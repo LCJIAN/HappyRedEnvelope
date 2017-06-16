@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rg_bottom_navigation"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <RadioButton
+        android:id="@+id/rb_red_envelope"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?selectableItemBackground"
+        android:button="@null"
+        android:drawablePadding="4dp"
+        android:drawableTop="@drawable/selector_red_envelope"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/red_envelope"
+        android:textColor="@color/colorTextGray"
+        android:textSize="12sp" />
+
+    <RadioButton
+        android:id="@+id/rb_billboard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?selectableItemBackground"
+        android:button="@null"
+        android:drawablePadding="4dp"
+        android:drawableTop="@drawable/selector_billboard"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/billboard"
+        android:textColor="@color/colorTextGray"
+        android:textSize="12sp" />
+
+    <RadioButton
+        android:id="@+id/rb_explore"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?selectableItemBackground"
+        android:button="@null"
+        android:drawablePadding="4dp"
+        android:drawableTop="@drawable/selector_explore"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/explore"
+        android:textColor="@color/colorTextGray"
+        android:textSize="12sp" />
+
+    <RadioButton
+        android:id="@+id/rb_mine"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?selectableItemBackground"
+        android:button="@null"
+        android:drawablePadding="4dp"
+        android:drawableTop="@drawable/selector_mine"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/mine"
+        android:textColor="@color/colorTextGray"
+        android:textSize="12sp" />
+
+</RadioGroup>

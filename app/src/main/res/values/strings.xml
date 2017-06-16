@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Happy Red Envelope</string>
+    <string name="red_envelope">红包乐</string>
+    <string name="billboard">排行榜</string>
+    <string name="explore">发现</string>
+    <string name="mine">我</string>
+    <string name="lucky_billboard">幸运手气榜</string>
+    <string name="explore_one">精品特卖</string>
+    <string name="explore_two">天猫淘宝优惠券</string>
+    <string name="explore_three">今日奇趣</string>
+    <string name="explore_four">热们应用</string>
+    <string name="buy_lucky_card">购买福卡</string>
+    <string name="buy_vip">购买VIP</string>
+    <string name="view_history">浏览记录</string>
+    <string name="my_coupon">我的优惠券</string>
+    <string name="helping_center">帮助中心</string>
+    <string name="red_envelope_sponsor">红包赞助</string>
+    <string name="settings">设置</string>
+    <string name="sing_in">一键登录</string>
+</resources>
