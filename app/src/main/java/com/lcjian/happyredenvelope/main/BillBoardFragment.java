@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 
 import com.lcjian.happyredenvelope.R;
 
-public class ExploreFragment extends BaseFragment {
+public class BillBoardFragment extends BaseFragment {
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_explore, container, false);
+        View view = inflater.inflate(R.layout.fragment_billboard, container, false);
         return view;
     }
 }
