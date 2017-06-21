@@ -1,4 +1,4 @@
-package com.lcjian.happyredenvelope.main;
+package com.lcjian.happyredenvelope.ui.main;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
