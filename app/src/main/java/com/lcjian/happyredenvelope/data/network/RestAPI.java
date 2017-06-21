@@ -44,6 +44,13 @@ public class RestAPI {
             clientBuilder.interceptors().add(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
+                    Request request = chain.request();
+                    RequestBody requestBody = request.body();
+                    String postBodyString = bodyToString(requestBody);
+                    postBodyString += ((postBodyString.length() > 0) ? "&" : "") + bodyToString(
+                            new FormBody.Builder().add("lan", OSellCommon.getLanguage()).add("UserToken", OsellCenter.getInstance().helper.getUserToken()).build());
+                    return chain.proceed(request.newBuilder().method(request.method(), RequestBody.create(requestBody.contentType(), postBodyString)).build());
+
                     long time = System.currentTimeMillis();
                     String username = chain.request().url().toString() + time;
                     String password = MD5Utils.getMD532(username + Constants.RED_ENVELOPE_API_KEY);
@@ -80,7 +87,17 @@ public class RestAPI {
         return cache;
     }
 
-    public RedEnvelopeService spunSugarService() {
+    private static String bodyToString(RequestBody request) {
+        try {
+            Buffer buffer = new Buffer();
+            request.writeTo(buffer);
+            return buffer.readUtf8();
+        } catch (IOException e) {
+            return "";
+        }
+    }
+
+    public RedEnvelopeService redEnvelopeService() {
         if (redEnvelopeService == null) {
             redEnvelopeService = getRetrofit().create(RedEnvelopeService.class);
         }
