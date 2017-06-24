@@ -1,5 +1,6 @@
 package com.lcjian.happyredenvelope.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.widget.RadioGroup;
 
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.lib.util.FragmentSwitchHelper;
+import com.umeng.socialize.UMShareAPI;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 new BillboardFragment(),
                 new ExploreFragment(),
                 new MineFragment());
-        rg_bottom_navigation.check(R.id.rb_red_envelope);
+        mFragmentSwitchHelper.changeFragment(RedEnvelopeFragment.class);
     }
 
     @Override
@@ -57,5 +59,11 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 }

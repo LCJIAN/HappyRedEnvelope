@@ -13,7 +13,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_margin="16dp"
-        app:srcCompat="@drawable/shape_no_avatar_bg" />
+        app:srcCompat="@drawable/shape_user_no_avatar_bg" />
 
     <TextView
         android:id="@+id/tv_user_name"
@@ -32,9 +32,9 @@
         android:layout_alignBottom="@+id/iv_user_avatar"
         android:layout_toEndOf="@+id/iv_user_avatar"
         android:layout_toRightOf="@+id/iv_user_avatar"
-        android:drawableLeft="@drawable/lucky_card_small"
+        android:drawableLeft="@drawable/luck_card_small"
         android:drawablePadding="16dp"
-        android:drawableStart="@drawable/lucky_card_small"
+        android:drawableStart="@drawable/luck_card_small"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppTheme.Micro" />
 
@@ -85,8 +85,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_below="@id/ll_withdrawal"
+        android:layout_marginTop="8dp"
         android:orientation="vertical">
 
         <View

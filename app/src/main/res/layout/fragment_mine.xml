@@ -45,7 +45,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <include layout="@layout/mine_not_signed_in" />
 
@@ -64,13 +64,13 @@
                 android:layout_height="wrap_content"
                 android:background="?selectableItemBackground"
                 android:drawableEnd="@drawable/ic_arrow_right"
-                android:drawableLeft="@drawable/ic_buy_lucky_card"
+                android:drawableLeft="@drawable/ic_buy_luck_card"
                 android:drawablePadding="16dp"
                 android:drawableRight="@drawable/ic_arrow_right"
-                android:drawableStart="@drawable/ic_buy_lucky_card"
+                android:drawableStart="@drawable/ic_buy_luck_card"
                 android:gravity="center_vertical"
                 android:padding="16dp"
-                android:text="@string/buy_lucky_card"
+                android:text="@string/buy_luck_card"
                 android:textAppearance="@style/TextAppearance.AppTheme"
                 android:textColor="@color/colorTextBlack" />
 

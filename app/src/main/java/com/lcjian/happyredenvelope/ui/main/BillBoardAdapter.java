@@ -124,7 +124,7 @@ class BillBoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Context context = itemView.getContext();
             Glide.with(context)
                     .load(billboard.billboardUser.userHeadimg)
-                    .apply(RequestOptions.placeholderOf(R.drawable.shape_no_avatar_bg).centerCrop())
+                    .apply(RequestOptions.placeholderOf(R.drawable.shape_user_no_avatar_bg).centerCrop())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(iv_user_avatar);
             tv_user_name.setText(billboard.billboardUser.userNickname);

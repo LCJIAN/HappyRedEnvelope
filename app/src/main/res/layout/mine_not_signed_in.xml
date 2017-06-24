@@ -19,7 +19,7 @@
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/shape_no_avatar_bg" />
+            android:background="@drawable/shape_user_no_avatar_bg" />
 
         <Button
             android:id="@+id/btn_sign_in"

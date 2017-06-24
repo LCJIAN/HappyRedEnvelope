@@ -30,7 +30,7 @@ public interface RedEnvelopeService {
                                             @Field("country") String country,
                                             @Field("province") String province,
                                             @Field("city") String city,
-                                            @Field("sex") int sex);
+                                            @Field("sex") String sex);
 
     /**
      * 用户是否VIP
@@ -44,16 +44,16 @@ public interface RedEnvelopeService {
      */
     @FormUrlEncoded
     @POST("room/getnormalrooms")
-    Observable<ResponseData<List<Room>>> getNormalRooms(@Field("page") int pageNumber,
-                                                        @Field("pagesize") int pageSize);
+    Observable<ResponseData<PageResult<Room>>> getNormalRooms(@Field("page") int pageNumber,
+                                                              @Field("pagesize") int pageSize);
 
     /**
      * 获取VIP房间列表
      */
     @FormUrlEncoded
     @POST("room/getviprooms")
-    Observable<ResponseData<List<Room>>> getVipRooms(@Field("page") int pageNumber,
-                                                     @Field("pagesize") int pageSize);
+    Observable<ResponseData<PageResult<Room>>> getVipRooms(@Field("page") int pageNumber,
+                                                           @Field("pagesize") int pageSize);
 
     /**
      * 搜索房间（按ID号）

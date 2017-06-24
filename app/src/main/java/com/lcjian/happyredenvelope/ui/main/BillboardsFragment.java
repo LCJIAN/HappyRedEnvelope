@@ -34,7 +34,7 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-public class BillboardListFragment extends RecyclerFragment<Displayable> {
+public class BillboardsFragment extends RecyclerFragment<Displayable> {
 
     private ImageView iv_user_avatar_one;
     private ImageView iv_user_avatar_two;
@@ -58,8 +58,8 @@ public class BillboardListFragment extends RecyclerFragment<Displayable> {
 
     private int mCurrentPage;
 
-    public static BillboardListFragment newInstance(int type) {
-        BillboardListFragment fragment = new BillboardListFragment();
+    public static BillboardsFragment newInstance(int type) {
+        BillboardsFragment fragment = new BillboardsFragment();
         Bundle args = new Bundle();
         args.putInt("type", type);
         fragment.setArguments(args);
@@ -161,7 +161,7 @@ public class BillboardListFragment extends RecyclerFragment<Displayable> {
     private void setupHeaderItem(Billboard billboard, ImageView avatar, TextView userName, TextView billboardAmount) {
         Glide.with(getContext())
                 .load(billboard.billboardUser.userHeadimg)
-                .apply(RequestOptions.placeholderOf(R.drawable.shape_no_avatar_bg).centerCrop())
+                .apply(RequestOptions.placeholderOf(R.drawable.shape_user_no_avatar_bg).centerCrop())
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(avatar);
         userName.setText(billboard.billboardUser.userNickname);

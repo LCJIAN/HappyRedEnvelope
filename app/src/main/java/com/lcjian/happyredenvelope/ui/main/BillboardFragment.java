@@ -37,9 +37,9 @@ public class BillboardFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         SimpleFragmentPagerAdapter pagerAdapter = new SimpleFragmentPagerAdapter(getChildFragmentManager());
-        pagerAdapter.addFragment(BillboardListFragment.newInstance(1), getString(R.string.day_billboard));
-        pagerAdapter.addFragment(BillboardListFragment.newInstance(2), getString(R.string.week_billboard));
-        pagerAdapter.addFragment(BillboardListFragment.newInstance(3), getString(R.string.month_billboard));
+        pagerAdapter.addFragment(BillboardsFragment.newInstance(1), getString(R.string.day_billboard));
+        pagerAdapter.addFragment(BillboardsFragment.newInstance(2), getString(R.string.week_billboard));
+        pagerAdapter.addFragment(BillboardsFragment.newInstance(3), getString(R.string.month_billboard));
         vp_billboard.setAdapter(pagerAdapter);
         tab_billboard.setupWithViewPager(vp_billboard);
         tab_billboard.setSelectedTabIndicatorColor(Color.WHITE);

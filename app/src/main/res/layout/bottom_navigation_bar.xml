@@ -14,6 +14,7 @@
         android:layout_weight="1"
         android:background="?selectableItemBackground"
         android:button="@null"
+        android:checked="true"
         android:drawableTop="@drawable/selector_red_envelope"
         android:gravity="center"
         android:padding="4dp"

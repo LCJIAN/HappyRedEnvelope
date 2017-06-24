@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:gravity="center"
-            android:text="@string/lucky_billboard"
+            android:text="@string/luck_billboard"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@android:color/white" />
 

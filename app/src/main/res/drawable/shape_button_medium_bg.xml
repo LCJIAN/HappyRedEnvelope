@@ -6,6 +6,6 @@
         android:endColor="@color/colorDarkRed"
         android:startColor="@color/colorLightRed"
         android:type="linear" />
-    <corners android:radius="12dp" />
-    <size android:height="24dp" />
+    <corners android:radius="16dp" />
+    <size android:height="32dp" />
 </shape>

@@ -2,10 +2,6 @@ package com.lcjian.happyredenvelope.data.entity;
 
 import java.util.List;
 
-/**
- * Created by root on 17-6-20.
- */
-
 public class Room {
 
     public long createTime;
@@ -19,6 +15,7 @@ public class Room {
     public List<RankInfo> rankInfo;
     public boolean show;
     public boolean vip;
+    public int state;   // 1:人数没到抢的状态;2:人数已到可以抢的状态;3:人数已满
 
     public static class RankInfo {
         public String userHeadimg;
