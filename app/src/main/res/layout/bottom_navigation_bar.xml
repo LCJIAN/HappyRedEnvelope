@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rg_bottom_navigation"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:showIn="@layout/activity_main">
 
     <RadioButton
         android:id="@+id/rb_red_envelope"
@@ -12,10 +14,9 @@
         android:layout_weight="1"
         android:background="?selectableItemBackground"
         android:button="@null"
-        android:drawablePadding="4dp"
         android:drawableTop="@drawable/selector_red_envelope"
         android:gravity="center"
-        android:padding="8dp"
+        android:padding="4dp"
         android:text="@string/red_envelope"
         android:textColor="@color/colorTextGray"
         android:textSize="12sp" />
@@ -27,10 +28,9 @@
         android:layout_weight="1"
         android:background="?selectableItemBackground"
         android:button="@null"
-        android:drawablePadding="4dp"
         android:drawableTop="@drawable/selector_billboard"
         android:gravity="center"
-        android:padding="8dp"
+        android:padding="4dp"
         android:text="@string/billboard"
         android:textColor="@color/colorTextGray"
         android:textSize="12sp" />
@@ -42,10 +42,9 @@
         android:layout_weight="1"
         android:background="?selectableItemBackground"
         android:button="@null"
-        android:drawablePadding="4dp"
         android:drawableTop="@drawable/selector_explore"
         android:gravity="center"
-        android:padding="8dp"
+        android:padding="4dp"
         android:text="@string/explore"
         android:textColor="@color/colorTextGray"
         android:textSize="12sp" />
@@ -57,10 +56,9 @@
         android:layout_weight="1"
         android:background="?selectableItemBackground"
         android:button="@null"
-        android:drawablePadding="4dp"
         android:drawableTop="@drawable/selector_mine"
         android:gravity="center"
-        android:padding="8dp"
+        android:padding="4dp"
         android:text="@string/mine"
         android:textColor="@color/colorTextGray"
         android:textSize="12sp" />

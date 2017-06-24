@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:padding="16dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/iv_withdrawal_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_withdrawal_success"/>
+        android:src="@drawable/ic_withdrawal_success" />
 
     <TextView
         android:id="@+id/tv_withdrawal_status"
         android:layout_width="wrap_content"
-        android:text="@string/app_name"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/iv_withdrawal_status"
-        android:layout_toEndOf="@+id/iv_withdrawal_status"
         android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@+id/iv_withdrawal_status"
+        android:layout_toRightOf="@+id/iv_withdrawal_status"
+        android:text="@string/app_name" />
 
     <TextView
+        android:id="@+id/tv_withdrawal_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/iv_withdrawal_status"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/tv_withdrawal_amount" />
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/iv_withdrawal_status" />
 
     <TextView
+        android:id="@+id/tv_withdrawal_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/iv_withdrawal_status"
         android:layout_alignLeft="@+id/tv_withdrawal_status"
         android:layout_alignStart="@+id/tv_withdrawal_status"
-        android:id="@+id/tv_withdrawal_time"
         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
     <TextView
+        android:id="@+id/tv_withdrawal_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/iv_withdrawal_status"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/tv_withdrawal_no"
+        android:layout_alignParentRight="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 </RelativeLayout>

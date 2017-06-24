@@ -1,23 +1,31 @@
 package com.lcjian.happyredenvelope.data.network;
 
-import android.util.Base64;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.google.gson.GsonBuilder;
 import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BuildConfig;
-import com.lcjian.happyredenvelope.Constants;
+import com.lcjian.lib.DeviceUuidFactory;
 import com.lcjian.lib.util.common.StorageUtils;
 import com.lcjian.lib.util.security.MD5Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
+import okhttp3.FormBody;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okio.Buffer;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -33,6 +41,16 @@ public class RestAPI {
 
     private RedEnvelopeService redEnvelopeService;
 
+    private static String bodyToString(RequestBody request) {
+        try {
+            Buffer buffer = new Buffer();
+            request.writeTo(buffer);
+            return buffer.readUtf8();
+        } catch (IOException e) {
+            return "";
+        }
+    }
+
     private Retrofit getRetrofit() {
         if (retrofit == null) {
             OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
@@ -43,21 +61,30 @@ public class RestAPI {
 
             clientBuilder.interceptors().add(new Interceptor() {
                 @Override
-                public Response intercept(Chain chain) throws IOException {
+                public Response intercept(@NonNull Chain chain) throws IOException {
+                    String deviceId = new DeviceUuidFactory(App.getInstance()).getDeviceUuid().toString();
+                    String version = BuildConfig.VERSION_NAME;
+                    String platform = "Android";
+                    String channel = "QQ";
+                    String timestamp = String.valueOf(System.currentTimeMillis());
+                    List<String> commonParas = Arrays.asList(deviceId, version, platform, channel, timestamp);
+                    Collections.sort(commonParas);
+                    String sign = MD5Utils.getMD532(TextUtils.join("", commonParas));
+
                     Request request = chain.request();
                     RequestBody requestBody = request.body();
                     String postBodyString = bodyToString(requestBody);
                     postBodyString += ((postBodyString.length() > 0) ? "&" : "") + bodyToString(
-                            new FormBody.Builder().add("lan", OSellCommon.getLanguage()).add("UserToken", OsellCenter.getInstance().helper.getUserToken()).build());
-                    return chain.proceed(request.newBuilder().method(request.method(), RequestBody.create(requestBody.contentType(), postBodyString)).build());
-
-                    long time = System.currentTimeMillis();
-                    String username = chain.request().url().toString() + time;
-                    String password = MD5Utils.getMD532(username + Constants.RED_ENVELOPE_API_KEY);
-                    return chain.proceed(chain.request().newBuilder()
-                            .addHeader("Authorization", "Basic " + Base64.encodeToString((username + ";" + password).getBytes(), Base64.NO_WRAP))
-                            .addHeader("Date", String.valueOf(time))
-                            .build());
+                            new FormBody.Builder()
+                                    .add("device", deviceId)
+                                    .add("version", version)
+                                    .add("platform", platform)
+                                    .add("channel", channel)
+                                    .add("timestamp", timestamp)
+                                    .add("sign", sign)
+                                    .build());
+                    return chain.proceed(request.newBuilder().method(request.method(),
+                            RequestBody.create(requestBody.contentType(), postBodyString)).build());
                 }
             });
             if (BuildConfig.DEBUG) {
@@ -85,16 +112,6 @@ public class RestAPI {
             Timber.e(e, "Unable to install disk cache.");
         }
         return cache;
-    }
-
-    private static String bodyToString(RequestBody request) {
-        try {
-            Buffer buffer = new Buffer();
-            request.writeTo(buffer);
-            return buffer.readUtf8();
-        } catch (IOException e) {
-            return "";
-        }
     }
 
     public RedEnvelopeService redEnvelopeService() {

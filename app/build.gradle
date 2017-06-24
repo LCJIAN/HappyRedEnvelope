@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 25
@@ -9,17 +10,21 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        buildConfigField 'String', 'API_URL', '"http://47.93.165.239/api/client/"'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             minifyEnabled false
+            buildConfigField 'String', 'API_URL', '"http://www.hongbaole.com/api/client/"'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
 
 dependencies {
+    compile project(':mylibrary')
+    compile project(':sharesdk')
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -35,13 +40,15 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:latest.integration'
     compile 'com.squareup.retrofit2:converter-gson:latest.integration'
     compile 'com.squareup.retrofit2:adapter-rxjava:latest.integration'
-    compile 'com.github.bumptech.glide:glide:latest.integration'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.github.bumptech.glide:okhttp3-integration:latest.integration'
     compile 'com.jakewharton:butterknife:8.5.1'
     compile 'com.pushtorefresh.storio:sqlite:latest.integration'
     compile 'com.pushtorefresh.storio:sqlite-annotations:latest.integration'
     compile 'com.jakewharton.timber:timber:latest.integration'
-    apt 'com.jakewharton:butterknife-compiler:latest.integration'
+    compile 'com.yqritc:recyclerview-flexibledivider:latest.integration'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    apt 'com.jakewharton:butterknife-compiler:8.5.1'
     apt 'com.pushtorefresh.storio:sqlite-annotations-processor:latest.integration'
     apt 'com.google.dagger:dagger-compiler:2.9'
     provided 'javax.annotation:jsr250-api:1.0'

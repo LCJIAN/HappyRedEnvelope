@@ -1,178 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.main.MineFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:background="@drawable/shape_top_navigation_bg">
 
+        <ImageButton
+            android:id="@+id/btn_go_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:background="?selectableItemBackground"
+            app:srcCompat="@drawable/ic_message" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/mine"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/white" />
     </RelativeLayout>
 
-    <FrameLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <LinearLayout
-            android:id="@+id/ll_not_signed_in"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:gravity="center"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:background="@drawable/shape_no_avatar_bg" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
-            <Button
-                android:id="@+id/btn_sign_in"
-                android:layout_width="wrap_content"
+                <include layout="@layout/mine_not_signed_in" />
+
+                <include layout="@layout/mine_signed_in" />
+
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@color/colorDivider" />
+
+            <TextView
+                android:id="@+id/tv_buy_lucky_card"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/shape_button_big_bg"
-                android:paddingLeft="48dp"
-                android:paddingRight="48dp"
-                android:text="@string/sing_in"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@android:color/white" />
+                android:background="?selectableItemBackground"
+                android:drawableEnd="@drawable/ic_arrow_right"
+                android:drawableLeft="@drawable/ic_buy_lucky_card"
+                android:drawablePadding="16dp"
+                android:drawableRight="@drawable/ic_arrow_right"
+                android:drawableStart="@drawable/ic_buy_lucky_card"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:text="@string/buy_lucky_card"
+                android:textAppearance="@style/TextAppearance.AppTheme"
+                android:textColor="@color/colorTextBlack" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorDivider" />
+
+            <TextView
+                android:id="@+id/tv_buy_vip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                android:drawableEnd="@drawable/ic_arrow_right"
+                android:drawableLeft="@drawable/ic_buy_vip"
+                android:drawablePadding="16dp"
+                android:drawableRight="@drawable/ic_arrow_right"
+                android:drawableStart="@drawable/ic_buy_vip"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:text="@string/buy_vip"
+                android:textAppearance="@style/TextAppearance.AppTheme"
+                android:textColor="@color/colorTextBlack" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorDivider" />
+
+            <TextView
+                android:id="@+id/tv_view_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                android:drawableEnd="@drawable/ic_arrow_right"
+                android:drawableLeft="@drawable/ic_view_history"
+                android:drawablePadding="16dp"
+                android:drawableRight="@drawable/ic_arrow_right"
+                android:drawableStart="@drawable/ic_view_history"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:text="@string/view_history"
+                android:textAppearance="@style/TextAppearance.AppTheme"
+                android:textColor="@color/colorTextBlack" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorDivider" />
+
+            <TextView
+                android:id="@+id/tv_my_coupon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                android:drawableEnd="@drawable/ic_arrow_right"
+                android:drawableLeft="@drawable/ic_my_coupon"
+                android:drawablePadding="16dp"
+                android:drawableRight="@drawable/ic_arrow_right"
+                android:drawableStart="@drawable/ic_my_coupon"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:text="@string/my_coupon"
+                android:textAppearance="@style/TextAppearance.AppTheme"
+                android:textColor="@color/colorTextBlack" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@color/colorDivider" />
+
+            <TextView
+                android:id="@+id/tv_helping_center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                android:drawableEnd="@drawable/ic_arrow_right"
+                android:drawableLeft="@drawable/ic_helping_center"
+                android:drawablePadding="16dp"
+                android:drawableRight="@drawable/ic_arrow_right"
+                android:drawableStart="@drawable/ic_helping_center"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:text="@string/helping_center"
+                android:textAppearance="@style/TextAppearance.AppTheme"
+                android:textColor="@color/colorTextBlack" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorDivider" />
+
+            <TextView
+                android:id="@+id/tv_red_envelope_sponsor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                android:drawableEnd="@drawable/ic_arrow_right"
+                android:drawableLeft="@drawable/ic_sponsor"
+                android:drawablePadding="16dp"
+                android:drawableRight="@drawable/ic_arrow_right"
+                android:drawableStart="@drawable/ic_sponsor"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:text="@string/red_envelope_sponsor"
+                android:textAppearance="@style/TextAppearance.AppTheme"
+                android:textColor="@color/colorTextBlack" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@color/colorDivider" />
+
+            <TextView
+                android:id="@+id/tv_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                android:drawableEnd="@drawable/ic_arrow_right"
+                android:drawableLeft="@drawable/ic_setting"
+                android:drawablePadding="16dp"
+                android:drawableRight="@drawable/ic_arrow_right"
+                android:drawableStart="@drawable/ic_setting"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:text="@string/settings"
+                android:textAppearance="@style/TextAppearance.AppTheme"
+                android:textColor="@color/colorTextBlack" />
         </LinearLayout>
-    </FrameLayout>
-
-    <TextView
-        android:id="@+id/tv_buy_lucky_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?selectableItemBackground"
-        android:drawableEnd="@drawable/ic_arrow_right"
-        android:drawableLeft="@drawable/ic_buy_lucky_card"
-        android:drawablePadding="16dp"
-        android:drawableRight="@drawable/ic_arrow_right"
-        android:drawableStart="@drawable/ic_buy_lucky_card"
-        android:gravity="center_vertical"
-        android:padding="16dp"
-        android:text="@string/buy_lucky_card"
-        android:textColor="@color/colorTextBlack" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/colorDivider" />
-
-    <TextView
-        android:id="@+id/tv_buy_vip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?selectableItemBackground"
-        android:drawableEnd="@drawable/ic_arrow_right"
-        android:drawableLeft="@drawable/ic_buy_vip"
-        android:drawablePadding="16dp"
-        android:drawableRight="@drawable/ic_arrow_right"
-        android:drawableStart="@drawable/ic_buy_vip"
-        android:gravity="center_vertical"
-        android:padding="16dp"
-        android:text="@string/buy_vip"
-        android:textColor="@color/colorTextBlack" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/colorDivider" />
-
-    <TextView
-        android:id="@+id/tv_view_history"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?selectableItemBackground"
-        android:drawableEnd="@drawable/ic_arrow_right"
-        android:drawableLeft="@drawable/ic_view_history"
-        android:drawablePadding="16dp"
-        android:drawableRight="@drawable/ic_arrow_right"
-        android:drawableStart="@drawable/ic_view_history"
-        android:gravity="center_vertical"
-        android:padding="16dp"
-        android:text="@string/view_history"
-        android:textColor="@color/colorTextBlack" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/colorDivider" />
-
-    <TextView
-        android:id="@+id/tv_my_coupon"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?selectableItemBackground"
-        android:drawableEnd="@drawable/ic_arrow_right"
-        android:drawableLeft="@drawable/ic_my_coupon"
-        android:drawablePadding="16dp"
-        android:drawableRight="@drawable/ic_arrow_right"
-        android:drawableStart="@drawable/ic_my_coupon"
-        android:gravity="center_vertical"
-        android:padding="16dp"
-        android:text="@string/my_coupon"
-        android:textColor="@color/colorTextBlack" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:background="@color/colorDivider" />
-
-    <TextView
-        android:id="@+id/tv_helping_center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?selectableItemBackground"
-        android:drawableEnd="@drawable/ic_arrow_right"
-        android:drawableLeft="@drawable/ic_helping_center"
-        android:drawablePadding="16dp"
-        android:drawableRight="@drawable/ic_arrow_right"
-        android:drawableStart="@drawable/ic_helping_center"
-        android:gravity="center_vertical"
-        android:padding="16dp"
-        android:text="@string/helping_center"
-        android:textColor="@color/colorTextBlack" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/colorDivider" />
-
-    <TextView
-        android:id="@+id/tv_red_envelope_sponsor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?selectableItemBackground"
-        android:drawableEnd="@drawable/ic_arrow_right"
-        android:drawableLeft="@drawable/ic_sponsor"
-        android:drawablePadding="16dp"
-        android:drawableRight="@drawable/ic_arrow_right"
-        android:drawableStart="@drawable/ic_sponsor"
-        android:gravity="center_vertical"
-        android:padding="16dp"
-        android:text="@string/red_envelope_sponsor"
-        android:textColor="@color/colorTextBlack" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:background="@color/colorDivider" />
-
-    <TextView
-        android:id="@+id/tv_settings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?selectableItemBackground"
-        android:drawableEnd="@drawable/ic_arrow_right"
-        android:drawableLeft="@drawable/ic_setting"
-        android:drawablePadding="16dp"
-        android:drawableRight="@drawable/ic_arrow_right"
-        android:drawableStart="@drawable/ic_setting"
-        android:gravity="center_vertical"
-        android:padding="16dp"
-        android:text="@string/settings"
-        android:textColor="@color/colorTextBlack" />
+    </ScrollView>
 </LinearLayout>

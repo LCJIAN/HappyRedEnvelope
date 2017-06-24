@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-
 import com.lcjian.happyredenvelope.data.network.RestAPI;
 import com.lcjian.happyredenvelope.di.component.AppComponent;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;

@@ -39,9 +39,7 @@ public class App extends Application {
                 .build();
 
         Config.DEBUG = true;
-        PlatformConfig.setQQZone(Constants.QQ_ID, Constants.QQ_KEY);
         PlatformConfig.setWeixin(Constants.WE_CHAT_ID, Constants.WE_CHAT_SECRET);
-        PlatformConfig.setSinaWeibo(Constants.WEIBO_KEY, Constants.WEIBO_SECRET, "");
         UMShareAPI.get(this);
 
         if (BuildConfig.DEBUG) {

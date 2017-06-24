@@ -2,7 +2,6 @@ package com.lcjian.happyredenvelope.di.module;
 
 import android.support.annotation.NonNull;
 
-
 import com.lcjian.happyredenvelope.RxBus;
 import com.lcjian.happyredenvelope.di.scope.ApplicationScope;
 

@@ -17,8 +17,8 @@ public class Room {
     public int nowNumber;
     public String pic;
     public List<RankInfo> rankInfo;
-    public         boolean  show;
-    public         boolean  vip;
+    public boolean show;
+    public boolean vip;
 
     public static class RankInfo {
         public String userHeadimg;

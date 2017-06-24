@@ -3,7 +3,6 @@ package com.lcjian.happyredenvelope.di.module;
 import android.app.Application;
 import android.support.annotation.NonNull;
 
-
 import com.lcjian.happyredenvelope.di.scope.ApplicationScope;
 
 import dagger.Module;

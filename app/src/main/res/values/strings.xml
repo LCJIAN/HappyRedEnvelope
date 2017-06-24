@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Happy Red Envelope</string>
+    <string name="error_msg">Happy Red Envelope</string>
+    <string name="empty_msg">Happy Red Envelope</string>
     <string name="red_envelope">红包乐</string>
     <string name="billboard">排行榜</string>
     <string name="explore">发现</string>
@@ -17,4 +19,15 @@
     <string name="red_envelope_sponsor">红包赞助</string>
     <string name="settings">设置</string>
     <string name="sing_in">一键登录</string>
+    <string name="withdrawal">提现</string>
+    <string name="day_red_envelope_count">提现</string>
+    <string name="week_red_envelope_count">提现</string>
+    <string name="month_red_envelope_count">提现</string>
+    <string name="total_red_envelope_count">提现</string>
+    <string name="day_billboard">提现</string>
+    <string name="week_billboard">提现</string>
+    <string name="month_billboard">提现</string>
+    <string name="total_count">提%1$d现</string>
+    <string name="total_luck_count">提%1$d现</string>
+    <string name="total_amount">提%1$s现</string>
 </resources>
