@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_vip_privilege"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:maxLines="2"
-    android:orientation="vertical" />
+    style="@style/TextAppearance.AppTheme.Micro"
+    android:textColor="@color/colorTextGray"
+    android:drawablePadding="8dp"
+    android:maxLines="2" />

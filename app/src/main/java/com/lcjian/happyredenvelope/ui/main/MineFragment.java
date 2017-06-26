@@ -1,5 +1,6 @@
 package com.lcjian.happyredenvelope.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -21,6 +22,9 @@ import com.lcjian.happyredenvelope.BaseFragment;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.User;
+import com.lcjian.happyredenvelope.ui.mine.BuyLuckCardActivity;
+import com.lcjian.happyredenvelope.ui.mine.BuyVipActivity;
+import com.lcjian.happyredenvelope.ui.mine.RedEnvelopeHistoriesActivity;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -37,8 +41,8 @@ import rx.schedulers.Schedulers;
 
 public class MineFragment extends BaseFragment implements View.OnClickListener {
 
-    @BindView(R.id.btn_go_message)
-    ImageButton btn_go_message;
+    @BindView(R.id.btn_go_message) ImageButton btn_go_message;
+    @BindView(R.id.tv_my_red_envelope_history) TextView tv_my_red_envelope_history;
     @BindView(R.id.iv_not_signed_in)
     ImageView iv_not_signed_in;
     @BindView(R.id.btn_sign_in)
@@ -59,8 +63,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.rl_signed_in)
     RelativeLayout rl_signed_in;
 
-    @BindView(R.id.tv_buy_lucky_card)
-    TextView tv_buy_lucky_card;
+    @BindView(R.id.tv_buy_luck_card)
+    TextView tv_buy_luck_card;
     @BindView(R.id.tv_buy_vip)
     TextView tv_buy_vip;
     @BindView(R.id.tv_view_history)
@@ -89,8 +93,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         btn_go_message.setOnClickListener(this);
+        tv_my_red_envelope_history.setOnClickListener(this);
         btn_sign_in.setOnClickListener(this);
-        tv_buy_lucky_card.setOnClickListener(this);
+        tv_buy_luck_card.setOnClickListener(this);
         tv_buy_vip.setOnClickListener(this);
         tv_view_history.setOnClickListener(this);
         tv_my_coupon.setOnClickListener(this);
@@ -144,7 +149,16 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                 });
             }
             break;
-            case R.id.tv_buy_lucky_card: {
+            case R.id.tv_buy_luck_card: {
+                startActivity(new Intent(getContext(), BuyLuckCardActivity.class));
+            }
+            break;
+            case R.id.tv_buy_vip: {
+                startActivity(new Intent(getContext(), BuyVipActivity.class));
+            }
+            break;
+            case R.id.tv_my_red_envelope_history: {
+                startActivity(new Intent(getContext(), RedEnvelopeHistoriesActivity.class));
             }
             break;
             default:
@@ -156,7 +170,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         if (mUserInfoSp.getBoolean("signed_in", false)) {
             rl_signed_in.setVisibility(View.VISIBLE);
             btn_go_message.setVisibility(View.VISIBLE);
-            tv_buy_lucky_card.setVisibility(View.VISIBLE);
+            tv_buy_luck_card.setVisibility(View.VISIBLE);
             tv_buy_vip.setVisibility(View.VISIBLE);
             tv_view_history.setVisibility(View.VISIBLE);
             tv_my_coupon.setVisibility(View.VISIBLE);
@@ -174,7 +188,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
 
             rl_signed_in.setVisibility(View.GONE);
             btn_go_message.setVisibility(View.GONE);
-            tv_buy_lucky_card.setVisibility(View.GONE);
+            tv_buy_luck_card.setVisibility(View.GONE);
             tv_buy_vip.setVisibility(View.GONE);
             tv_view_history.setVisibility(View.GONE);
             tv_my_coupon.setVisibility(View.GONE);
@@ -206,13 +220,13 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                                     .apply();
                             setupSignedIn();
                         } else {
-                            Toast.makeText(getActivity(), userResponseData.message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(App.getInstance(), userResponseData.message, Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        Toast.makeText(getActivity(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(App.getInstance(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
         mUserInfoSp.edit()

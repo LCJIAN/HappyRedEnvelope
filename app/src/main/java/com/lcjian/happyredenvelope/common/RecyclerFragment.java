@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseFragment;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.PageResult;
@@ -160,7 +161,7 @@ public abstract class RecyclerFragment<T> extends BaseFragment {
                 } else {
                     mLoadMoreAdapter.setState(LoadMoreAdapter.STATE_ERROR);
                 }
-                Toast.makeText(getActivity(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getInstance(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

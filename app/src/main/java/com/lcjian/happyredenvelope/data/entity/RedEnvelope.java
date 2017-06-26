@@ -8,5 +8,5 @@ public class RedEnvelope {
 
     public long time;
     public float money;
-    public Room room;
+    public Room hongBaoRoom;
 }

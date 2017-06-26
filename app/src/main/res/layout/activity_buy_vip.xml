@@ -1,24 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.mine.BuyVipActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@drawable/shape_top_navigation_bg">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/buy_vip"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/white" />
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="?selectableItemBackground"
+            android:padding="8dp"
+            app:srcCompat="@drawable/ic_arrow_left" />
+    </RelativeLayout>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="24dp"
         android:src="@drawable/ic_vip_large" />
 
     <TextView
+        style="@style/TextAppearance.AppTheme.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="福卡VIP  30元/月" />
+        android:text="@string/vip_price"
+        android:textColor="@color/colorTextBlack" />
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape_button_big_bg" />
+        style="@style/TextAppearance.AppTheme.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/shape_button_medium_bg"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:text="@string/buy_vip"
+        android:textColor="@android:color/white" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_vip_privileges"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/colorDivider" />
 
 </LinearLayout>

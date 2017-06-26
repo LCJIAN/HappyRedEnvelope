@@ -1,7 +1,9 @@
 package com.lcjian.happyredenvelope.data.network;
 
 
+import com.lcjian.happyredenvelope.data.entity.Banner;
 import com.lcjian.happyredenvelope.data.entity.Billboard;
+import com.lcjian.happyredenvelope.data.entity.Explore;
 import com.lcjian.happyredenvelope.data.entity.Message;
 import com.lcjian.happyredenvelope.data.entity.PageResult;
 import com.lcjian.happyredenvelope.data.entity.RedEnvelope;
@@ -9,11 +11,13 @@ import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.Room;
 import com.lcjian.happyredenvelope.data.entity.User;
 import com.lcjian.happyredenvelope.data.entity.UserVipInfo;
+import com.lcjian.happyredenvelope.data.entity.VipPrivilege;
 
 import java.util.List;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import rx.Observable;
 
@@ -105,15 +109,6 @@ public interface RedEnvelopeService {
                                                    @Field("msgid") long msgId);
 
     /**
-     * 获取红包记录
-     */
-    @FormUrlEncoded
-    @POST("hongbao/gethongbaohistory")
-    Observable<ResponseData<List<RedEnvelope>>> getRedEnvelopeHistories(@Field("uid") long userId,
-                                                                        @Field("page") int pageNumber,
-                                                                        @Field("pagesize") int pageSize);
-
-    /**
      * 获取幸运手气榜
      *
      * @param type 1-日榜  2-周榜  3-月榜
@@ -124,4 +119,34 @@ public interface RedEnvelopeService {
                                                                  @Field("type") int type,
                                                                  @Field("page") int pageNumber,
                                                                  @Field("pagesize") int pageSize);
+
+    /**
+     * 获取VIP
+     */
+    @Headers("Content-Type: application/x-www-form-urlencoded; charset=utf-8")
+    @POST("user/vip/getvips")
+    Observable<ResponseData<List<VipPrivilege>>> getVipPrivileges();
+
+    /**
+     * 获取发现参数
+     */
+    @Headers("Content-Type: application/x-www-form-urlencoded; charset=utf-8")
+    @POST("user/found/getparams")
+    Observable<ResponseData<Explore>> getExplore();
+
+    /**
+     * 获取发现参数
+     */
+    @Headers("Content-Type: application/x-www-form-urlencoded; charset=utf-8")
+    @POST("user/found/getbanner")
+    Observable<ResponseData<List<Banner>>> getBanners();
+
+    /**
+     * 获取红包记录
+     */
+    @FormUrlEncoded
+    @POST("hongbao/gethongbaohistory")
+    Observable<ResponseData<PageResult<RedEnvelope>>> getRedEnvHistories(@Field("uid") long userId,
+                                                                                @Field("page") int pageNumber,
+                                                                                @Field("pagesize") int pageSize);
 }

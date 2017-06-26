@@ -35,4 +35,20 @@
     <string name="room_id">ID:%1$d</string>
     <string name="room_red_envelope_count">%1$d个</string>
     <string name="room_user_count">%1$d人</string>
+    <string name="quarter_luck_card">VIP房间</string>
+    <string name="half_an_hour_luck_card">VIP房间</string>
+    <string name="one_hour_luck_card">VIP房间</string>
+    <string name="two_hours_luck_card">VIP房间</string>
+    <string name="day_luck_card">VIP房间</string>
+    <string name="yuan_5">$5</string>
+    <string name="yuan_9">$9</string>
+    <string name="yuan_16">$16</string>
+    <string name="yuan_25">$25</string>
+    <string name="yuan_50">$50</string>
+    <string name="luck_card_unit">$50</string>
+    <string name="buy_now">$50</string>
+    <string name="buy_luck_card_tip">$50</string>
+    <string name="vip_price">福卡VIP  30元/月</string>
+    <string name="red_envelope_history">红包history</string>
+    <string name="filter">红包filter</string>
 </resources>

@@ -30,6 +30,11 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.mine.BuyLuckCardActivity" />
+        <activity android:name=".ui.mine.BuyVipActivity" />
+        <activity android:name=".ui.mine.RedEnvelopeHistoriesActivity" />
+        <activity android:name=".ui.web.WebViewActivity" />
+
         <meta-data
             android:name="com.lcjian.happyredenvelope.VastPlayerGlideModule"
             android:value="GlideModule" />

@@ -31,6 +31,18 @@
             android:text="@string/mine"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/tv_my_red_envelope_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="8dp"
+            android:layout_alignParentEnd="true"
+            android:text="@string/red_envelope_history"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@android:color/white" />
     </RelativeLayout>
 
     <ScrollView
@@ -59,7 +71,7 @@
                 android:background="@color/colorDivider" />
 
             <TextView
-                android:id="@+id/tv_buy_lucky_card"
+                android:id="@+id/tv_buy_luck_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?selectableItemBackground"
