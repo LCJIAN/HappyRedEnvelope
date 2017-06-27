@@ -2,7 +2,10 @@ package com.lcjian.happyredenvelope.ui.mine;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.util.DiffUtil;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,6 +93,19 @@ public class RedEnvelopeHistoriesActivity extends BaseActivity implements View.O
         @Override
         public void notifyDataChanged(List<RedEnvelope> data) {
             mAdapter.replaceAll(data);
+        }
+
+        @Override
+        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+            swipe_refresh_layout.setColorSchemeResources(R.color.colorLightRed);
+
+            recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
+            recycler_view.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext())
+                    .color(ContextCompat.getColor(getContext(), R.color.colorDivider))
+                    .size(1)
+                    .build());
+
+            super.onViewCreated(view, savedInstanceState);
         }
     }
 
