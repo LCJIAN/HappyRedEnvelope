@@ -134,14 +134,14 @@ public class BuyVipActivity extends BaseActivity implements View.OnClickListener
             void bindTo(VipPrivilege vipPrivilege) {
                 Context context = itemView.getContext();
                 Glide.with(context)
-                        .load(vipPrivilege.vipName)
+                        .load(vipPrivilege.icon)
                         .into(new ViewTarget<TextView, Drawable>(tv_vip_privilege) {
                             @Override
                             public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
                                 view.setCompoundDrawablesWithIntrinsicBounds(resource, null, null, null);
                             }
                         });
-                tv_vip_privilege.setText(vipPrivilege.vipName);
+                tv_vip_privilege.setText(vipPrivilege.name);
             }
 
         }
