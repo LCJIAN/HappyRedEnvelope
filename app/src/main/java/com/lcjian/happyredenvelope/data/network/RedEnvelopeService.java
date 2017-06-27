@@ -35,6 +35,13 @@ public interface RedEnvelopeService {
                                             @Field("sex") String sex);
 
     /**
+     * 用户登陆
+     */
+    @FormUrlEncoded
+    @POST("user/user/register")
+    Observable<ResponseData<UserSummary>> getUserSummary(@Field("userid") long userId);
+
+    /**
      * 获取普通房间列表
      */
     @FormUrlEncoded
