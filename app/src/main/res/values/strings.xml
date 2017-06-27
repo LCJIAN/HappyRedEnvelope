@@ -45,10 +45,15 @@
     <string name="yuan_16">$16</string>
     <string name="yuan_25">$25</string>
     <string name="yuan_50">$50</string>
-    <string name="luck_card_unit">$50</string>
+    <string name="luck_card_unit">张</string>
+    <string name="total_price">总价:%1$s元</string>
     <string name="buy_now">立即购买</string>
     <string name="buy_luck_card_tip">提醒：\r\n福卡部分时长</string>
     <string name="vip_price">福卡VIP  30元/月</string>
     <string name="red_envelope_history">红包记录</string>
     <string name="filter">筛选</string>
+    <string name="start_snatch">开抢</string>
+    <string name="enter">进入</string>
+    <string name="lock">锁定</string>
+    <string name="no_room_billboard_yet">本房间暂无红包排行旁</string>
 </resources>
