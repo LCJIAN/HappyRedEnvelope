@@ -112,10 +112,10 @@ public interface RedEnvelopeService {
                                                                  @Field("pagesize") int pageSize);
 
     /**
-     * 获取VIP
+     * 获取会员特权
      */
     @Headers("Content-Type: application/x-www-form-urlencoded; charset=utf-8")
-    @POST("user/vip/getvips")
+    @POST("user/vip/getright")
     Observable<ResponseData<List<VipPrivilege>>> getVipPrivileges();
 
     /**
