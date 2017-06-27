@@ -126,6 +126,8 @@ public class BillboardsFragment extends RecyclerFragment<Displayable> {
                         return result;
                     }
                 })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(new Action1<PageResult<Displayable>>() {
                     @Override
                     public void call(PageResult<Displayable> displayablePageResult) {
@@ -135,9 +137,7 @@ public class BillboardsFragment extends RecyclerFragment<Displayable> {
                             setupHeaderItem(three, iv_user_avatar_three, tv_user_name_three, tv_billboard_amount_three);
                         }
                     }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                });
     }
 
     @Override
@@ -160,11 +160,11 @@ public class BillboardsFragment extends RecyclerFragment<Displayable> {
 
     private void setupHeaderItem(Billboard billboard, ImageView avatar, TextView userName, TextView billboardAmount) {
         Glide.with(getContext())
-                .load(billboard.billboardUser.userHeadimg)
-                .apply(RequestOptions.placeholderOf(R.drawable.shape_user_no_avatar_bg).centerCrop())
+                .load(billboard.hblUser.userHeadimg)
+                .apply(RequestOptions.placeholderOf(R.drawable.shape_user_no_avatar_bg).circleCrop())
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(avatar);
-        userName.setText(billboard.billboardUser.userNickname);
+        userName.setText(billboard.hblUser.userNickname);
         billboardAmount.setText(getString(R.string.total_amount, mDecimalFormat.format(billboard.total)));
     }
 

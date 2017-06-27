@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/shape_room_item_bg">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tv_room_id"
@@ -14,7 +13,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_margin="8dp"
-        android:text="TextView" />
+        android:textColor="@color/colorOrange" />
 
     <TextView
         android:id="@+id/tv_room_create_time"
@@ -24,7 +23,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="8dp"
-        android:text="TextView"
         android:textColor="@color/colorTextLightGray" />
 
     <View
@@ -50,7 +48,6 @@
         android:layout_alignTop="@id/iv_room_avatar"
         android:layout_toEndOf="@id/iv_room_avatar"
         android:layout_toRightOf="@id/iv_room_avatar"
-        android:text="TextView"
         android:textColor="@color/colorTextBlack" />
 
     <TextView
@@ -65,11 +62,9 @@
         android:drawablePadding="8dp"
         android:drawableStart="@drawable/ic_red_envelope_summary"
         android:gravity="center_vertical"
-        android:text="TextView"
         android:textColor="@color/colorTextBlack" />
 
     <TextView
-
         android:id="@+id/tv_room_user_count"
         style="@style/TextAppearance.AppTheme"
         android:layout_width="wrap_content"
@@ -83,13 +78,11 @@
         android:drawablePadding="8dp"
         android:drawableStart="@drawable/ic_user"
         android:gravity="center_vertical"
-        android:text="TextView"
         android:textColor="@color/colorTextBlack" />
-
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="56dp"
         android:layout_below="@id/iv_room_avatar"
         android:orientation="horizontal">
 
@@ -117,8 +110,8 @@
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:textColor="@android:color/white" />
     </LinearLayout>
 

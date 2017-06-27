@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Happy Red Envelope</string>
-    <string name="error_msg">Happy Red Envelope</string>
-    <string name="empty_msg">Happy Red Envelope</string>
+    <string name="error_msg">Error occurred</string>
+    <string name="empty_msg">No data</string>
     <string name="red_envelope">红包乐</string>
     <string name="billboard">排行榜</string>
     <string name="explore">发现</string>

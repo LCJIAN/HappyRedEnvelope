@@ -10,4 +10,5 @@
     <color name="colorTextGray">#ff666666</color>
     <color name="colorTextLightGray">#ff999999</color>
     <color name="colorDivider">#fff5f5f5</color>
+    <color name="colorOrange">#fffffe55</color>
 </resources>

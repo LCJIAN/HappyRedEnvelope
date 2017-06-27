@@ -122,14 +122,14 @@ public interface RedEnvelopeService {
      * 获取发现参数
      */
     @Headers("Content-Type: application/x-www-form-urlencoded; charset=utf-8")
-    @POST("user/found/getparams")
+    @POST("found/getparams")
     Observable<ResponseData<Explore>> getExplore();
 
     /**
      * 获取发现参数
      */
     @Headers("Content-Type: application/x-www-form-urlencoded; charset=utf-8")
-    @POST("user/found/getbanner")
+    @POST("found/getbanner")
     Observable<ResponseData<List<Banner>>> getBanners();
 
     /**

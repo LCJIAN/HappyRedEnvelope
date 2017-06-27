@@ -123,12 +123,12 @@ class BillBoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             this.billboard = billboard;
             Context context = itemView.getContext();
             Glide.with(context)
-                    .load(billboard.billboardUser.userHeadimg)
-                    .apply(RequestOptions.placeholderOf(R.drawable.shape_user_no_avatar_bg).centerCrop())
+                    .load(billboard.hblUser.userHeadimg)
+                    .apply(RequestOptions.placeholderOf(R.drawable.shape_user_no_avatar_bg).circleCrop())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(iv_user_avatar);
-            tv_user_name.setText(billboard.billboardUser.userNickname);
-            if (mMyUserId == billboard.billboardUser.userId) {
+            tv_user_name.setText(billboard.hblUser.userNickname);
+            if (mMyUserId == billboard.hblUser.userId) {
                 tv_user_name.setTextColor(ContextCompat.getColor(context, R.color.colorLightRed));
             } else {
                 tv_user_name.setTextColor(ContextCompat.getColor(context, R.color.colorTextBlack));

@@ -115,7 +115,7 @@ class RoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tv_room_create_time.setText(DateUtils.convertDateToStr(new Date(room.createTime), "yyyy-MM-dd HH:mm"));
             Glide.with(context)
                     .load(room.pic)
-                    .apply(RequestOptions.placeholderOf(R.drawable.shape_user_no_avatar_bg).transform(new RoundedCorners(4)))
+                    .apply(RequestOptions.placeholderOf(R.drawable.shape_room_no_avatar_bg).transform(new RoundedCorners(4)))
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(iv_room_avatar);
             tv_room_name.setText(room.name);

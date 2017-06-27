@@ -24,6 +24,7 @@ import com.lcjian.happyredenvelope.data.entity.PageResult;
 import com.lcjian.happyredenvelope.data.entity.RedEnvelope;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.lib.util.common.DateUtils;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.text.DecimalFormat;
 import java.util.Date;

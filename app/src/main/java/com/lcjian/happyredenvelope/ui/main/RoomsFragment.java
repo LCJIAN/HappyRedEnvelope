@@ -72,6 +72,8 @@ public class RoomsFragment extends RecyclerFragment<Room> {
                         return pageResultResponseData.data;
                     }
                 })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(new Action1<PageResult<Room>>() {
                     @Override
                     public void call(PageResult<Room> displayablePageResult) {
@@ -79,9 +81,7 @@ public class RoomsFragment extends RecyclerFragment<Room> {
                             setupHeader();
                         }
                     }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                });
     }
 
     @Override

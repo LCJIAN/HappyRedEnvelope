@@ -4,7 +4,7 @@ import com.lcjian.lib.entity.Displayable;
 
 public class Billboard implements Displayable {
 
-    public User billboardUser;
+    public User hblUser;
     public int day;
     public int week;
     public int month;
