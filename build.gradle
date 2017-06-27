@@ -17,9 +17,9 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
-        maven {
-            url 'http://oss.sonatype.org/content/repositories/snapshots'
-        }
+//        maven {
+//            url 'http://oss.sonatype.org/content/repositories/snapshots'
+//        }
         maven {
             url "https://jitpack.io"
         }

@@ -1,9 +1,5 @@
 package com.lcjian.happyredenvelope.data.entity;
 
-/**
- * Created by root on 17-6-20.
- */
-
 public class User {
 
     public long userCreatetime;
@@ -12,4 +8,6 @@ public class User {
     public long userLastlogintime;
     public String userNickname;
     public String userOpenid;
+    public String userCountry;
+    public int userSex;
 }

@@ -36,10 +36,10 @@
             android:id="@+id/tv_my_red_envelope_history"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="8dp"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
             android:text="@string/red_envelope_history"
             android:textAppearance="@style/TextAppearance.AppCompat"
             android:textColor="@android:color/white" />

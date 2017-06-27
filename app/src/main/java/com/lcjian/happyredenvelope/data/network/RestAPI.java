@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.google.gson.GsonBuilder;
 import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BuildConfig;
+import com.lcjian.happyredenvelope.Constants;
 import com.lcjian.lib.DeviceUuidFactory;
 import com.lcjian.lib.util.common.StorageUtils;
 import com.lcjian.lib.util.security.MD5Utils;
@@ -69,7 +70,7 @@ public class RestAPI {
                     String timestamp = String.valueOf(System.currentTimeMillis());
                     List<String> commonParas = Arrays.asList(deviceId, version, platform, channel, timestamp);
                     Collections.sort(commonParas);
-                    String sign = MD5Utils.getMD532(TextUtils.join("", commonParas));
+                    String sign = MD5Utils.getMD532(TextUtils.join("", commonParas) + Constants.RED_ENVELOPE_API_KEY);
 
                     Request request = chain.request();
                     RequestBody requestBody = request.body();

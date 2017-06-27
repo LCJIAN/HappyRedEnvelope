@@ -1,6 +1,5 @@
 package com.lcjian.happyredenvelope.data.network;
 
-
 import com.lcjian.happyredenvelope.data.entity.Banner;
 import com.lcjian.happyredenvelope.data.entity.Billboard;
 import com.lcjian.happyredenvelope.data.entity.Explore;
@@ -10,7 +9,6 @@ import com.lcjian.happyredenvelope.data.entity.RedEnvelope;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.Room;
 import com.lcjian.happyredenvelope.data.entity.User;
-import com.lcjian.happyredenvelope.data.entity.UserVipInfo;
 import com.lcjian.happyredenvelope.data.entity.VipPrivilege;
 
 import java.util.List;
@@ -35,13 +33,6 @@ public interface RedEnvelopeService {
                                             @Field("province") String province,
                                             @Field("city") String city,
                                             @Field("sex") String sex);
-
-    /**
-     * 用户是否VIP
-     */
-    @FormUrlEncoded
-    @POST("user/user/isvip")
-    Observable<ResponseData<UserVipInfo>> isVip(@Field("userid") long userId);
 
     /**
      * 获取普通房间列表
@@ -147,6 +138,6 @@ public interface RedEnvelopeService {
     @FormUrlEncoded
     @POST("hongbao/gethongbaohistory")
     Observable<ResponseData<PageResult<RedEnvelope>>> getRedEnvHistories(@Field("uid") long userId,
-                                                                                @Field("page") int pageNumber,
-                                                                                @Field("pagesize") int pageSize);
+                                                                         @Field("page") int pageNumber,
+                                                                         @Field("pagesize") int pageSize);
 }

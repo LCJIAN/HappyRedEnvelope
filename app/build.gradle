@@ -13,11 +13,30 @@ android {
         buildConfigField 'String', 'API_URL', '"http://47.93.165.239/api/client/"'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        release {
+            storeFile file("../lcjian.keystore")
+            storePassword "9a11b00c"
+            keyAlias "liaocj"
+            keyPassword "9a11b00c"
+        }
+//        myConfig {
+//            storeFile file("C:\\Users\\成见\\Desktop\\lcjian.keystore")
+//            storePassword System.console().readLine("\nKeystore password: ")
+//            keyAlias "liaocj"
+//            keyPassword System.console().readLine("\nKey password: ")
+//        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
             buildConfigField 'String', 'API_URL', '"http://www.hongbaole.com/api/client/"'
+            minifyEnabled false
+            zipAlignEnabled true
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }

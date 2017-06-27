@@ -2,6 +2,7 @@ package com.lcjian.happyredenvelope.ui.mine;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +48,7 @@ public class RedEnvelopeHistoriesActivity extends BaseActivity implements View.O
         ButterKnife.bind(this);
 
         btn_back.setOnClickListener(this);
-        getSupportFragmentManager().beginTransaction().add(R.id.fl_red_env_histories_container,new RedEnvelopesFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fl_red_env_histories_container, new RedEnvelopesFragment()).commit();
     }
 
     @Override
@@ -63,7 +64,7 @@ public class RedEnvelopeHistoriesActivity extends BaseActivity implements View.O
     }
 
     public static class RedEnvelopesFragment extends RecyclerFragment<RedEnvelope> {
-        
+
         private RedEnvelopeAdapter mAdapter;
 
         @Override
@@ -88,6 +89,7 @@ public class RedEnvelopeHistoriesActivity extends BaseActivity implements View.O
 
         @Override
         public void notifyDataChanged(List<RedEnvelope> data) {
+            mAdapter.replaceAll(data);
         }
     }
 
@@ -97,6 +99,33 @@ public class RedEnvelopeHistoriesActivity extends BaseActivity implements View.O
 
         RedEnvelopeAdapter(List<RedEnvelope> redEnvelopeHistories) {
             this.mRedEnvelopeHistories = redEnvelopeHistories;
+        }
+
+        void replaceAll(final List<RedEnvelope> data) {
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+
+                @Override
+                public int getOldListSize() {
+                    return mRedEnvelopeHistories == null ? 0 : mRedEnvelopeHistories.size();
+                }
+
+                @Override
+                public int getNewListSize() {
+                    return data == null ? 0 : data.size();
+                }
+
+                @Override
+                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                    return mRedEnvelopeHistories.get(oldItemPosition) == data.get(newItemPosition);
+                }
+
+                @Override
+                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                    return mRedEnvelopeHistories.get(oldItemPosition) == data.get(newItemPosition);
+                }
+            }, true);
+            this.mRedEnvelopeHistories = data;
+            diffResult.dispatchUpdatesTo(this);
         }
 
         @Override
@@ -116,10 +145,14 @@ public class RedEnvelopeHistoriesActivity extends BaseActivity implements View.O
 
         static class RedEnvelopeViewHolder extends RecyclerView.ViewHolder {
 
-            @BindView(R.id.iv_red_envelop_avatar) ImageView iv_red_envelop_avatar;
-            @BindView(R.id.tv_red_envelop_title) TextView tv_red_envelop_title;
-            @BindView(R.id.tv_red_envelop_time) TextView tv_red_envelop_time;
-            @BindView(R.id.iv_red_envelop_amount) TextView iv_red_envelop_amount;
+            @BindView(R.id.iv_red_envelop_avatar)
+            ImageView iv_red_envelop_avatar;
+            @BindView(R.id.tv_red_envelop_title)
+            TextView tv_red_envelop_title;
+            @BindView(R.id.tv_red_envelop_time)
+            TextView tv_red_envelop_time;
+            @BindView(R.id.iv_red_envelop_amount)
+            TextView iv_red_envelop_amount;
 
             private DecimalFormat mDecimalFormat;
 
@@ -139,7 +172,7 @@ public class RedEnvelopeHistoriesActivity extends BaseActivity implements View.O
 
                 tv_red_envelop_title.setText(redEnvelope.hongBaoRoom.name);
                 tv_red_envelop_time.setText(DateUtils.convertDateToStr(new Date(redEnvelope.time), "yyyy-MM-dd HH:mm"));
-                iv_red_envelop_amount.setText(String.format(Locale.getDefault(), "%s%s", "+" , mDecimalFormat.format(redEnvelope.money)));
+                iv_red_envelop_amount.setText(String.format(Locale.getDefault(), "%s%s", "+", mDecimalFormat.format(redEnvelope.money)));
             }
         }
     }

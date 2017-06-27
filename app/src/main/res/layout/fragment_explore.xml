@@ -33,7 +33,7 @@
             <com.lcjian.lib.viewpager.AutoViewPager
                 android:id="@+id/vp_banner"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"/>
+                android:layout_height="200dp" />
 
             <View
                 android:layout_width="match_parent"

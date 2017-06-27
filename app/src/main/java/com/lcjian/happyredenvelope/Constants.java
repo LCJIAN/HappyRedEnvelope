@@ -6,6 +6,6 @@ public class Constants {
 
     public static final String WE_CHAT_ID = "wx3ae995fc61483287";
 
-    public static final String WE_CHAT_SECRET = "e9a5fbd3baa5c04855e038b707f4ee23";
+    public static final String WE_CHAT_SECRET = "942f822faea14d4b12f866f17ec9ee7d";
 
 }

@@ -41,8 +41,10 @@ import rx.schedulers.Schedulers;
 
 public class MineFragment extends BaseFragment implements View.OnClickListener {
 
-    @BindView(R.id.btn_go_message) ImageButton btn_go_message;
-    @BindView(R.id.tv_my_red_envelope_history) TextView tv_my_red_envelope_history;
+    @BindView(R.id.btn_go_message)
+    ImageButton btn_go_message;
+    @BindView(R.id.tv_my_red_envelope_history)
+    TextView tv_my_red_envelope_history;
     @BindView(R.id.iv_not_signed_in)
     ImageView iv_not_signed_in;
     @BindView(R.id.btn_sign_in)
@@ -170,6 +172,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         if (mUserInfoSp.getBoolean("signed_in", false)) {
             rl_signed_in.setVisibility(View.VISIBLE);
             btn_go_message.setVisibility(View.VISIBLE);
+            tv_my_red_envelope_history.setVisibility(View.VISIBLE);
             tv_buy_luck_card.setVisibility(View.VISIBLE);
             tv_buy_vip.setVisibility(View.VISIBLE);
             tv_view_history.setVisibility(View.VISIBLE);
@@ -188,6 +191,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
 
             rl_signed_in.setVisibility(View.GONE);
             btn_go_message.setVisibility(View.GONE);
+            tv_my_red_envelope_history.setVisibility(View.GONE);
             tv_buy_luck_card.setVisibility(View.GONE);
             tv_buy_vip.setVisibility(View.GONE);
             tv_view_history.setVisibility(View.GONE);
@@ -216,11 +220,13 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                                     .putString("user_avatar", userResponseData.data.userHeadimg)
                                     .putString("user_nick_name", userResponseData.data.userNickname)
                                     .putString("user_open_id", userResponseData.data.userOpenid)
+                                    .putString("user_country", userResponseData.data.userCountry)
+                                    .putInt("user_sex", userResponseData.data.userSex)
                                     .putBoolean("signed_in", true)
                                     .apply();
                             setupSignedIn();
                         } else {
-                            Toast.makeText(App.getInstance(), userResponseData.message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(App.getInstance(), userResponseData.msg, Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Action1<Throwable>() {
@@ -237,15 +243,6 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                 .putString("province", province)
                 .putString("city", city)
                 .putString("sex", sex)
-
-                .putLong("user_id", 122)
-                .putLong("user_create_time", 0)
-                .putLong("user_last_sign_in_time", 0)
-                .putString("user_avatar", avatar)
-                .putString("user_nick_name", name)
-                .putString("user_open_id", openId)
-                .putBoolean("signed_in", true)
                 .apply();
-        setupSignedIn();
     }
 }

@@ -4,18 +4,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.lcjian.happyredenvelope.BaseFragment;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.Banner;
 import com.lcjian.happyredenvelope.data.entity.Explore;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.ui.web.WebViewActivity;
+import com.lcjian.lib.viewpager.AutoViewPager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -28,6 +35,8 @@ import rx.subscriptions.CompositeSubscription;
 
 public class ExploreFragment extends BaseFragment implements View.OnClickListener {
 
+    @BindView(R.id.vp_banner)
+    AutoViewPager vp_banner;
     @BindView(R.id.tv_explore_one)
     TextView tv_explore_one;
     @BindView(R.id.tv_explore_two)
@@ -52,6 +61,7 @@ public class ExploreFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
         tv_explore_one.setOnClickListener(this);
         tv_explore_two.setOnClickListener(this);
         tv_explore_three.setOnClickListener(this);
@@ -61,17 +71,18 @@ public class ExploreFragment extends BaseFragment implements View.OnClickListene
         mSubscriptions.add(mRestAPI.redEnvelopeService().getBanners()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Action1<ResponseData<List<Banner>>>() {
-            @Override
-            public void call(ResponseData<List<Banner>> listResponseData) {
+                .subscribe(new Action1<ResponseData<List<Banner>>>() {
+                    @Override
+                    public void call(ResponseData<List<Banner>> listResponseData) {
+                        vp_banner.setAdapter(new BannerAdapter(listResponseData.data));
+                        vp_banner.setOffscreenPageLimit(2);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
 
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-
-            }
-        }));
+                    }
+                }));
         mSubscriptions.add(mRestAPI.redEnvelopeService().getExplore()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -131,14 +142,57 @@ public class ExploreFragment extends BaseFragment implements View.OnClickListene
 
     private static class BannerAdapter extends PagerAdapter {
 
+        private List<Banner> mData;
+
+        private List<View> mRecycledViews;
+
+        private BannerAdapter(List<Banner> data) {
+            this.mData = data;
+            this.mRecycledViews = new ArrayList<>();
+        }
+
         @Override
         public int getCount() {
-            return 0;
+            return mData == null ? 0 : mData.size();
         }
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return false;
+            return view == object;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            View view;
+            if (mRecycledViews.isEmpty()) {
+                view = new ImageView(container.getContext());
+                view.setLayoutParams(new ViewPager.LayoutParams());
+            } else {
+                view = mRecycledViews.get(0);
+                mRecycledViews.remove(0);
+            }
+            final Banner banner = mData.get(position);
+
+            Glide.with(container.getContext())
+                    .load(banner.img)
+                    .apply(RequestOptions.centerCropTransform())
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into((ImageView) view);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    v.getContext().startActivity(new Intent(v.getContext(), WebViewActivity.class).putExtra("url", banner.url));
+                }
+            });
+            container.addView(view);
+            return view;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
+            mRecycledViews.add((View) object);
         }
     }
 }

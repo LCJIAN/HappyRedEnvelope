@@ -122,7 +122,8 @@ public class BuyVipActivity extends BaseActivity implements View.OnClickListener
 
         static class VipPrivilegeViewHolder extends RecyclerView.ViewHolder {
 
-            @BindView(R.id.tv_vip_privilege) TextView tv_vip_privilege;
+            @BindView(R.id.tv_vip_privilege)
+            TextView tv_vip_privilege;
 
             VipPrivilegeViewHolder(ViewGroup parent) {
                 super(LayoutInflater.from(parent.getContext()).inflate(R.layout.vip_privilege_item, parent, false));
