@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,8 +19,8 @@ import com.lcjian.happyredenvelope.common.RoomViewHolder;
 import com.lcjian.happyredenvelope.data.entity.Goods;
 import com.lcjian.happyredenvelope.data.entity.GroupHeader;
 import com.lcjian.happyredenvelope.data.entity.Room;
-import com.lcjian.happyredenvelope.data.entity.SearchHistoryHeader;
 import com.lcjian.happyredenvelope.data.entity.SearchHistory;
+import com.lcjian.happyredenvelope.data.entity.SearchHistoryHeader;
 import com.lcjian.lib.entity.Displayable;
 
 import java.text.DecimalFormat;
@@ -29,7 +30,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
- class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_ROOM = 0;
     private static final int TYPE_GOODS = 1;
@@ -149,41 +150,40 @@ import butterknife.ButterKnife;
 
     static class SearchHistoryHeaderViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.iv_video_thumbnail)
-        ImageView iv_video_thumbnail;
-        @BindView(R.id.iv_video_title)
-        TextView iv_video_title;
-
-        SearchHistoryHeader searchHistoryHeader;
+        @BindView(R.id.tv_search_history_title)
+        TextView tv_search_history_title;
+        @BindView(R.id.btn_delete_histories)
+        ImageButton btn_delete_histories;
+        @BindView(R.id.tv_no_data)
+        TextView tv_no_data;
 
         SearchHistoryHeaderViewHolder(ViewGroup parent) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.video_item, parent, false));
+            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.search_history_header_item, parent, false));
             ButterKnife.bind(this, this.itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
+            btn_delete_histories.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                 }
             });
         }
 
-        void bindTo( SearchHistoryHeader searchHistoryHeader) {
-            this.searchHistoryHeader = searchHistoryHeader;
-            Context context = itemView.getContext();
-            iv_video_title.setText(searchHeader.ku6ShortVideo.name);
+        void bindTo(SearchHistoryHeader searchHistoryHeader) {
+            tv_search_history_title.setText(searchHistoryHeader.title);
+            tv_no_data.setText(searchHistoryHeader.noDataText);
+            tv_no_data.setVisibility(searchHistoryHeader.noData ? View.VISIBLE : View.GONE);
         }
     }
 
     static class SearchHistoryViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.iv_video_thumbnail)
-        ImageView iv_video_thumbnail;
-        @BindView(R.id.iv_video_title)
-        TextView iv_video_title;
+        @BindView(R.id.tv_room_id)
+        TextView tv_room_id;
 
         SearchHistory searchHistory;
 
         SearchHistoryViewHolder(ViewGroup parent) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.video_item, parent, false));
+            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.search_history_item, parent, false));
             ButterKnife.bind(this, this.itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -192,10 +192,9 @@ import butterknife.ButterKnife;
             });
         }
 
-        void bindTo( SearchHistory searchHistory) {
+        void bindTo(SearchHistory searchHistory) {
             this.searchHistory = searchHistory;
-            Context context = itemView.getContext();
-            iv_video_title.setText(videoHistory.ku6ShortVideo.name);
+            tv_room_id.setText(searchHistory.text);
         }
     }
 }

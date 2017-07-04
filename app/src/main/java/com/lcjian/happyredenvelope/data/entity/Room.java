@@ -1,8 +1,10 @@
 package com.lcjian.happyredenvelope.data.entity;
 
+import com.lcjian.lib.entity.Displayable;
+
 import java.util.List;
 
-public class Room {
+public class Room implements Displayable {
 
     public long createTime;
     public String desc;

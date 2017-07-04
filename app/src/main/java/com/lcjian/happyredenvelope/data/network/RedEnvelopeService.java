@@ -3,6 +3,7 @@ package com.lcjian.happyredenvelope.data.network;
 import com.lcjian.happyredenvelope.data.entity.Banner;
 import com.lcjian.happyredenvelope.data.entity.Billboard;
 import com.lcjian.happyredenvelope.data.entity.Explore;
+import com.lcjian.happyredenvelope.data.entity.Goods;
 import com.lcjian.happyredenvelope.data.entity.GoodsHistory;
 import com.lcjian.happyredenvelope.data.entity.LeftTimeInfo;
 import com.lcjian.happyredenvelope.data.entity.LuckCardSummary;
@@ -188,11 +189,18 @@ public interface RedEnvelopeService {
                                                                          @Field("pagesize") int pageSize);
 
     /**
+     * 获取优惠券推荐
+     */
+    @FormUrlEncoded
+    @POST("ticket/getrecommendtickets")
+    Observable<ResponseData<List<Goods>>> getRecommendGoods(@Field("count") int count);
+
+    /**
      * 搜索房间（按ID号）
      */
     @FormUrlEncoded
     @POST("room/searchroom")
-    Observable<ResponseData<List<Room>>> searchRoom(@Field("roomid") long roomId);
+    Observable<ResponseData<Room>> searchRoom(@Field("roomid") String keyword);
 
     /**
      * 进入房间

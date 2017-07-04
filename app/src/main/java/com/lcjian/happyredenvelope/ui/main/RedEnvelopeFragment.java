@@ -25,6 +25,7 @@ import com.lcjian.happyredenvelope.data.entity.RedEnvHot;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.ui.mine.UserLuckCardActivity;
 import com.lcjian.happyredenvelope.ui.room.CreateRoomActivity;
+import com.lcjian.happyredenvelope.ui.search.SearchActivity;
 import com.lcjian.happyredenvelope.ui.web.WebViewActivity;
 import com.lcjian.lib.content.SimpleFragmentPagerAdapter;
 import com.lcjian.lib.viewpager.AutoViewPager;
@@ -89,6 +90,7 @@ public class RedEnvelopeFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
+        btn_go_search.setOnClickListener(this);
         btn_go_add_room.setOnClickListener(this);
         tv_create_room.setOnClickListener(this);
         tv_buy_luck_card.setOnClickListener(this);
@@ -142,6 +144,10 @@ public class RedEnvelopeFragment extends BaseFragment implements View.OnClickLis
             break;
             case R.id.tv_create_room: {
                 startActivity(new Intent(v.getContext(), CreateRoomActivity.class));
+            }
+            break;
+            case R.id.btn_go_search: {
+                startActivity(new Intent(v.getContext(), SearchActivity.class));
             }
             break;
             case R.id.tv_buy_luck_card: {

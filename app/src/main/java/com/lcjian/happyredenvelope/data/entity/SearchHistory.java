@@ -3,11 +3,12 @@ package com.lcjian.happyredenvelope.data.entity;
 import android.support.annotation.Nullable;
 
 import com.lcjian.happyredenvelope.data.db.table.SearchHistoryTable;
+import com.lcjian.lib.entity.Displayable;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
 @StorIOSQLiteType(table = SearchHistoryTable.TABLE_NAME)
-public class SearchHistory {
+public class SearchHistory implements Displayable {
 
     /**
      * If object was not inserted into db, id will be null

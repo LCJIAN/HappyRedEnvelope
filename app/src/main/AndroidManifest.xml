@@ -37,6 +37,7 @@
         <activity android:name=".ui.mine.RedEnvelopeHistoriesActivity" />
         <activity android:name=".ui.withdrawal.WithdrawalActivity" />
         <activity android:name=".ui.withdrawal.WithdrawalHistoriesActivity" />
+        <activity android:name=".ui.search.SearchActivity" />
         <activity android:name=".ui.room.CreateRoomActivity" />
         <activity android:name=".ui.web.WebViewActivity" />
 

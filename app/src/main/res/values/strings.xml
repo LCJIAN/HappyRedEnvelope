@@ -85,4 +85,9 @@
     <string name="copy_token">创建房间:%1$d</string>
     <string name="vip_withdrawal_msg">创建房间</string>
     <string name="none_vip_withdrawal_msg">创建房间</string>
+    <string name="room_id_label">房间ID</string>
+    <string name="no_search_history">房间ID</string>
+    <string name="no_search_result">房间ID</string>
+    <string name="history_search">history search</string>
+    <string name="recommend_goods">recommend goods</string>
 </resources>
