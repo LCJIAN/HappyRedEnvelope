@@ -20,23 +20,33 @@ import com.bumptech.glide.request.RequestOptions;
 import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseFragment;
 import com.lcjian.happyredenvelope.R;
+import com.lcjian.happyredenvelope.data.entity.LeftTimeInfo;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.User;
-import com.lcjian.happyredenvelope.ui.mine.BuyLuckCardActivity;
+import com.lcjian.happyredenvelope.data.entity.UserSummary;
 import com.lcjian.happyredenvelope.ui.mine.BuyVipActivity;
 import com.lcjian.happyredenvelope.ui.mine.RedEnvelopeHistoriesActivity;
+import com.lcjian.happyredenvelope.ui.mine.UserLuckCardActivity;
+import com.lcjian.happyredenvelope.ui.mine.ViewHistoriesActivity;
+import com.lcjian.happyredenvelope.ui.withdrawal.WithdrawalActivity;
+import com.lcjian.lib.util.common.StringUtils;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
+import java.text.DecimalFormat;
+import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 public class MineFragment extends BaseFragment implements View.OnClickListener {
@@ -62,11 +72,21 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     TextView tv_balance;
     @BindView(R.id.btn_withdrawal)
     TextView btn_withdrawal;
+    @BindView(R.id.tv_day_count)
+    TextView tv_day_count;
+    @BindView(R.id.tv_week_count)
+    TextView tv_week_count;
+    @BindView(R.id.tv_month_count)
+    TextView tv_month_count;
+    @BindView(R.id.tv_total_count)
+    TextView tv_total_count;
     @BindView(R.id.rl_signed_in)
     RelativeLayout rl_signed_in;
 
     @BindView(R.id.tv_buy_luck_card)
     TextView tv_buy_luck_card;
+    @BindView(R.id.tv_left_luck_card_total)
+    TextView tv_left_luck_card_total;
     @BindView(R.id.tv_buy_vip)
     TextView tv_buy_vip;
     @BindView(R.id.tv_view_history)
@@ -83,6 +103,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     Unbinder unbinder;
 
     private Subscription mSubscription;
+    private Subscription mSubscription2;
+    private Subscription mSubscription3;
 
     @Nullable
     @Override
@@ -97,6 +119,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         btn_go_message.setOnClickListener(this);
         tv_my_red_envelope_history.setOnClickListener(this);
         btn_sign_in.setOnClickListener(this);
+        btn_withdrawal.setOnClickListener(this);
         tv_buy_luck_card.setOnClickListener(this);
         tv_buy_vip.setOnClickListener(this);
         tv_view_history.setOnClickListener(this);
@@ -117,6 +140,12 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         super.onDestroyView();
         if (mSubscription != null) {
             mSubscription.unsubscribe();
+        }
+        if (mSubscription2 != null) {
+            mSubscription2.unsubscribe();
+        }
+        if (mSubscription3 != null) {
+            mSubscription3.unsubscribe();
         }
         unbinder.unbind();
     }
@@ -151,12 +180,20 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                 });
             }
             break;
+            case R.id.btn_withdrawal: {
+                startActivity(new Intent(getContext(), WithdrawalActivity.class));
+            }
+            break;
             case R.id.tv_buy_luck_card: {
-                startActivity(new Intent(getContext(), BuyLuckCardActivity.class));
+                startActivity(new Intent(getContext(), UserLuckCardActivity.class));
             }
             break;
             case R.id.tv_buy_vip: {
                 startActivity(new Intent(getContext(), BuyVipActivity.class));
+            }
+            break;
+            case R.id.tv_view_history: {
+                startActivity(new Intent(getContext(), ViewHistoriesActivity.class));
             }
             break;
             case R.id.tv_my_red_envelope_history: {
@@ -186,6 +223,11 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                     .apply(RequestOptions.placeholderOf(R.drawable.shape_user_no_avatar_bg).circleCrop())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(iv_user_avatar);
+            tv_balance.setText(String.format(Locale.getDefault(), "%s%s",
+                    "￥", new DecimalFormat("0.00").format(mUserInfoSp.getFloat("user_balance", 0))));
+            tv_user_name.setText(mUserInfoSp.getString("user_nick_name", ""));
+            getUserSummary();
+            getLeftTime();
         } else {
             fl_not_signed_in.setVisibility(View.VISIBLE);
 
@@ -222,6 +264,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                                     .putString("user_open_id", userResponseData.data.userOpenid)
                                     .putString("user_country", userResponseData.data.userCountry)
                                     .putInt("user_sex", userResponseData.data.userSex)
+                                    .putFloat("user_balance", userResponseData.data.userBalance)
                                     .putBoolean("signed_in", true)
                                     .apply();
                             setupSignedIn();
@@ -244,5 +287,68 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                 .putString("city", city)
                 .putString("sex", sex)
                 .apply();
+    }
+
+    private void getUserSummary() {
+        if (mSubscription2 != null) {
+            mSubscription2.unsubscribe();
+        }
+        mSubscription2 = mRestAPI.redEnvelopeService().getUserSummary(mUserInfoSp.getLong("user_id", 0))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<ResponseData<UserSummary>>() {
+                    @Override
+                    public void call(ResponseData<UserSummary> userSummaryResponseData) {
+                        if (userSummaryResponseData.code == 0) {
+                            tv_day_count.setText(String.valueOf(userSummaryResponseData.data.day));
+                            tv_week_count.setText(String.valueOf(userSummaryResponseData.data.week));
+                            tv_month_count.setText(String.valueOf(userSummaryResponseData.data.month));
+                            tv_total_count.setText(String.valueOf(userSummaryResponseData.data.totalCount));
+                            tv_left_luck_card_total.setText(getString(R.string.luck_card_left, userSummaryResponseData.data.totalLuck));
+                        } else {
+                            Toast.makeText(App.getInstance(), userSummaryResponseData.msg, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Toast.makeText(App.getInstance(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+
+    private void getLeftTime() {
+        if (mSubscription3 != null) {
+            mSubscription3.unsubscribe();
+        }
+        mSubscription3 = Observable.combineLatest(Observable.interval(1, TimeUnit.SECONDS),
+                mRestAPI.redEnvelopeService().getLuckCardTotalLeftTime(mUserInfoSp.getLong("user_id", 0))
+                , new Func2<Long, ResponseData<LeftTimeInfo>, Long>() {
+                    @Override
+                    public Long call(Long aLong, ResponseData<LeftTimeInfo> leftTimeInfoResponseData) {
+                        if (leftTimeInfoResponseData.code == 0) {
+                            return (leftTimeInfoResponseData.data.totalLeftTime - aLong) * 1000;
+                        } else {
+                            throw new RuntimeException(leftTimeInfoResponseData.msg);
+                        }
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        if (aLong < 0) {
+                            aLong = 0L;
+                        }
+                        tv_time_left.setText(StringUtils.stringForTime(aLong.intValue()));
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Toast.makeText(App.getInstance(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

@@ -10,4 +10,5 @@ public class User {
     public String userOpenid;
     public String userCountry;
     public int userSex;
+    public float userBalance;
 }

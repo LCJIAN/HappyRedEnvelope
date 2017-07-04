@@ -30,9 +30,14 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.mine.UserLuckCardActivity" />
         <activity android:name=".ui.mine.BuyLuckCardActivity" />
         <activity android:name=".ui.mine.BuyVipActivity" />
+        <activity android:name=".ui.mine.ViewHistoriesActivity" />
         <activity android:name=".ui.mine.RedEnvelopeHistoriesActivity" />
+        <activity android:name=".ui.withdrawal.WithdrawalActivity" />
+        <activity android:name=".ui.withdrawal.WithdrawalHistoriesActivity" />
+        <activity android:name=".ui.room.CreateRoomActivity" />
         <activity android:name=".ui.web.WebViewActivity" />
 
         <meta-data

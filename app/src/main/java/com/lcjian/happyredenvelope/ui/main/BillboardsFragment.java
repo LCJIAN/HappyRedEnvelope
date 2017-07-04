@@ -137,7 +137,8 @@ public class BillboardsFragment extends RecyclerFragment<Displayable> {
                             setupHeaderItem(three, iv_user_avatar_three, tv_user_name_three, tv_billboard_amount_three);
                         }
                     }
-                });
+                })
+                .cache();
     }
 
     @Override

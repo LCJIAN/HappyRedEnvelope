@@ -59,6 +59,16 @@
         android:text="@string/buy_vip"
         android:textColor="@android:color/white" />
 
+    <TextView
+        style="@style/TextAppearance.AppTheme.Small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorDivider"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/vip_privilege"
+        android:textColor="@color/colorTextGray" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_vip_privileges"
         android:layout_width="match_parent"

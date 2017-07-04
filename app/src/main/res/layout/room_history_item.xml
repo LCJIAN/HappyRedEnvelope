@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="4dp">
+
+    <com.lcjian.lib.widget.RatioLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:fixedSide="width"
+        app:ratio="1">
+
+        <ImageView
+            android:id="@+id/iv_room_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.lcjian.lib.widget.RatioLayout>
+
+    <TextView
+        android:id="@+id/tv_room_name"
+        style="@style/TextAppearance.AppTheme.Small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:textColor="@color/colorTextBlack" />
+</LinearLayout>

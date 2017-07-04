@@ -10,10 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseFragment;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.Banner;
@@ -80,7 +82,7 @@ public class ExploreFragment extends BaseFragment implements View.OnClickListene
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-
+                        Toast.makeText(App.getInstance(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }));
         mSubscriptions.add(mRestAPI.redEnvelopeService().getExplore()
@@ -94,7 +96,7 @@ public class ExploreFragment extends BaseFragment implements View.OnClickListene
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-
+                        Toast.makeText(App.getInstance(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }));
     }

@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 
 import com.lcjian.happyredenvelope.R;
@@ -13,7 +12,6 @@ import com.lcjian.happyredenvelope.common.RecyclerFragment;
 import com.lcjian.happyredenvelope.data.entity.PageResult;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.Room;
-import com.lcjian.lib.recyclerview.LoadMoreAdapter;
 import com.lcjian.lib.util.common.DimenUtils;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -56,12 +54,6 @@ public class RoomsFragment extends RecyclerFragment<Room> {
     }
 
     @Override
-    public void onLoadMoreAdapterCreated(LoadMoreAdapter loadMoreAdapter) {
-        View header = LayoutInflater.from(getContext()).inflate(R.layout.red_envelope_header, recycler_view, false);
-        loadMoreAdapter.addHeader(header);
-    }
-
-    @Override
     public Observable<PageResult<Room>> onCreatePageObservable(int currentPage) {
         mCurrentPage = currentPage;
         return (mIsVip ? mRestAPI.redEnvelopeService().getVipRooms(currentPage, 10) : mRestAPI.redEnvelopeService()
@@ -81,7 +73,8 @@ public class RoomsFragment extends RecyclerFragment<Room> {
                             setupHeader();
                         }
                     }
-                });
+                })
+                .cache();
     }
 
     @Override

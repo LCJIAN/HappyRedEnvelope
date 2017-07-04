@@ -1,90 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.mine.UserLuckCardActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:background="@drawable/shape_top_navigation_bg">
+    <include layout="@layout/navigation_top_bar" />
 
-    </RelativeLayout>
-
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="24dp"
-            app:srcCompat="@drawable/luck_card" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/imageView"
-            android:layout_marginLeft="46dp"
-            android:layout_marginStart="46dp"
-            android:layout_marginTop="12dp"
-            android:layout_toEndOf="@+id/imageView"
-            android:layout_toRightOf="@+id/imageView"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/imageView"
-            android:layout_alignLeft="@+id/textView"
-            android:layout_alignStart="@+id/textView"
-            android:layout_marginBottom="11dp"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/imageView"
-            android:layout_centerHorizontal="true"
-            android:text="TextView" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textView3"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="46dp"
-            android:text="Button" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/textView3"
-            android:layout_alignRight="@+id/textView3"
-            android:layout_below="@+id/button2"
-            android:layout_marginTop="38dp"
-            android:text="TextView" />
-
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textView4"
-            android:drawableEnd="@drawable/ic_arrow_right"
-            android:drawableLeft="@drawable/ic_sponsor"
-            android:drawableRight="@drawable/ic_arrow_right"
-            android:drawableStart="@drawable/ic_sponsor"
-            android:padding="16dp" />
+            android:layout_height="wrap_content">
 
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/iv_luck_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="24dp"
+                app:srcCompat="@drawable/luck_card" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/iv_luck_card"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_toEndOf="@id/iv_luck_card"
+                android:layout_toRightOf="@id/iv_luck_card"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextAppearance.AppTheme.Micro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/time_left"
+                    android:textColor="@color/colorTextGray" />
+
+                <TextView
+                    android:id="@+id/tv_time_left"
+                    style="@style/TextAppearance.AppTheme.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorTextBlack" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_left_luck_card_total"
+                style="@style/TextAppearance.AppTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_luck_card"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/colorTextBlack" />
+
+            <LinearLayout
+                android:id="@+id/ll_luck_card_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_left_luck_card_total"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/color_one"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:id="@+id/tv_total_buy_count"
+                        style="@style/TextAppearance.AppTheme.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextBlack" />
+
+                    <TextView
+                        android:id="@+id/tv_total_buy_time"
+                        style="@style/TextAppearance.AppTheme.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextBlack" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:background="@color/color_one"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:id="@+id/tv_total_present_count"
+                        style="@style/TextAppearance.AppTheme.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextBlack" />
+
+                    <TextView
+                        android:id="@+id/tv_total_present_time"
+                        style="@style/TextAppearance.AppTheme.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextBlack" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_go_buy_luck_card"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_below="@id/ll_luck_card_info"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/shape_button_medium_bg"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:text="@string/buy_luck_card"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/tv_luck_card_tip"
+                style="@style/TextAppearance.AppTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_go_buy_luck_card"
+                android:layout_marginTop="24dp"
+                android:padding="16dp"
+                android:text="@string/buy_luck_card_tip"
+                android:textColor="@color/colorTextBlack" />
+
+            <View
+                android:id="@+id/v_luck_card_tutorial"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_below="@+id/tv_luck_card_tip"
+                android:background="@color/colorDivider" />
+
+            <TextView
+                android:id="@+id/tv_luck_card_tutorial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/v_luck_card_tutorial"
+                android:background="?selectableItemBackground"
+                android:drawableEnd="@drawable/ic_arrow_right"
+                android:drawableLeft="@drawable/ic_luck_card_tutorial"
+                android:drawablePadding="16dp"
+                android:drawableRight="@drawable/ic_arrow_right"
+                android:drawableStart="@drawable/ic_luck_card_tutorial"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:text="@string/buy_vip"
+                android:textAppearance="@style/TextAppearance.AppTheme"
+                android:textColor="@color/colorTextBlack" />
+
+        </RelativeLayout>
+    </ScrollView>
 </LinearLayout>

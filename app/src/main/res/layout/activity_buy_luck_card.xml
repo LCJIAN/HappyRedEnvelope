@@ -7,19 +7,7 @@
     android:orientation="vertical"
     tools:context=".ui.mine.BuyLuckCardActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:background="@drawable/shape_top_navigation_bg">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/buy_luck_card"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@android:color/white" />
-    </RelativeLayout>
+    <include layout="@layout/navigation_top_bar" />
 
     <ScrollView
         android:layout_width="match_parent"

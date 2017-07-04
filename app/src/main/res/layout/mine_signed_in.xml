@@ -22,7 +22,6 @@
         android:layout_alignTop="@+id/iv_user_avatar"
         android:layout_toEndOf="@+id/iv_user_avatar"
         android:layout_toRightOf="@+id/iv_user_avatar"
-        android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppTheme" />
 
     <TextView
@@ -35,7 +34,8 @@
         android:drawableLeft="@drawable/luck_card_small"
         android:drawablePadding="16dp"
         android:drawableStart="@drawable/luck_card_small"
-        android:text="TextView"
+        android:gravity="center_vertical"
+        android:text="@string/time_left"
         android:textAppearance="@style/TextAppearance.AppTheme.Micro" />
 
     <TextView
@@ -48,9 +48,7 @@
         android:layout_toEndOf="@+id/tv_time_left_label"
         android:layout_toRightOf="@+id/tv_time_left_label"
         android:gravity="center_vertical"
-        android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppTheme.Small" />
-
 
     <LinearLayout
         android:id="@+id/ll_withdrawal"
@@ -71,7 +69,9 @@
         <TextView
             android:id="@+id/btn_withdrawal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:background="@drawable/shape_button_micro_bg"
             android:gravity="center"
             android:paddingLeft="12dp"
@@ -114,8 +114,11 @@
                     android:textColor="@color/colorTextBlack" />
 
                 <TextView
+                    android:id="@+id/tv_day_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
                     android:textAppearance="@style/TextAppearance.AppTheme.Small"
                     android:textColor="@color/colorLightRed" />
             </LinearLayout>
@@ -140,8 +143,11 @@
                     android:textColor="@color/colorTextBlack" />
 
                 <TextView
+                    android:id="@+id/tv_week_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
                     android:textAppearance="@style/TextAppearance.AppTheme.Small"
                     android:textColor="@color/colorLightRed" />
             </LinearLayout>
@@ -172,8 +178,11 @@
                     android:textColor="@color/colorTextBlack" />
 
                 <TextView
+                    android:id="@+id/tv_month_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
                     android:textAppearance="@style/TextAppearance.AppTheme.Small"
                     android:textColor="@color/colorLightRed" />
             </LinearLayout>
@@ -198,8 +207,11 @@
                     android:textColor="@color/colorTextBlack" />
 
                 <TextView
+                    android:id="@+id/tv_total_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
                     android:textAppearance="@style/TextAppearance.AppTheme.Small"
                     android:textColor="@color/colorLightRed" />
             </LinearLayout>

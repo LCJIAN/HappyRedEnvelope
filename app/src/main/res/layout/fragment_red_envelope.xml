@@ -44,10 +44,45 @@
             app:srcCompat="@drawable/ic_add" />
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/TextAppearance.AppTheme.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/red_envelope_hot"
+            android:textColor="@color/colorDarkRed"
+            android:textStyle="bold" />
+
+        <com.lcjian.lib.viewpager.AutoViewPager
+            android:id="@+id/vp_red_env_hot"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <TextView
+            style="@style/TextAppearance.AppTheme.Micro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/view_it"
+            android:textColor="@color/colorTextLightGray" />
+    </LinearLayout>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_red_envelope"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:layout_weight="1">
 
     </android.support.v4.view.ViewPager>
