@@ -5,9 +5,9 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.lcjian.happyredenvelope"
+        applicationId "com.lqpinxuan.lqpx"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
         buildConfigField 'String', 'API_URL', '"http://47.93.165.239/api/client/"'
@@ -16,10 +16,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile file("../lcjian.keystore")
-            storePassword "9a11b00c"
-            keyAlias "liaocj"
-            keyPassword "9a11b00c"
+            storeFile file("../key.jks")
+            storePassword "hongbaole"
+            keyAlias "商城"
+            keyPassword "hongbaole"
         }
 //        myConfig {
 //            storeFile file("C:\\Users\\成见\\Desktop\\lcjian.keystore")
@@ -31,10 +31,12 @@ android {
 
     buildTypes {
         release {
-            buildConfigField 'String', 'API_URL', '"http://www.hongbaole.com/api/client/"'
+//            buildConfigField 'String', 'API_URL', '"http://www.hongbaole.com/api/client/"'
+            buildConfigField 'String', 'API_URL', '"http://47.93.165.239/api/client/"'
             minifyEnabled false
             zipAlignEnabled true
             shrinkResources false
+            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }

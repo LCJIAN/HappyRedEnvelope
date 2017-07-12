@@ -8,105 +8,116 @@
 
     <include layout="@layout/navigation_top_bar" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <TextView
-            style="@style/TextAppearance.AppTheme.Micro"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:drawableTop="@drawable/ic_balance"
-            android:gravity="center_horizontal"
-            android:text="@string/my_balance"
-            android:textColor="@color/colorTextLightGray" />
-
-        <TextView
-            android:id="@+id/tv_my_balance"
-            style="@style/TextAppearance.AppTheme.Large"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="@color/colorTextBlack"
-            android:textStyle="bold" />
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
-
-            <Button
-                android:id="@+id/btn_go_withdrawal"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:background="@drawable/shape_button_medium_bg"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp"
-                android:text="@string/apply_withdrawal"
-                android:textColor="@android:color/white" />
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/ll_current_withdrawal"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:background="@android:color/white"
+                android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/btn_copy_token"
+                <TextView
+                    style="@style/TextAppearance.AppTheme.Micro"
                     android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:background="@drawable/shape_button_medium_gray_bg"
-                    android:paddingLeft="24dp"
-                    android:paddingRight="24dp"
-                    android:text="@string/copy_token"
-                    android:textColor="@android:color/white" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:drawableTop="@drawable/ic_balance"
+                    android:gravity="center_horizontal"
+                    android:text="@string/my_balance"
+                    android:textColor="@color/colorTextLightGray" />
 
                 <TextView
-                    android:id="@+id/tv_current_withdrawal_token"
-                    style="@style/TextAppearance.AppTheme"
+                    android:id="@+id/tv_my_balance"
+                    style="@style/TextAppearance.AppTheme.Large"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:textColor="@color/colorTextBlack"
+                    android:textStyle="bold" />
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <Button
+                        android:id="@+id/btn_go_withdrawal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:background="@drawable/shape_button_medium_bg"
+                        android:paddingLeft="24dp"
+                        android:paddingRight="24dp"
+                        android:text="@string/apply_withdrawal"
+                        android:textColor="@android:color/white" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_current_withdrawal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/btn_copy_token"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:background="@drawable/shape_button_medium_gray_bg"
+                            android:paddingLeft="24dp"
+                            android:paddingRight="24dp"
+                            android:textColor="@android:color/white" />
+
+                        <TextView
+                            android:id="@+id/tv_current_withdrawal_token"
+                            style="@style/TextAppearance.AppTheme"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textColor="@color/colorTextBlack" />
+                    </LinearLayout>
+                </FrameLayout>
+
+                <TextView
+                    style="@style/TextAppearance.AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:padding="16dp"
+                    android:text="@string/withdrawal_tip"
                     android:textColor="@color/colorTextBlack" />
+
             </LinearLayout>
-        </FrameLayout>
 
-        <TextView
-            style="@style/TextAppearance.AppTheme"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:padding="16dp"
-            android:text="@string/buy_luck_card_tip"
-            android:textColor="@color/colorTextBlack" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/white">
 
-    </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@android:color/white">
-
-        <TextView
-            android:id="@+id/tv_withdrawal_tutorial"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?selectableItemBackground"
-            android:drawableEnd="@drawable/ic_arrow_right"
-            android:drawableLeft="@drawable/ic_withdrawal_tutorial"
-            android:drawablePadding="16dp"
-            android:drawableRight="@drawable/ic_arrow_right"
-            android:drawableStart="@drawable/ic_withdrawal_tutorial"
-            android:gravity="center_vertical"
-            android:padding="16dp"
-            android:text="@string/withdrawal_tutorial"
-            android:textAppearance="@style/TextAppearance.AppTheme"
-            android:textColor="@color/colorTextBlack" />
-    </FrameLayout>
+                <TextView
+                    android:id="@+id/tv_withdrawal_tutorial"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?selectableItemBackground"
+                    android:drawableEnd="@drawable/ic_arrow_right"
+                    android:drawableLeft="@drawable/ic_withdrawal_tutorial"
+                    android:drawablePadding="16dp"
+                    android:drawableRight="@drawable/ic_arrow_right"
+                    android:drawableStart="@drawable/ic_withdrawal_tutorial"
+                    android:gravity="center_vertical"
+                    android:padding="16dp"
+                    android:text="@string/withdrawal_tutorial"
+                    android:textAppearance="@style/TextAppearance.AppTheme"
+                    android:textColor="@color/colorTextBlack" />
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

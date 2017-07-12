@@ -13,10 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseFragment;
+import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.Banner;
 import com.lcjian.happyredenvelope.data.entity.Explore;
@@ -178,7 +178,7 @@ public class ExploreFragment extends BaseFragment implements View.OnClickListene
             Glide.with(container.getContext())
                     .load(banner.img)
                     .apply(RequestOptions.centerCropTransform())
-                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .transition(Global.crossFade)
                     .into((ImageView) view);
 
             view.setOnClickListener(new View.OnClickListener() {

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 
 import com.lcjian.happyredenvelope.BaseActivity;
+import com.lcjian.happyredenvelope.BaseDialogFragment;
 import com.lcjian.happyredenvelope.BaseFragment;
 import com.lcjian.happyredenvelope.RxBus;
 import com.lcjian.happyredenvelope.data.network.RestAPI;
@@ -40,5 +41,7 @@ public interface AppComponent {
     void inject(BaseActivity baseActivity);
 
     void inject(BaseFragment baseFragment);
+
+    void inject(BaseDialogFragment baseDialogFragment);
 
 }

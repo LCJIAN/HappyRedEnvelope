@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_red_envelope_open"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/red_envelope_bg"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context=".ui.room.RedEnvelopeOpenFragment">
+
+    <ImageButton
+        android:id="@+id/btn_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:padding="8dp"
+        app:srcCompat="@drawable/ic_close_3" />
+
+    <ImageView
+        android:id="@+id/iv_brand_avatar"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/tv_brand_name"
+        style="@style/TextAppearance.AppTheme.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:textColor="@color/color_two" />
+
+    <TextView
+        android:id="@+id/tv_brand_des"
+        style="@style/TextAppearance.AppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:textColor="@color/color_two" />
+</LinearLayout>

@@ -3,6 +3,7 @@ package com.lcjian.happyredenvelope.ui.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
 import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseFragment;
+import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.LeftTimeInfo;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
@@ -37,16 +37,13 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import java.text.DecimalFormat;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 public class MineFragment extends BaseFragment implements View.OnClickListener {
@@ -154,8 +151,6 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_sign_in: {
-                signIn("1234567890", "AndroidTest", "https://mfs.ykimg.com/051400005885B69967BC3C1C580523FD",
-                        "China", "cq", "cq", "1");
                 UMShareAPI.get(getContext()).getPlatformInfo(getActivity(), SHARE_MEDIA.WEIXIN, new UMAuthListener() {
                     @Override
                     public void onStart(SHARE_MEDIA share_media) {
@@ -165,7 +160,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                     public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
                         Toast.makeText(App.getInstance(), "Authorize succeeded", Toast.LENGTH_SHORT).show();
                         signIn(map.get("openid"), map.get("name"), map.get("iconurl"),
-                                map.get("country"), map.get("province"), map.get("city"), map.get("gender"));
+                                map.get("country"), map.get("province"), map.get("city"),
+                                TextUtils.equals("男", map.get("gender")) ? "1" : (TextUtils.equals("女", map.get("gender")) ? "2" : "0"));
                     }
 
                     @Override
@@ -220,8 +216,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
 
             Glide.with(this)
                     .load(mUserInfoSp.getString("user_avatar", ""))
-                    .apply(RequestOptions.placeholderOf(R.drawable.shape_user_no_avatar_bg).circleCrop())
-                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .apply(Global.userAvatar)
+                    .transition(Global.crossFade)
                     .into(iv_user_avatar);
             tv_balance.setText(String.format(Locale.getDefault(), "%s%s",
                     "￥", new DecimalFormat("0.00").format(mUserInfoSp.getFloat("user_balance", 0))));
@@ -322,27 +318,15 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         if (mSubscription3 != null) {
             mSubscription3.unsubscribe();
         }
-        mSubscription3 = Observable.combineLatest(Observable.interval(1, TimeUnit.SECONDS),
-                mRestAPI.redEnvelopeService().getLuckCardTotalLeftTime(mUserInfoSp.getLong("user_id", 0))
-                , new Func2<Long, ResponseData<LeftTimeInfo>, Long>() {
-                    @Override
-                    public Long call(Long aLong, ResponseData<LeftTimeInfo> leftTimeInfoResponseData) {
-                        if (leftTimeInfoResponseData.code == 0) {
-                            return (leftTimeInfoResponseData.data.totalLeftTime - aLong) * 1000;
-                        } else {
-                            throw new RuntimeException(leftTimeInfoResponseData.msg);
-                        }
-                    }
-                })
+        mSubscription3 = mRestAPI.redEnvelopeService().getLuckCardTotalLeftTime(mUserInfoSp.getLong("user_id", 0))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Long>() {
+                .subscribe(new Action1<ResponseData<LeftTimeInfo>>() {
                     @Override
-                    public void call(Long aLong) {
-                        if (aLong < 0) {
-                            aLong = 0L;
+                    public void call(ResponseData<LeftTimeInfo> leftTimeInfoResponseData) {
+                        if (leftTimeInfoResponseData.code == 0) {
+                            tv_time_left.setText(StringUtils.stringForTime((int) leftTimeInfoResponseData.data.totalLeftTime * 1000));
                         }
-                        tv_time_left.setText(StringUtils.stringForTime(aLong.intValue()));
                     }
                 }, new Action1<Throwable>() {
                     @Override

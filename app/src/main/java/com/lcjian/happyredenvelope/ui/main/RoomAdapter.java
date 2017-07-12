@@ -1,5 +1,7 @@
 package com.lcjian.happyredenvelope.ui.main;
 
+import android.content.SharedPreferences;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
@@ -13,8 +15,13 @@ class RoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Room> mData;
 
-    RoomAdapter(List<Room> data) {
+    private SharedPreferences mUserInfoSp;
+    private FragmentManager mFragmentManager;
+
+    RoomAdapter(List<Room> data, SharedPreferences userInfoSp, FragmentManager fragmentManager) {
         this.mData = data;
+        this.mUserInfoSp = userInfoSp;
+        this.mFragmentManager = fragmentManager;
     }
 
     public void replaceAll(final List<Room> data) {
@@ -51,7 +58,7 @@ class RoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new RoomViewHolder(parent);
+        return new RoomViewHolder(parent, mUserInfoSp, mFragmentManager);
     }
 
     @Override

@@ -15,9 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
 import com.lcjian.happyredenvelope.BaseActivity;
+import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.common.RecyclerFragment;
 import com.lcjian.happyredenvelope.data.entity.PageResult;
@@ -188,8 +187,8 @@ public class LuckCardHistoriesActivity extends BaseActivity implements View.OnCl
                 Context context = itemView.getContext();
                 Glide.with(context)
                         .load(redEnvelope.hongBaoRoom.pic)
-                        .apply(RequestOptions.placeholderOf(R.drawable.shape_user_no_avatar_bg).centerCrop())
-                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .apply(Global.userAvatar)
+                        .transition(Global.crossFade)
                         .into(iv_red_envelop_avatar);
 
                 tv_red_envelop_title.setText(redEnvelope.hongBaoRoom.name);

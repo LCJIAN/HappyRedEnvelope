@@ -1,6 +1,7 @@
 package com.lcjian.happyredenvelope.ui.mine;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,15 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
+import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.common.GroupHeaderViewHolder;
 import com.lcjian.happyredenvelope.data.entity.GoodsHistory;
 import com.lcjian.happyredenvelope.data.entity.GroupHeader;
 import com.lcjian.happyredenvelope.data.entity.RoomHistory;
 import com.lcjian.happyredenvelope.data.entity.VideoHistory;
+import com.lcjian.happyredenvelope.ui.web.WebViewActivity;
 import com.lcjian.lib.entity.Displayable;
 
 import java.text.DecimalFormat;
@@ -125,8 +125,8 @@ class ViewHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Context context = itemView.getContext();
             Glide.with(context)
                     .load(roomHistory.hongBaoRoom.pic)
-                    .apply(RequestOptions.placeholderOf(R.drawable.shape_room_no_avatar_bg).transform(new RoundedCorners(4)))
-                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .apply(Global.roomAvatar)
+                    .transition(Global.crossFade)
                     .into(iv_room_avatar);
             tv_room_name.setText(roomHistory.hongBaoRoom.name);
         }
@@ -153,6 +153,8 @@ class ViewHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    v.getContext().startActivity(new Intent(v.getContext(), WebViewActivity.class)
+                            .putExtra("url", goodsHistory.link));
                 }
             });
             this.mDecimalFormat = new DecimalFormat("0.00");
@@ -163,8 +165,7 @@ class ViewHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Context context = itemView.getContext();
             Glide.with(context)
                     .load(goodsHistory.pic)
-                    .apply(RequestOptions.placeholderOf(R.drawable.shape_room_no_avatar_bg))
-                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .transition(Global.crossFade)
                     .into(iv_goods_avatar);
             tv_goods_name.setText(goodsHistory.title);
             tv_goods_price.setText(String.format(Locale.getDefault(), "%s%s", "￥", mDecimalFormat.format(goodsHistory.price)));
@@ -187,6 +188,8 @@ class ViewHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    v.getContext().startActivity(new Intent(v.getContext(), WebViewActivity.class)
+                            .putExtra("url", videoHistory.ku6ShortVideo.link));
                 }
             });
         }
@@ -196,8 +199,7 @@ class ViewHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Context context = itemView.getContext();
             Glide.with(context)
                     .load(videoHistory.ku6ShortVideo.picture)
-                    .apply(RequestOptions.placeholderOf(R.drawable.shape_room_no_avatar_bg))
-                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .transition(Global.crossFade)
                     .into(iv_video_thumbnail);
             iv_video_title.setText(videoHistory.ku6ShortVideo.name);
         }

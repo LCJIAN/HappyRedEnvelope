@@ -14,6 +14,7 @@
 
     <color name="colorOrange">#fffffe55</color>
     <color name="color_one">#fffeeeee</color>
+    <color name="color_two">#ffffe7ae</color>
 
     <color name="five_percent_transparency_white">#0Dffffff</color>
     <color name="ten_percent_transparency_white">#1Affffff</color>

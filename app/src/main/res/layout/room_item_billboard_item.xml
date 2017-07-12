@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="36dp"
+    android:layout_height="36dp">
+
+    <ImageView
+        android:id="@+id/iv_user_billboard_bg"
+        android:layout_width="36dp"
+        android:layout_height="10dp"
+        android:layout_gravity="bottom|center_horizontal" />
+
+    <ImageView
+        android:id="@+id/iv_user_avatar"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/iv_user_billboard_fg"
+        android:layout_width="32dp"
+        android:layout_height="14dp"
+        android:layout_gravity="bottom|center_horizontal" />
+</FrameLayout>

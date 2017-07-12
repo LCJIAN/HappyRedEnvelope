@@ -33,37 +33,44 @@
             app:srcCompat="@drawable/ic_arrow_left" />
     </RelativeLayout>
 
-    <ImageView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="24dp"
-        android:src="@drawable/ic_vip_large" />
+        android:background="@android:color/white"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-    <TextView
-        style="@style/TextAppearance.AppTheme.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/vip_price"
-        android:textColor="@color/colorTextBlack" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/ic_vip_large" />
 
-    <Button
-        style="@style/TextAppearance.AppTheme.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginBottom="24dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/shape_button_medium_bg"
-        android:paddingLeft="32dp"
-        android:paddingRight="32dp"
-        android:text="@string/buy_vip"
-        android:textColor="@android:color/white" />
+        <TextView
+            style="@style/TextAppearance.AppTheme.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vip_price"
+            android:textColor="@color/colorTextBlack" />
+
+        <Button
+            style="@style/TextAppearance.AppTheme.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/shape_button_medium_bg"
+            android:paddingLeft="48dp"
+            android:paddingRight="48dp"
+            android:text="@string/buy_vip"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
 
     <TextView
         style="@style/TextAppearance.AppTheme.Small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorDivider"
         android:gravity="center"
         android:padding="16dp"
         android:text="@string/vip_privilege"
@@ -73,7 +80,6 @@
         android:id="@+id/rv_vip_privileges"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/colorDivider" />
+        android:layout_weight="1" />
 
 </LinearLayout>

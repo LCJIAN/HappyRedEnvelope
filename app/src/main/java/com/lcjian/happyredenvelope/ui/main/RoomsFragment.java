@@ -19,7 +19,6 @@ import java.util.List;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -28,8 +27,6 @@ public class RoomsFragment extends RecyclerFragment<Room> {
     private RoomAdapter mAdapter;
 
     private boolean mIsVip;
-
-    private int mCurrentPage;
 
     public static RoomsFragment newInstance(boolean isVip) {
         RoomsFragment fragment = new RoomsFragment();
@@ -49,13 +46,12 @@ public class RoomsFragment extends RecyclerFragment<Room> {
 
     @Override
     public RecyclerView.Adapter onCreateAdapter(List<Room> data) {
-        mAdapter = new RoomAdapter(data);
+        mAdapter = new RoomAdapter(data, mUserInfoSp, getChildFragmentManager());
         return mAdapter;
     }
 
     @Override
     public Observable<PageResult<Room>> onCreatePageObservable(int currentPage) {
-        mCurrentPage = currentPage;
         return (mIsVip ? mRestAPI.redEnvelopeService().getVipRooms(currentPage, 10) : mRestAPI.redEnvelopeService()
                 .getNormalRooms(currentPage, 10))
                 .map(new Func1<ResponseData<PageResult<Room>>, PageResult<Room>>() {
@@ -66,14 +62,6 @@ public class RoomsFragment extends RecyclerFragment<Room> {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(new Action1<PageResult<Room>>() {
-                    @Override
-                    public void call(PageResult<Room> displayablePageResult) {
-                        if (mCurrentPage == 1) {
-                            setupHeader();
-                        }
-                    }
-                })
                 .cache();
     }
 
@@ -94,9 +82,5 @@ public class RoomsFragment extends RecyclerFragment<Room> {
 
         super.onViewCreated(view, savedInstanceState);
     }
-
-    private void setupHeader() {
-    }
-
 }
 

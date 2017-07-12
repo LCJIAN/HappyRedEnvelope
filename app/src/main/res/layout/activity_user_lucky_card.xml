@@ -16,7 +16,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@android:color/white">
 
             <ImageView
                 android:id="@+id/iv_luck_card"
@@ -55,20 +56,11 @@
                     android:textColor="@color/colorTextBlack" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_left_luck_card_total"
-                style="@style/TextAppearance.AppTheme"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/iv_luck_card"
-                android:layout_centerHorizontal="true"
-                android:textColor="@color/colorTextBlack" />
-
             <LinearLayout
                 android:id="@+id/ll_luck_card_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_left_luck_card_total"
+                android:layout_below="@id/iv_luck_card"
                 android:baselineAligned="false"
                 android:orientation="horizontal"
                 android:paddingLeft="16dp"
@@ -133,8 +125,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="32dp"
                 android:background="@drawable/shape_button_medium_bg"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp"
+                android:paddingLeft="48dp"
+                android:paddingRight="48dp"
                 android:text="@string/buy_luck_card"
                 android:textColor="@android:color/white" />
 
@@ -146,7 +138,7 @@
                 android:layout_below="@+id/btn_go_buy_luck_card"
                 android:layout_marginTop="24dp"
                 android:padding="16dp"
-                android:text="@string/buy_luck_card_tip"
+                android:text="@string/luck_card_tip"
                 android:textColor="@color/colorTextBlack" />
 
             <View
@@ -169,7 +161,7 @@
                 android:drawableStart="@drawable/ic_luck_card_tutorial"
                 android:gravity="center_vertical"
                 android:padding="16dp"
-                android:text="@string/buy_vip"
+                android:text="@string/luck_card_tutorial"
                 android:textAppearance="@style/TextAppearance.AppTheme"
                 android:textColor="@color/colorTextBlack" />
 

@@ -26,18 +26,24 @@ import java.util.List;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func2;
+import rx.observables.ConnectableObservable;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 public class SearchFragment extends RecyclerFragment<Displayable> {
 
-    private String mKeyword = "10";
+    private String mKeyword;
 
     private SearchAdapter mAdapter;
 
+    private CompositeSubscription mSubscriptions;
+
     @Override
     public RecyclerView.Adapter onCreateAdapter(List<Displayable> data) {
-        mAdapter = new SearchAdapter(data);
+        mAdapter = new SearchAdapter(data, mRxBus,
+                mStorIOSQLite, mUserInfoSp, getChildFragmentManager());
         return mAdapter;
     }
 
@@ -138,5 +144,28 @@ public class SearchFragment extends RecyclerFragment<Displayable> {
         recycler_view.setLayoutManager(gridLayoutManager);
 
         super.onViewCreated(view, savedInstanceState);
+
+        mSubscriptions = new CompositeSubscription();
+        ConnectableObservable<Object> eventEmitter = mRxBus.toObserverable().publish();
+        mSubscriptions.add(eventEmitter.subscribe(new Action1<Object>() {
+            @Override
+            public void call(Object event) {
+                if (event instanceof SearchActivity.SearchAction) {
+                    mKeyword = ((SearchActivity.SearchAction) event).keyword;
+                    refresh();
+                } else if (TextUtils.equals("refresh", event.toString())) {
+                    refresh();
+                }
+            }
+        }));
+        mSubscriptions.add(eventEmitter.connect());
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (mSubscriptions != null) {
+            mSubscriptions.unsubscribe();
+        }
+        super.onDestroyView();
     }
 }

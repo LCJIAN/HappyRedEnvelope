@@ -38,7 +38,7 @@ public class App extends Application {
                 .sharedPreferenceModule(new SharedPreferenceModule())
                 .build();
 
-        Config.DEBUG = true;
+        Config.DEBUG = BuildConfig.DEBUG;
         PlatformConfig.setWeixin(Constants.WE_CHAT_ID, Constants.WE_CHAT_SECRET);
         UMShareAPI.get(this);
 

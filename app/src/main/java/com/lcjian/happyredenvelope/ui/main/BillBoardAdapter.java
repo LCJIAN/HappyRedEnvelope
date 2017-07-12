@@ -11,8 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
+import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.common.AdvertisementViewHolder;
 import com.lcjian.happyredenvelope.data.entity.Advertisement;
@@ -124,8 +123,8 @@ class BillBoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Context context = itemView.getContext();
             Glide.with(context)
                     .load(billboard.hblUser.userHeadimg)
-                    .apply(RequestOptions.placeholderOf(R.drawable.shape_user_no_avatar_bg).circleCrop())
-                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .apply(Global.userAvatar)
+                    .transition(Global.crossFade)
                     .into(iv_user_avatar);
             tv_user_name.setText(billboard.hblUser.userNickname);
             if (mMyUserId == billboard.hblUser.userId) {

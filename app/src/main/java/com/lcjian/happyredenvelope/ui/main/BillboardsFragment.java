@@ -11,8 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
+import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.common.RecyclerFragment;
 import com.lcjian.happyredenvelope.data.entity.Advertisement;
@@ -162,8 +161,8 @@ public class BillboardsFragment extends RecyclerFragment<Displayable> {
     private void setupHeaderItem(Billboard billboard, ImageView avatar, TextView userName, TextView billboardAmount) {
         Glide.with(getContext())
                 .load(billboard.hblUser.userHeadimg)
-                .apply(RequestOptions.placeholderOf(R.drawable.shape_user_no_avatar_bg).circleCrop())
-                .transition(DrawableTransitionOptions.withCrossFade())
+                .apply(Global.userAvatar)
+                .transition(Global.crossFade)
                 .into(avatar);
         userName.setText(billboard.hblUser.userNickname);
         billboardAmount.setText(getString(R.string.total_amount, mDecimalFormat.format(billboard.total)));

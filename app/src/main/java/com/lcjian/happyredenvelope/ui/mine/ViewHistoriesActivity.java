@@ -52,8 +52,9 @@ public class ViewHistoriesActivity extends BaseActivity {
             }
         });
         tv_top_bar_title.setText(R.string.view_history);
-        tv_top_bar_right.setVisibility(View.GONE);
-        getSupportFragmentManager().beginTransaction().add(R.id.fl_view_histories_container, new ViewHistoriesFragment()).commit();
+        tv_top_bar_right.setText(R.string.clear);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_view_histories_container,
+                new ViewHistoriesFragment(), "ViewHistoriesFragment").commit();
     }
 
     public static class ViewHistoriesFragment extends RecyclerFragment<Displayable> {
@@ -86,15 +87,15 @@ public class ViewHistoriesActivity extends BaseActivity {
                             result.total_pages = 1;
                             result.elements = new ArrayList<>();
                             if (listResponseData.data != null && !listResponseData.data.isEmpty()) {
-                                result.elements.add(new GroupHeader(getString(R.string.vip_room)));
+                                result.elements.add(new GroupHeader(getString(R.string.history_room)));
                                 result.elements.addAll(listResponseData.data);
                             }
                             if (listResponseData2.data != null && !listResponseData2.data.isEmpty()) {
-                                result.elements.add(new GroupHeader(getString(R.string.vip_room)));
+                                result.elements.add(new GroupHeader(getString(R.string.history_goods)));
                                 result.elements.addAll(listResponseData2.data);
                             }
                             if (listResponseData3.data.elements != null && !listResponseData3.data.elements.isEmpty()) {
-                                result.elements.add(new GroupHeader(getString(R.string.vip_room)));
+                                result.elements.add(new GroupHeader(getString(R.string.history_video)));
                                 result.elements.addAll(listResponseData3.data.elements);
                             }
                             return result;

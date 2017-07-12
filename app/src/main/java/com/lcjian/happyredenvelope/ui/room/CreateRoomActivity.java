@@ -11,14 +11,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
 import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseActivity;
+import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.RoomIdInfo;
+import com.lcjian.happyredenvelope.data.entity.VipInfo;
 import com.lcjian.lib.util.ImageChooseHelper;
 
 import java.io.File;
@@ -28,6 +27,7 @@ import butterknife.ButterKnife;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -53,6 +53,9 @@ public class CreateRoomActivity extends BaseActivity implements View.OnClickList
 
     private String mPath;
 
+    private Subscription mSubscription;
+    private Subscription mSubscription2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,17 +75,52 @@ public class CreateRoomActivity extends BaseActivity implements View.OnClickList
                 mPath = path;
                 Glide.with(CreateRoomActivity.this)
                         .load(mPath)
-                        .apply(RequestOptions.placeholderOf(R.drawable.shape_room_no_avatar_bg).transform(new RoundedCorners(4)))
-                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .apply(Global.roomAvatar)
+                        .transition(Global.crossFade)
                         .into(iv_room_avatar);
             }
         });
+
+        mSubscription = mRestAPI.redEnvelopeService().isVip(mUserInfoSp.getLong("user_id", 0))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<ResponseData<VipInfo>>() {
+                    @Override
+                    public void call(ResponseData<VipInfo> vipInfoResponseData) {
+                        if (vipInfoResponseData.code == 0) {
+                            if (!vipInfoResponseData.data.isvip) {
+                                Toast.makeText(App.getInstance(), R.string.only_vip_can_create_room, Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        } else {
+                            Toast.makeText(App.getInstance(), vipInfoResponseData.msg, Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Toast.makeText(App.getInstance(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mImageChooseHelper.handleActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mSubscription != null) {
+            mSubscription.unsubscribe();
+        }
+        if (mSubscription2 != null) {
+            mSubscription2.unsubscribe();
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -107,7 +145,7 @@ public class CreateRoomActivity extends BaseActivity implements View.OnClickList
                     return;
                 }
                 File file = new File(mPath);
-                mRestAPI.redEnvelopeService().createVipRoom(mUserInfoSp.getLong("user_id", 0),
+                mSubscription2 = mRestAPI.redEnvelopeService().createVipRoom(mUserInfoSp.getLong("user_id", 0),
                         et_room_name.getText().toString(), et_room_announcement.getText().toString(),
                         MultipartBody.Part.createFormData("icon",
                                 file.getName(),

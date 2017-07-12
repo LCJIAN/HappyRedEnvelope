@@ -1,34 +1,36 @@
 package com.lcjian.happyredenvelope.ui.search;
 
-import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
 import com.lcjian.happyredenvelope.R;
+import com.lcjian.happyredenvelope.RxBus;
+import com.lcjian.happyredenvelope.common.GoodsViewHolder;
 import com.lcjian.happyredenvelope.common.GroupHeaderViewHolder;
 import com.lcjian.happyredenvelope.common.RoomViewHolder;
+import com.lcjian.happyredenvelope.data.db.table.SearchHistoryTable;
 import com.lcjian.happyredenvelope.data.entity.Goods;
 import com.lcjian.happyredenvelope.data.entity.GroupHeader;
 import com.lcjian.happyredenvelope.data.entity.Room;
 import com.lcjian.happyredenvelope.data.entity.SearchHistory;
 import com.lcjian.happyredenvelope.data.entity.SearchHistoryHeader;
 import com.lcjian.lib.entity.Displayable;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
+import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
 
-import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.functions.Action1;
 
 class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -40,8 +42,18 @@ class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Displayable> mData;
 
-    SearchAdapter(List<Displayable> data) {
+    private SharedPreferences mUserInfoSp;
+    private FragmentManager mFragmentManager;
+    private StorIOSQLite mStorIOSQLite;
+    private RxBus mRxBus;
+
+    SearchAdapter(List<Displayable> data, RxBus rxBus,
+                  StorIOSQLite storIOSQLite, SharedPreferences userInfoSp, FragmentManager fragmentManager) {
         this.mData = data;
+        this.mRxBus = rxBus;
+        this.mStorIOSQLite = storIOSQLite;
+        this.mUserInfoSp = userInfoSp;
+        this.mFragmentManager = fragmentManager;
     }
 
     void replaceAll(final List<Displayable> data) {
@@ -86,10 +98,10 @@ class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return viewType == TYPE_ROOM ? new RoomViewHolder(parent)
+        return viewType == TYPE_ROOM ? new RoomViewHolder(parent, mUserInfoSp, mFragmentManager)
                 : (viewType == TYPE_GOODS ? new GoodsViewHolder(parent)
-                : (viewType == TYPE_SEARCH_HISTORY ? new SearchHistoryViewHolder(parent)
-                : (viewType == TYPE_SEARCH_HISTORY_HEADER ? new SearchHistoryHeaderViewHolder(parent)
+                : (viewType == TYPE_SEARCH_HISTORY ? new SearchHistoryViewHolder(parent, mRxBus)
+                : (viewType == TYPE_SEARCH_HISTORY_HEADER ? new SearchHistoryHeaderViewHolder(parent, mRxBus, mStorIOSQLite)
                 : new GroupHeaderViewHolder(parent))));
     }
 
@@ -108,46 +120,6 @@ class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    static class GoodsViewHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.iv_goods_avatar)
-        ImageView iv_goods_avatar;
-        @BindView(R.id.tv_goods_name)
-        TextView tv_goods_name;
-        @BindView(R.id.tv_goods_price)
-        TextView tv_goods_price;
-        @BindView(R.id.tv_goods_sale_count)
-        TextView tv_goods_sale_count;
-
-        Goods goods;
-
-        private DecimalFormat mDecimalFormat;
-
-        GoodsViewHolder(ViewGroup parent) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.goods_item, parent, false));
-            ButterKnife.bind(this, this.itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                }
-            });
-            this.mDecimalFormat = new DecimalFormat("0.00");
-        }
-
-        void bindTo(Goods goods) {
-            this.goods = goods;
-            Context context = itemView.getContext();
-            Glide.with(context)
-                    .load(goods.pic)
-                    .apply(RequestOptions.placeholderOf(R.drawable.shape_room_no_avatar_bg))
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(iv_goods_avatar);
-            tv_goods_name.setText(goods.title);
-            tv_goods_price.setText(String.format(Locale.getDefault(), "%s%s", "￥", mDecimalFormat.format(goods.price)));
-            tv_goods_sale_count.setText(context.getString(R.string.sale_count, goods.saleCount));
-        }
-    }
-
     static class SearchHistoryHeaderViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_search_history_title)
@@ -157,13 +129,27 @@ class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.tv_no_data)
         TextView tv_no_data;
 
-        SearchHistoryHeaderViewHolder(ViewGroup parent) {
+        RxBus mRxBus;
+        StorIOSQLite mStorIOSQLite;
+
+        SearchHistoryHeaderViewHolder(ViewGroup parent, RxBus rxBus, StorIOSQLite storIOSQLite) {
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.search_history_header_item, parent, false));
             ButterKnife.bind(this, this.itemView);
+            this.mRxBus = rxBus;
+            this.mStorIOSQLite = storIOSQLite;
             btn_delete_histories.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    mStorIOSQLite.delete()
+                            .byQuery(DeleteQuery.builder().table(SearchHistoryTable.TABLE_NAME).build())
+                            .prepare()
+                            .asRxObservable()
+                            .subscribe(new Action1<DeleteResult>() {
+                                @Override
+                                public void call(DeleteResult deleteResult) {
+                                    mRxBus.send("refresh");
+                                }
+                            });
                 }
             });
         }
@@ -182,12 +168,16 @@ class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         SearchHistory searchHistory;
 
-        SearchHistoryViewHolder(ViewGroup parent) {
+        RxBus mRxBus;
+
+        SearchHistoryViewHolder(ViewGroup parent, RxBus rxBus) {
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.search_history_item, parent, false));
             ButterKnife.bind(this, this.itemView);
+            this.mRxBus = rxBus;
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mRxBus.send(new SearchActivity.SearchAction(searchHistory.text));
                 }
             });
         }

@@ -39,6 +39,14 @@
         <activity android:name=".ui.withdrawal.WithdrawalHistoriesActivity" />
         <activity android:name=".ui.search.SearchActivity" />
         <activity android:name=".ui.room.CreateRoomActivity" />
+        <activity android:name=".ui.room.RoomActivity" />
+        <activity android:name=".ui.room.RoomInfoActivity" />
+        <activity android:name=".ui.room.RedEnvelopeSnatchedEmptyActivity" />
+        <activity android:name=".ui.room.RedEnvelopeSnatchedSuccessActivity" />
+        <activity android:name=".ui.room.RedEnvelopeSnatchedFakeActivity" />
+        <activity android:name=".ui.room.RoomLuckBillboardsActivity" />
+        <activity android:name=".ui.room.RoomMemberManageActivity" />
+        <activity android:name=".ui.room.UserActivity" />
         <activity android:name=".ui.web.WebViewActivity" />
 
         <meta-data
@@ -52,7 +60,7 @@
             android:value="Wandoujia" />
 
         <activity
-            android:name=".wxapi.WXEntryActivity"
+            android:name="com.lqpinxuan.lqpx.wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"

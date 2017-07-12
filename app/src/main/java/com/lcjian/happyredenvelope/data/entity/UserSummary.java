@@ -8,4 +8,6 @@ public class UserSummary {
     public int month;      // 月红包数
     public int totalCount; // 总红包数
     public int totalLuck;  // 剩余福卡
+    public float total;
+    public User hblUser;
 }

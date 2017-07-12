@@ -1,5 +1,6 @@
 package com.lcjian.happyredenvelope.ui.withdrawal;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseActivity;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.common.RecyclerFragment;
@@ -31,7 +34,9 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -44,19 +49,26 @@ public class WithdrawalHistoriesActivity extends BaseActivity implements View.On
     @BindView(R.id.tv_top_bar_right)
     TextView tv_top_bar_right;
 
+    private Subscription mSubscription;
+
+    private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_withdrawal_histories);
         ButterKnife.bind(this);
 
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+
         tv_top_bar_title.setText(R.string.withdrawal_history);
         tv_top_bar_right.setText(R.string.clear);
         tv_top_bar_right.setOnClickListener(this);
         btn_top_bar_left.setOnClickListener(this);
 
-        getSupportFragmentManager().beginTransaction().add(R.id.fl_withdrawal_histories_container,
-                new WithdrawalHistoriesFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_withdrawal_histories_container,
+                new WithdrawalHistoriesFragment(), "WithdrawalHistoriesFragment").commit();
     }
 
     @Override
@@ -67,11 +79,42 @@ public class WithdrawalHistoriesActivity extends BaseActivity implements View.On
             }
             break;
             case R.id.tv_top_bar_right: {
+                mProgressDialog.show();
+                mSubscription = mRestAPI.redEnvelopeService()
+                        .cleanWithdrawalHistories(mUserInfoSp.getLong("user_id", 0))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<ResponseData<String>>() {
+                            @Override
+                            public void call(ResponseData<String> stringResponseData) {
+                                mProgressDialog.dismiss();
+                                if (stringResponseData.code == 0) {
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fl_withdrawal_histories_container,
+                                            new WithdrawalHistoriesFragment(), "WithdrawalHistoriesFragment").commit();
+                                } else {
+                                    Toast.makeText(App.getInstance(), stringResponseData.msg, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }, new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                mProgressDialog.dismiss();
+                                Toast.makeText(App.getInstance(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
             break;
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mSubscription != null) {
+            mSubscription.unsubscribe();
+        }
+        super.onDestroy();
     }
 
     public static class WithdrawalHistoriesFragment extends RecyclerFragment<Withdrawal> {

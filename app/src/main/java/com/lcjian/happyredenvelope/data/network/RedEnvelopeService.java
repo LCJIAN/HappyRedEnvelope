@@ -3,6 +3,7 @@ package com.lcjian.happyredenvelope.data.network;
 import com.lcjian.happyredenvelope.data.entity.Banner;
 import com.lcjian.happyredenvelope.data.entity.Billboard;
 import com.lcjian.happyredenvelope.data.entity.Explore;
+import com.lcjian.happyredenvelope.data.entity.FreeLuckCard;
 import com.lcjian.happyredenvelope.data.entity.Goods;
 import com.lcjian.happyredenvelope.data.entity.GoodsHistory;
 import com.lcjian.happyredenvelope.data.entity.LeftTimeInfo;
@@ -13,11 +14,16 @@ import com.lcjian.happyredenvelope.data.entity.RedEnvHot;
 import com.lcjian.happyredenvelope.data.entity.RedEnvelope;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.Room;
+import com.lcjian.happyredenvelope.data.entity.RoomAndCreator;
+import com.lcjian.happyredenvelope.data.entity.RoomBillboard;
 import com.lcjian.happyredenvelope.data.entity.RoomHistory;
 import com.lcjian.happyredenvelope.data.entity.RoomIdInfo;
 import com.lcjian.happyredenvelope.data.entity.User;
 import com.lcjian.happyredenvelope.data.entity.UserSummary;
+import com.lcjian.happyredenvelope.data.entity.Users;
+import com.lcjian.happyredenvelope.data.entity.Video;
 import com.lcjian.happyredenvelope.data.entity.VideoHistory;
+import com.lcjian.happyredenvelope.data.entity.VipInfo;
 import com.lcjian.happyredenvelope.data.entity.VipPrivilege;
 import com.lcjian.happyredenvelope.data.entity.Withdrawal;
 
@@ -83,6 +89,13 @@ public interface RedEnvelopeService {
     @FormUrlEncoded
     @POST("user/user/gethongbaostatistic")
     Observable<ResponseData<UserSummary>> getUserSummary(@Field("userid") long userId);
+
+    /**
+     * 获取用户基本信息
+     */
+    @FormUrlEncoded
+    @POST("room/getuserinfo")
+    Observable<ResponseData<UserSummary>> getUserInfo(@Field("uid") long userId);
 
     /**
      * 获取普通房间列表
@@ -154,6 +167,13 @@ public interface RedEnvelopeService {
                                                                             @Field("pagesize") int pageSize);
 
     /**
+     * 清空提现记录
+     */
+    @FormUrlEncoded
+    @POST("user/withdraw/clean")
+    Observable<ResponseData<String>> cleanWithdrawalHistories(@Field("userid") long userId);
+
+    /**
      * VIP创建房间
      */
     @Multipart
@@ -162,6 +182,13 @@ public interface RedEnvelopeService {
                                                        @Part("name") String name,
                                                        @Part("desc") String desc,
                                                        @Part MultipartBody.Part icon);
+
+    /**
+     * 用户是否VIP
+     */
+    @FormUrlEncoded
+    @POST("user/user/isvip")
+    Observable<ResponseData<VipInfo>> isVip(@Field("userid") long userId);
 
     /**
      * 用户房间浏览记录
@@ -196,6 +223,14 @@ public interface RedEnvelopeService {
     Observable<ResponseData<List<Goods>>> getRecommendGoods(@Field("count") int count);
 
     /**
+     * 猜你喜欢
+     */
+    @FormUrlEncoded
+    @POST("ticket/getfavoritetickets")
+    Observable<ResponseData<List<Goods>>> guessYouLike(@Field("id") long id,
+                                                       @Field("count") int count);
+
+    /**
      * 搜索房间（按ID号）
      */
     @FormUrlEncoded
@@ -207,16 +242,16 @@ public interface RedEnvelopeService {
      */
     @FormUrlEncoded
     @POST("room/joinroom")
-    Observable<ResponseData<Long>> joinRoom(@Field("uid") long userId,
-                                            @Field("roomid") long roomid);
+    Observable<ResponseData<Integer>> joinRoom(@Field("uid") long userId,
+                                               @Field("roomid") long roomId);
 
     /**
      * 退出房间
      */
     @FormUrlEncoded
-    @POST("room/joinroom")
+    @POST("room/exitroom")
     Observable<ResponseData<String>> exitRoom(@Field("uid") long userId,
-                                              @Field("roomid") long roomid);
+                                              @Field("roomid") long roomId);
 
     /**
      * 退获取增量消息（每5S获取一次）
@@ -224,15 +259,55 @@ public interface RedEnvelopeService {
     @FormUrlEncoded
     @POST("roommsg/getaddmsg")
     Observable<ResponseData<List<Message>>> getAddedMsg(@Field("uid") long userId,
-                                                        @Field("roomid") long roomid);
+                                                        @Field("roomid") long roomId);
+
+    /**
+     * 获取房间基本信息
+     */
+    @FormUrlEncoded
+    @POST("room/getroominfo")
+    Observable<ResponseData<Room>> getRoomDetail(@Field("roomid") long roomId);
+
+    /**
+     * 获取房间基本信息
+     */
+    @FormUrlEncoded
+    @POST("room/getviproominfo")
+    Observable<ResponseData<RoomAndCreator>> getRoomDetailAndCreator(@Field("roomid") long roomId);
+
+    /**
+     * 获取房间用户列表
+     */
+    @FormUrlEncoded
+    @POST("room/getroomuserlist")
+    Observable<ResponseData<Users>> getRoomMembers(@Field("uid") long userId,
+                                                   @Field("roomid") long roomId,
+                                                   @Field("page") int pageNumber,
+                                                   @Field("pagesize") int pageSize);
+
+    /**
+     * 删除VIP房间中的成员
+     */
+    @FormUrlEncoded
+    @POST("room/deleteviproomuser")
+    Observable<ResponseData<String>> deleteRoomMembers(@Field("uid") long userId,
+                                                       @Field("roomid") long roomId,
+                                                       @Field("uids") String userIds);
+
+    /**
+     * 获取房间用户列表
+     */
+    @FormUrlEncoded
+    @POST("rank/getroomluckrank")
+    Observable<ResponseData<List<RoomBillboard>>> getRoomBillboards(@Field("roomid") long roomId);
 
     /**
      * 打开红包
      */
     @FormUrlEncoded
     @POST("hongbao/openhongbao")
-    Observable<ResponseData<Long>> openRedEnvelope(@Field("uid") long userId,
-                                                   @Field("msgid") long msgId);
+    Observable<ResponseData<Object>> openRedEnvelope(@Field("uid") long userId,
+                                                     @Field("msgid") long msgId);
 
     /**
      * 获取幸运手气榜
@@ -245,4 +320,26 @@ public interface RedEnvelopeService {
                                                                  @Field("type") int type,
                                                                  @Field("page") int pageNumber,
                                                                  @Field("pagesize") int pageSize);
+
+    /**
+     * 获取推荐视频
+     */
+    @FormUrlEncoded
+    @POST("user/video/getrecommendvideos")
+    Observable<ResponseData<List<Video>>> getRecommendVideos(@Field("count") int count);
+
+    /**
+     * 添加视频浏览记录
+     */
+    @FormUrlEncoded
+    @POST("user/video/addvideowatch")
+    Observable<ResponseData<String>> addVideoHistory(@Field("id") long id);
+
+    /**
+     * 添加视频浏览记录
+     */
+    @FormUrlEncoded
+    @POST("fuka/order/getfree")
+    Observable<ResponseData<FreeLuckCard>> getFreeLuckCard(@Field("userid") long id);
+
 }

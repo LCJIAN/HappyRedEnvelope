@@ -10,8 +10,10 @@ public class Withdrawal {
 
     public static class Token {
 
+        public long tokenCreatetime;
         public String tokenContent;
         public boolean tokenIsexpired;
+        public int tokenTime;
 
     }
 }

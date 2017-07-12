@@ -20,10 +20,12 @@ import com.lcjian.happyredenvelope.data.entity.Withdrawal;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func2;
@@ -55,6 +57,10 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
 
     private ProgressDialog mProgressDialog;
 
+    private Subscription mSubscription;
+    private Subscription mSubscription2;
+    private Subscription mSubscription3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,9 +82,24 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
         tv_top_bar_right.setOnClickListener(this);
         tv_my_balance.setOnClickListener(this);
         btn_go_withdrawal.setOnClickListener(this);
+        btn_copy_token.setOnClickListener(this);
         tv_withdrawal_tutorial.setOnClickListener(this);
 
         refresh();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mSubscription != null) {
+            mSubscription.unsubscribe();
+        }
+        if (mSubscription2 != null) {
+            mSubscription2.unsubscribe();
+        }
+        if (mSubscription3 != null) {
+            mSubscription3.unsubscribe();
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -94,7 +115,7 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
             break;
             case R.id.btn_go_withdrawal: {
                 float balance = mUserInfoSp.getFloat("user_balance", 0);
-                if (!mIsFirstWithdrawal) {
+                if (!mIsFirstWithdrawal || balance <= 0f) {
                     if (mUserInfoSp.getBoolean("user_is_vip", false)) {
                         if (balance < 50) {
                             Toast.makeText(App.getInstance(), R.string.vip_withdrawal_msg, Toast.LENGTH_SHORT).show();
@@ -107,7 +128,11 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
                         }
                     }
                 }
-                saveWithdrawal(5 + balance);
+                saveWithdrawal(balance);
+            }
+            break;
+            case R.id.btn_copy_token: {
+                CopyTokenDialogFragment.newInstance(mCurrentWithdrawal.token.tokenContent).show(getSupportFragmentManager(), "CopyTokenDialogFragment");
             }
             break;
             case R.id.tv_withdrawal_tutorial: {
@@ -120,7 +145,10 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
 
     private void refresh() {
         mProgressDialog.show();
-        Observable.zip(
+        if (mSubscription != null) {
+            mSubscription.unsubscribe();
+        }
+        mSubscription = Observable.zip(
                 mRestAPI.redEnvelopeService().isFirstWithdrawal(mUserInfoSp.getLong("user_id", 0)),
                 mRestAPI.redEnvelopeService().getCurrentWithdrawals(mUserInfoSp.getLong("user_id", 0)),
                 new Func2<ResponseData<Boolean>, ResponseData<List<Withdrawal>>, Pair<ResponseData<Boolean>, ResponseData<List<Withdrawal>>>>() {
@@ -162,7 +190,10 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
 
     private void saveWithdrawal(float withdrawalAmount) {
         mProgressDialog.show();
-        mRestAPI.redEnvelopeService().saveWithdrawal(mUserInfoSp.getLong("user_id", 0), withdrawalAmount)
+        if (mSubscription2 != null) {
+            mSubscription2.unsubscribe();
+        }
+        mSubscription2 = mRestAPI.redEnvelopeService().saveWithdrawal(mUserInfoSp.getLong("user_id", 0), withdrawalAmount)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<ResponseData<Withdrawal>>() {
@@ -190,6 +221,41 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
             ll_current_withdrawal.setVisibility(View.VISIBLE);
 
             tv_current_withdrawal_token.setText(mCurrentWithdrawal.token.tokenContent);
+
+            long left = mCurrentWithdrawal.token.tokenCreatetime + mCurrentWithdrawal.token.tokenTime * 1000 - System.currentTimeMillis();
+            if (left > 0) {
+                if (mSubscription3 != null) {
+                    mSubscription3.unsubscribe();
+                }
+                mSubscription3 = Observable.combineLatest(
+                        Observable.just(left),
+                        Observable.interval(1, TimeUnit.SECONDS),
+                        new Func2<Long, Long, Long>() {
+
+                            @Override
+                            public Long call(Long aLong, Long aLong2) {
+                                return aLong / 1000 - aLong2;
+                            }
+                        })
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<Long>() {
+                            @Override
+                            public void call(Long aLong) {
+                                if (aLong >= 0) {
+                                    btn_copy_token.setText(getString(R.string.copy_token, aLong));
+                                } else {
+                                    refresh();
+                                }
+                            }
+                        }, new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+
+                            }
+                        });
+            }
+
+            CopyTokenDialogFragment.newInstance(mCurrentWithdrawal.token.tokenContent).show(getSupportFragmentManager(), "CopyTokenDialogFragment");
         } else {
             btn_go_withdrawal.setVisibility(View.VISIBLE);
             ll_current_withdrawal.setVisibility(View.GONE);

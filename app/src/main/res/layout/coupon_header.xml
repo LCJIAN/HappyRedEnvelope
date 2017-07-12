@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.lcjian.lib.widget.RatioLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:fixedSide="width"
+        app:ratio="1">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_goods_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/tv_goods_name"
+                style="@style/TextAppearance.AppTheme.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/twenty_percent_transparency_black"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:padding="8dp"
+                android:textColor="@android:color/white" />
+        </FrameLayout>
+    </com.lcjian.lib.widget.RatioLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/white"
+        android:padding="8dp"
+        android:text="@string/guess_your_like"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/colorTextBlack" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/coupon_bg">
+
+    </FrameLayout>
+</LinearLayout>

@@ -1,4 +1,4 @@
-package com.lcjian.happyredenvelope.wxapi;
+package com.lqpinxuan.lqpx.wxapi;
 
 import com.umeng.weixin.callback.WXCallbackActivity;
 
