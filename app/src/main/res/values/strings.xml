@@ -142,4 +142,8 @@
     <string name="receive_success">你已成功领取</string>
     <string name="origin_price">原价:%1$s</string>
     <string name="coupon_amount">优惠券:%1$s</string>
+    <string name="pay_success">支付成功</string>
+    <string name="pay_failed">支付失败</string>
+    <string name="user_canceled">用户取消</string>
+    <string name="auth_denied">没有权限</string>
 </resources>

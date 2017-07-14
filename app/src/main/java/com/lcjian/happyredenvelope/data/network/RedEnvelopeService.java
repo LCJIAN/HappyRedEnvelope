@@ -26,6 +26,7 @@ import com.lcjian.happyredenvelope.data.entity.Video;
 import com.lcjian.happyredenvelope.data.entity.VideoHistory;
 import com.lcjian.happyredenvelope.data.entity.VipInfo;
 import com.lcjian.happyredenvelope.data.entity.VipPrivilege;
+import com.lcjian.happyredenvelope.data.entity.WeChatPayOrder;
 import com.lcjian.happyredenvelope.data.entity.Withdrawal;
 
 import java.util.List;
@@ -367,5 +368,12 @@ public interface RedEnvelopeService {
     @FormUrlEncoded
     @POST("user/user/cleanscanhistory")
     Observable<ResponseData<String>> cleanHistories(@Field("userid") long userId);
+
+    /**
+     * 费领优惠券
+     */
+    @FormUrlEncoded
+    @POST("user/vip/setrecord")
+    Observable<ResponseData<WeChatPayOrder>> createBuyingVipOrder(@Field("userid") long userId, @Field("month") int month);
 
 }

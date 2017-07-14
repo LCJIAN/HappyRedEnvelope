@@ -1,17 +1,30 @@
 package com.lqpinxuan.lqpx.wxapi;
 
+import android.content.Context;
+
+import com.lcjian.happyredenvelope.Constants;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
 public class WeChatPay {
 
-    private IWXAPI api;
-    PayReq req = new PayReq();
-    //req.appId = "wxf8b4f85f3a794e77";  // 测试用appId
-    req.appId			= json.getString("appid");
-    req.partnerId		= json.getString("partnerid");
-    req.prepayId		= json.getString("prepayid");
-    req.nonceStr		= json.getString("noncestr");
-    req.timeStamp		= json.getString("timestamp");
-    req.packageValue	= json.getString("package");
-    req.sign			= json.getString("sign");
-    req.extData			= "app data"; // optional
-    api.sendReq(req);
+    public static void pay(Context context,
+                           String appId,
+                           String partnerId,
+                           String prepayId,
+                           String nonceStr,
+                           String timeStamp,
+                           String packageValue,
+                           String sign) {
+        PayReq req = new PayReq();
+        req.appId = appId;
+        req.partnerId = partnerId;
+        req.prepayId = prepayId;
+        req.nonceStr = nonceStr;
+        req.timeStamp = timeStamp;
+        req.packageValue = packageValue;
+        req.sign = sign;
+        WXAPIFactory.createWXAPI(context, Constants.WE_CHAT_ID).sendReq(req);
+    }
+
 }

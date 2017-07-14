@@ -1,5 +1,6 @@
 package com.lcjian.happyredenvelope.ui.mine;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -19,7 +21,9 @@ import com.lcjian.happyredenvelope.BaseActivity;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.VipPrivilege;
+import com.lcjian.happyredenvelope.data.entity.WeChatPayOrder;
 import com.lcjian.lib.util.common.DimenUtils;
+import com.lqpinxuan.lqpx.wxapi.WeChatPay;
 
 import java.util.List;
 
@@ -37,8 +41,13 @@ public class BuyVipActivity extends BaseActivity implements View.OnClickListener
     ImageButton btn_back;
     @BindView(R.id.rv_vip_privileges)
     RecyclerView rv_vip_privileges;
+    @BindView(R.id.btn_buy_vip)
+    Button btn_buy_vip;
 
     private Subscription mSubscription;
+    private Subscription mSubscription2;
+
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +55,11 @@ public class BuyVipActivity extends BaseActivity implements View.OnClickListener
         setContentView(R.layout.activity_buy_vip);
         ButterKnife.bind(this);
 
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+
         btn_back.setOnClickListener(this);
+        btn_buy_vip.setOnClickListener(this);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         rv_vip_privileges.setLayoutManager(gridLayoutManager);
@@ -83,6 +96,9 @@ public class BuyVipActivity extends BaseActivity implements View.OnClickListener
         if (mSubscription != null) {
             mSubscription.unsubscribe();
         }
+        if (mSubscription2 != null) {
+            mSubscription2.unsubscribe();
+        }
     }
 
     @Override
@@ -90,6 +106,37 @@ public class BuyVipActivity extends BaseActivity implements View.OnClickListener
         switch (v.getId()) {
             case R.id.btn_back: {
                 onBackPressed();
+            }
+            break;
+            case R.id.btn_buy_vip: {
+                mProgressDialog.show();
+                if (mSubscription2 != null) {
+                    mSubscription2.unsubscribe();
+                }
+                mSubscription2 = mRestAPI.redEnvelopeService()
+                        .createBuyingVipOrder(mUserInfoSp.getLong("user_id", 0), 1)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<ResponseData<WeChatPayOrder>>() {
+                            @Override
+                            public void call(ResponseData<WeChatPayOrder> orderResponseData) {
+                                mProgressDialog.dismiss();
+                                if (orderResponseData.code == 0) {
+                                    WeChatPay.pay(BuyVipActivity.this, orderResponseData.data.appid,
+                                            orderResponseData.data.partnerid,
+                                            orderResponseData.data.prepayid,
+                                            orderResponseData.data.noncestr,
+                                            orderResponseData.data.timestamp,
+                                            orderResponseData.data.packages,
+                                            orderResponseData.data.sign);
+                                }
+                            }
+                        }, new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                mProgressDialog.dismiss();
+                            }
+                        });
             }
             break;
             default:
