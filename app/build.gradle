@@ -71,6 +71,7 @@ dependencies {
     compile 'com.yqritc:recyclerview-flexibledivider:latest.integration'
     compile 'com.just.agentweb:agentweb:latest.integration'
     compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:latest.integration'
     apt 'com.jakewharton:butterknife-compiler:8.5.1'
     apt 'com.pushtorefresh.storio:sqlite-annotations-processor:latest.integration'
     apt 'com.google.dagger:dagger-compiler:2.9'
