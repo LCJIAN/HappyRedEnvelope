@@ -3,22 +3,30 @@ package com.lcjian.happyredenvelope.ui.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.RadioGroup;
 
+import com.lcjian.happyredenvelope.BaseActivity;
 import com.lcjian.happyredenvelope.R;
+import com.lcjian.happyredenvelope.data.entity.AppLinks;
+import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.lib.util.FragmentSwitchHelper;
 import com.umeng.socialize.UMShareAPI;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
+public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
 
     @BindView(R.id.rg_bottom_navigation)
     RadioGroup rg_bottom_navigation;
 
     private FragmentSwitchHelper mFragmentSwitchHelper;
+
+    private Subscription mSubscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +43,38 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 new ExploreFragment(),
                 new MineFragment());
         mFragmentSwitchHelper.changeFragment(RedEnvelopeFragment.class);
+
+        mSubscription = mRestAPI.redEnvelopeService()
+                .getAppLinks()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<ResponseData<AppLinks>>() {
+                    @Override
+                    public void call(ResponseData<AppLinks> appLinksResponseData) {
+                        if (appLinksResponseData.code == 0) {
+                            AppLinks appLinks = appLinksResponseData.data;
+                            mUserInfoSp.edit()
+                                    .putString("luck_card_tutorial_link", appLinks.fukaManualLink)
+                                    .putString("helping_center_link", appLinks.helpCenterLink)
+                                    .putString("red_envelop_sponsor_link", appLinks.hongbaoCooperatorLink)
+                                    .putString("hot_app_link", appLinks.hotAppLink)
+                                    .putString("tao_bao_ticket_Link", appLinks.taobaoTicketLink).apply();
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+
+                    }
+                });
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mSubscription != null) {
+            mSubscription.unsubscribe();
+        }
+        super.onDestroy();
     }
 
     @Override

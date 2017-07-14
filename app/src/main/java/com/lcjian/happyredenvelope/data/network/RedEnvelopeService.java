@@ -1,5 +1,6 @@
 package com.lcjian.happyredenvelope.data.network;
 
+import com.lcjian.happyredenvelope.data.entity.AppLinks;
 import com.lcjian.happyredenvelope.data.entity.Banner;
 import com.lcjian.happyredenvelope.data.entity.Billboard;
 import com.lcjian.happyredenvelope.data.entity.Explore;
@@ -369,11 +370,12 @@ public interface RedEnvelopeService {
     @POST("user/user/cleanscanhistory")
     Observable<ResponseData<String>> cleanHistories(@Field("userid") long userId);
 
-    /**
-     * 费领优惠券
-     */
     @FormUrlEncoded
     @POST("user/vip/setrecord")
     Observable<ResponseData<WeChatPayOrder>> createBuyingVipOrder(@Field("userid") long userId, @Field("month") int month);
+
+    @Headers("Content-Type: application/x-www-form-urlencoded; charset=utf-8")
+    @POST("app/getlinks")
+    Observable<ResponseData<AppLinks>> getAppLinks();
 
 }

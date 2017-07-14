@@ -99,7 +99,8 @@
                     android:layout_marginEnd="32dp"
                     android:layout_marginRight="32dp"
                     android:textAppearance="@style/TextAppearance.AppTheme.Small"
-                    android:textColor="@color/colorTextLightGray" />
+                    android:textColor="@color/colorTextLightGray"
+                    android:visibility="gone" />
             </FrameLayout>
 
             <View

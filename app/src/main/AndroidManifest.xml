@@ -22,14 +22,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.main.MainActivity">
+        <activity
+            android:name=".ui.main.SplashActivity"
+            android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.mine.UserLuckCardActivity" />
         <activity android:name=".ui.mine.BuyLuckCardActivity" />
         <activity android:name=".ui.mine.BuyVipActivity" />
@@ -65,7 +67,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
             android:name="com.lqpinxuan.lqpx.wxapi.WXPayEntryActivity"
             android:exported="true"

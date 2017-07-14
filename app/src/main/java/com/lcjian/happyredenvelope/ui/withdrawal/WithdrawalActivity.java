@@ -15,6 +15,7 @@ import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseActivity;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
+import com.lcjian.happyredenvelope.data.entity.VipInfo;
 import com.lcjian.happyredenvelope.data.entity.Withdrawal;
 
 import java.text.DecimalFormat;
@@ -60,6 +61,9 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
     private Subscription mSubscription;
     private Subscription mSubscription2;
     private Subscription mSubscription3;
+    private Subscription mSubscription4;
+
+    private boolean mIsVip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +89,7 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
         btn_copy_token.setOnClickListener(this);
         tv_withdrawal_tutorial.setOnClickListener(this);
 
+        checkVip();
         refresh();
     }
 
@@ -98,6 +103,9 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
         }
         if (mSubscription3 != null) {
             mSubscription3.unsubscribe();
+        }
+        if (mSubscription4 != null) {
+            mSubscription4.unsubscribe();
         }
         super.onDestroy();
     }
@@ -116,7 +124,7 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
             case R.id.btn_go_withdrawal: {
                 float balance = mUserInfoSp.getFloat("user_balance", 0);
                 if (!mIsFirstWithdrawal || balance <= 0f) {
-                    if (mUserInfoSp.getBoolean("user_is_vip", false)) {
+                    if (mIsVip) {
                         if (balance < 50) {
                             Toast.makeText(App.getInstance(), R.string.vip_withdrawal_msg, Toast.LENGTH_SHORT).show();
                             return;
@@ -184,6 +192,20 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
                     public void call(Throwable throwable) {
                         mProgressDialog.dismiss();
                         Toast.makeText(App.getInstance(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void checkVip() {
+        mSubscription4 = mRestAPI.redEnvelopeService().isVip(mUserInfoSp.getLong("user_id", 0))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<ResponseData<VipInfo>>() {
+                    @Override
+                    public void call(ResponseData<VipInfo> vipInfoResponseData) {
+                        if (vipInfoResponseData.code == 0) {
+                            mIsVip = vipInfoResponseData.data.isvip;
+                        }
                     }
                 });
     }

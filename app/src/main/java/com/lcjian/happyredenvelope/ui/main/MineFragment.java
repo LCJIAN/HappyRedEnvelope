@@ -28,6 +28,7 @@ import com.lcjian.happyredenvelope.ui.mine.BuyVipActivity;
 import com.lcjian.happyredenvelope.ui.mine.RedEnvelopeHistoriesActivity;
 import com.lcjian.happyredenvelope.ui.mine.UserLuckCardActivity;
 import com.lcjian.happyredenvelope.ui.mine.ViewHistoriesActivity;
+import com.lcjian.happyredenvelope.ui.web.WebViewActivity;
 import com.lcjian.happyredenvelope.ui.withdrawal.WithdrawalActivity;
 import com.lcjian.lib.util.common.StringUtils;
 import com.umeng.socialize.UMAuthListener;
@@ -196,6 +197,16 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(new Intent(getContext(), RedEnvelopeHistoriesActivity.class));
             }
             break;
+            case R.id.tv_helping_center: {
+               startActivity(new Intent(getContext(), WebViewActivity.class)
+                       .putExtra("url", mUserInfoSp.getString("helping_center_link", "")));
+            }
+            break;
+            case R.id.tv_red_envelope_sponsor: {
+                startActivity(new Intent(getContext(), WebViewActivity.class)
+                        .putExtra("url", mUserInfoSp.getString("red_envelop_sponsor_link", "")));
+            }
+            break;
             default:
                 break;
         }
@@ -219,8 +230,6 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                     .apply(Global.userAvatar)
                     .transition(Global.crossFade)
                     .into(iv_user_avatar);
-            tv_balance.setText(String.format(Locale.getDefault(), "%s%s",
-                    "￥", new DecimalFormat("0.00").format(mUserInfoSp.getFloat("user_balance", 0))));
             tv_user_name.setText(mUserInfoSp.getString("user_nick_name", ""));
             getUserSummary();
             getLeftTime();
@@ -260,7 +269,6 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                                     .putString("user_open_id", userResponseData.data.userOpenid)
                                     .putString("user_country", userResponseData.data.userCountry)
                                     .putInt("user_sex", userResponseData.data.userSex)
-                                    .putFloat("user_balance", userResponseData.data.userBalance)
                                     .putBoolean("signed_in", true)
                                     .apply();
                             setupSignedIn();
@@ -300,7 +308,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                             tv_week_count.setText(String.valueOf(userSummaryResponseData.data.weekCount));
                             tv_month_count.setText(String.valueOf(userSummaryResponseData.data.monthCount));
                             tv_total_count.setText(String.valueOf(userSummaryResponseData.data.totalCount));
-                            tv_left_luck_card_total.setText(getString(R.string.luck_card_left, userSummaryResponseData.data.totalLuck));
+                            tv_balance.setText(String.format(Locale.getDefault(), "%s%s",
+                                    "￥", new DecimalFormat("0.00").format(userSummaryResponseData.data.hblUser.userBalance)));
                         } else {
                             Toast.makeText(App.getInstance(), userSummaryResponseData.msg, Toast.LENGTH_SHORT).show();
                         }

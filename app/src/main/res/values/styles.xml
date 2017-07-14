@@ -11,6 +11,11 @@
         <item name="android:windowBackground">@color/colorBackground</item>
     </style>
 
+    <style name="AppTheme.Splash">
+        <item name="android:windowBackground">@drawable/bitmap_splash</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <style name="TextAppearance.AppTheme.Large" parent="TextAppearance.AppCompat.Large" />
 
     <style name="TextAppearance.AppTheme.Medium" parent="TextAppearance.AppCompat.Medium" />

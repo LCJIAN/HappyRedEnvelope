@@ -13,6 +13,7 @@ import com.lcjian.happyredenvelope.BaseActivity;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.LuckCardSummary;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
+import com.lcjian.happyredenvelope.ui.web.WebViewActivity;
 import com.lcjian.lib.util.common.StringUtils;
 
 import butterknife.BindView;
@@ -106,6 +107,8 @@ public class UserLuckCardActivity extends BaseActivity implements View.OnClickLi
             }
             break;
             case R.id.tv_luck_card_tutorial: {
+                startActivity(new Intent(this, WebViewActivity.class)
+                        .putExtra("url", mUserInfoSp.getString("luck_card_tutorial_link", "")));
             }
             break;
             default:
