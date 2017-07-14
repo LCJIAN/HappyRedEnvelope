@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -64,7 +64,22 @@ public class RoomMemberManageActivity extends BaseActivity implements View.OnCli
         tv_top_bar_right.setVisibility(View.GONE);
 
         btn_top_bar_left.setOnClickListener(this);
-        chb_check_all.setOnClickListener(this);
+        chb_check_all.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag("RoomMemberManageFragment");
+                    if (fragment != null) {
+                        ((RoomMemberManageFragment) fragment).selectAll();
+                    }
+                } else {
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag("RoomMemberManageFragment");
+                    if (fragment != null) {
+                        ((RoomMemberManageFragment) fragment).selectNone();
+                    }
+                }
+            }
+        });
         btn_check_none.setOnClickListener(this);
         btn_delete.setOnClickListener(this);
 
@@ -78,13 +93,6 @@ public class RoomMemberManageActivity extends BaseActivity implements View.OnCli
             case R.id.btn_top_bar_left:
                 onBackPressed();
                 break;
-            case R.id.chb_check_all: {
-                Fragment fragment = getSupportFragmentManager().findFragmentByTag("RoomMemberManageFragment");
-                if (fragment != null) {
-                    ((RoomMemberManageFragment) fragment).selectAll();
-                }
-            }
-            break;
             case R.id.btn_check_none: {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag("RoomMemberManageFragment");
                 if (fragment != null) {
@@ -109,6 +117,14 @@ public class RoomMemberManageActivity extends BaseActivity implements View.OnCli
 
         private RoomMemberManageAdapter mAdapter;
 
+        private RecyclerView.AdapterDataObserver mObserver = new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                ((RoomMemberManageActivity) getActivity()).chb_check_all
+                        .setText(getString(R.string.selected_member, mAdapter.mChecked.size()));
+            }
+        };
+
         public static RoomMemberManageFragment newInstance(long roomId) {
             RoomMemberManageFragment fragment = new RoomMemberManageFragment();
             Bundle args = new Bundle();
@@ -128,6 +144,7 @@ public class RoomMemberManageActivity extends BaseActivity implements View.OnCli
         @Override
         public RecyclerView.Adapter onCreateAdapter(List<User> data) {
             mAdapter = new RoomMemberManageAdapter(data);
+            mAdapter.registerAdapterDataObserver(mObserver);
             return mAdapter;
         }
 
@@ -164,6 +181,12 @@ public class RoomMemberManageActivity extends BaseActivity implements View.OnCli
                     .build());
 
             super.onViewCreated(view, savedInstanceState);
+        }
+
+        @Override
+        public void onDestroyView() {
+            mAdapter.unregisterAdapterDataObserver(mObserver);
+            super.onDestroyView();
         }
 
         public void selectAll() {
@@ -213,30 +236,9 @@ public class RoomMemberManageActivity extends BaseActivity implements View.OnCli
         }
 
         void replaceAll(final List<User> data) {
-            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
-
-                @Override
-                public int getOldListSize() {
-                    return mData == null ? 0 : mData.size();
-                }
-
-                @Override
-                public int getNewListSize() {
-                    return data == null ? 0 : data.size();
-                }
-
-                @Override
-                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return mData.get(oldItemPosition) == data.get(newItemPosition);
-                }
-
-                @Override
-                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                    return mData.get(oldItemPosition) == data.get(newItemPosition);
-                }
-            }, true);
             this.mData = data;
-            diffResult.dispatchUpdatesTo(this);
+            this.mChecked.clear();
+            notifyDataSetChanged();
         }
 
         @Override
@@ -255,12 +257,13 @@ public class RoomMemberManageActivity extends BaseActivity implements View.OnCli
         }
 
         private void selectAll() {
+            mChecked.clear();
             mChecked.addAll(mData);
             notifyDataSetChanged();
         }
 
         private void selectNone() {
-            mChecked.removeAll(mData);
+            mChecked.clear();
             notifyDataSetChanged();
         }
 

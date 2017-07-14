@@ -1,5 +1,6 @@
 package com.lcjian.happyredenvelope.ui.mine;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -7,7 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseActivity;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.common.RecyclerFragment;
@@ -26,7 +29,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func3;
 import rx.schedulers.Schedulers;
 
@@ -39,11 +44,18 @@ public class ViewHistoriesActivity extends BaseActivity {
     @BindView(R.id.tv_top_bar_right)
     TextView tv_top_bar_right;
 
+    private Subscription mSubscription;
+
+    private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_histories);
         ButterKnife.bind(this);
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
 
         btn_top_bar_left.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,8 +65,47 @@ public class ViewHistoriesActivity extends BaseActivity {
         });
         tv_top_bar_title.setText(R.string.view_history);
         tv_top_bar_right.setText(R.string.clear);
+        tv_top_bar_right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mProgressDialog.show();
+                if (mSubscription != null) {
+                    mSubscription.unsubscribe();
+                }
+                mSubscription = mRestAPI.redEnvelopeService()
+                        .cleanHistories(mUserInfoSp.getLong("user_id", 0))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<ResponseData<String>>() {
+                            @Override
+                            public void call(ResponseData<String> stringResponseData) {
+                                mProgressDialog.dismiss();
+                                if (stringResponseData.code == 0) {
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fl_view_histories_container,
+                                            new ViewHistoriesFragment(), "ViewHistoriesFragment").commit();
+                                } else {
+                                    Toast.makeText(App.getInstance(), stringResponseData.msg, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }, new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                mProgressDialog.dismiss();
+                                Toast.makeText(App.getInstance(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        });
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_view_histories_container,
                 new ViewHistoriesFragment(), "ViewHistoriesFragment").commit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mSubscription != null) {
+            mSubscription.unsubscribe();
+        }
+        super.onDestroy();
     }
 
     public static class ViewHistoriesFragment extends RecyclerFragment<Displayable> {
@@ -119,7 +170,8 @@ public class ViewHistoriesActivity extends BaseActivity {
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    if (recycler_view.getAdapter().getItemViewType(position) == 3) {
+                    if (recycler_view.getAdapter().getItemViewType(position) == 3
+                            || recycler_view.getAdapter().getItemViewType(position) == 2) {
                         return 2;
                     } else {
                         return 1;

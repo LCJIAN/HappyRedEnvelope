@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.room.RedEnvelopeSnatchedEmptyActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/brand_red_envelope"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textAppearance="@style/TextAppearance.AppTheme.Medium"
             android:textColor="@android:color/white" />
     </RelativeLayout>
 
@@ -62,13 +64,13 @@
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="12dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hot_news"
-            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textAppearance="@style/TextAppearance.AppTheme"
             android:textColor="@color/colorTextBlack" />
 
         <android.support.v4.widget.Space
@@ -81,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/change"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textAppearance="@style/TextAppearance.AppTheme"
             android:textColor="@color/colorTextLightGray" />
     </LinearLayout>
 
@@ -89,5 +91,6 @@
         android:id="@+id/rv_videos"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:background="@android:color/white" />
 </LinearLayout>

@@ -10,8 +10,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseDialogFragment;
+import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.Message;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
@@ -67,23 +71,32 @@ public class RedEnvelopeOpenFragment extends BaseDialogFragment implements View.
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        if (mMessage.supportInfo != null) {
+            Glide.with(getContext())
+                    .load(mMessage.supportInfo.icon)
+                    .apply(Global.userAvatar)
+                    .transition(Global.crossFade)
+                    .into(iv_brand_avatar);
+            tv_brand_name.setText(mMessage.supportInfo.name);
+            tv_brand_des.setText(mMessage.supportInfo.desc);
+        }
+
         ll_red_envelope_open.setOnClickListener(this);
         btn_close.setOnClickListener(this);
 
         if (mMessage.type == 3) {
-
-
             mRestAPI.redEnvelopeService().openRedEnvelope(mUserInfoSp.getLong("user_id", 0), mMessage.id)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<ResponseData<Object>>() {
                         @Override
                         public void call(ResponseData<Object> objectResponseData) {
+                            responseData = objectResponseData;
                         }
                     }, new Action1<Throwable>() {
                         @Override
                         public void call(Throwable throwable) {
-
+                            Toast.makeText(App.getInstance(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -106,7 +119,8 @@ public class RedEnvelopeOpenFragment extends BaseDialogFragment implements View.
                 } else if (mMessage.type == 3) {
                     if (responseData != null) {
                         if (responseData.code == 0) {
-                            startActivity(new Intent(v.getContext(), RedEnvelopeSnatchedSuccessActivity.class));
+                            startActivity(new Intent(v.getContext(), RedEnvelopeSnatchedSuccessActivity.class)
+                                    .putExtra("msg_id", mMessage.id));
                         } else {
                             RedEnvelopeSnatchFailedFragment.newInstance(responseData.msg)
                                     .show(getFragmentManager(), "RedEnvelopeSnatchFailedFragment");

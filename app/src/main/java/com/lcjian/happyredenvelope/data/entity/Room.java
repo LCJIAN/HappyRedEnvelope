@@ -2,9 +2,15 @@ package com.lcjian.happyredenvelope.data.entity;
 
 import com.lcjian.lib.entity.Displayable;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Room implements Displayable {
+public class Room implements Serializable, Displayable {
+
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 1L;
 
     public long createTime;
     public String desc;
@@ -18,4 +24,6 @@ public class Room implements Displayable {
     public boolean show;
     public boolean vip;
     public int state;   // 1:人数没到抢的状态;2:人数已到可以抢的状态;3:人数已满
+
+    public User creator;
 }

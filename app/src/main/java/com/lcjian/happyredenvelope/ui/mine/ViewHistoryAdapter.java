@@ -199,6 +199,7 @@ class ViewHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Context context = itemView.getContext();
             Glide.with(context)
                     .load(videoHistory.ku6ShortVideo.picture)
+                    .apply(Global.centerCrop)
                     .transition(Global.crossFade)
                     .into(iv_video_thumbnail);
             iv_video_title.setText(videoHistory.ku6ShortVideo.name);

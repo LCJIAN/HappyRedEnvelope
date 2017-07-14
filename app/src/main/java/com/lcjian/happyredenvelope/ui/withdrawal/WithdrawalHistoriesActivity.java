@@ -80,6 +80,9 @@ public class WithdrawalHistoriesActivity extends BaseActivity implements View.On
             break;
             case R.id.tv_top_bar_right: {
                 mProgressDialog.show();
+                if (mSubscription != null) {
+                    mSubscription.unsubscribe();
+                }
                 mSubscription = mRestAPI.redEnvelopeService()
                         .cleanWithdrawalHistories(mUserInfoSp.getLong("user_id", 0))
                         .subscribeOn(Schedulers.io())

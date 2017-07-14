@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="@string/search"
-            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textAppearance="@style/TextAppearance.AppTheme"
             android:textColor="@android:color/white" />
     </LinearLayout>
 

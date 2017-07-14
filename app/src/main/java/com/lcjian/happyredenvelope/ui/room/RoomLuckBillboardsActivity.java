@@ -48,8 +48,10 @@ public class RoomLuckBillboardsActivity extends BaseActivity implements View.OnC
         setContentView(R.layout.activity_room_luck_billboards);
         ButterKnife.bind(this);
         btn_top_bar_left.setOnClickListener(this);
+        tv_top_bar_title.setText(R.string.room_luck_billboard);
+        tv_top_bar_right.setVisibility(View.GONE);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_room_luck_billboards_container,
-                new RoomLuckBillboardsFragment(), "RoomLuckBillboardsFragment").commit();
+                RoomLuckBillboardsFragment.newInstance(getIntent().getLongExtra("room_id", 0)), "RoomLuckBillboardsFragment").commit();
     }
 
     @Override
@@ -203,7 +205,7 @@ public class RoomLuckBillboardsActivity extends BaseActivity implements View.OnC
                         .into(iv_user_avatar);
 
                 tv_user_name.setText(roomBillboard.nickname);
-                tv_luckiest_time.setText(context.getString(R.string.luckiest_time, roomBillboard.luckiestCount));
+                tv_luckiest_time.setText(context.getString(R.string.luckiest_times, roomBillboard.luckiestCount));
                 iv_red_envelop_count.setText(String.valueOf(roomBillboard.HongbaoCount));
             }
         }

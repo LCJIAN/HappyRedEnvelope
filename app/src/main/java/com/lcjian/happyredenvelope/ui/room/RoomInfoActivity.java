@@ -1,9 +1,11 @@
 package com.lcjian.happyredenvelope.ui.room;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +27,7 @@ import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.common.RecyclerFragment;
 import com.lcjian.happyredenvelope.data.entity.PageResult;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
+import com.lcjian.happyredenvelope.data.entity.Room;
 import com.lcjian.happyredenvelope.data.entity.RoomAndCreator;
 import com.lcjian.happyredenvelope.data.entity.User;
 import com.lcjian.happyredenvelope.data.entity.Users;
@@ -70,22 +73,37 @@ public class RoomInfoActivity extends BaseActivity {
         tv_top_bar_right.setVisibility(View.GONE);
 
         mSubscription = mRestAPI.redEnvelopeService()
-                .getRoomDetailAndCreator(getIntent().getLongExtra("room_id", 0))
+                .getRoomDetail(getIntent().getLongExtra("room_id", 0))
+                .flatMap(new Func1<ResponseData<Room>, Observable<Room>>() {
+                    @Override
+                    public Observable<Room> call(ResponseData<Room> roomResponseData) {
+                        if (roomResponseData.data.vip) {
+                            return mRestAPI.redEnvelopeService()
+                                    .getRoomDetailAndCreator(getIntent().getLongExtra("room_id", 0))
+                                    .map(new Func1<ResponseData<RoomAndCreator>, Room>() {
+                                        @Override
+                                        public Room call(ResponseData<RoomAndCreator> roomAndCreatorResponseData) {
+                                            Room room = roomAndCreatorResponseData.data.hongBaoRoom;
+                                            room.creator = roomAndCreatorResponseData.data.hblUser;
+                                            return room;
+                                        }
+                                    });
+                        } else {
+                            return Observable.just(roomResponseData.data);
+                        }
+                    }
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<ResponseData<RoomAndCreator>>() {
+                .subscribe(new Action1<Room>() {
                     @Override
-                    public void call(ResponseData<RoomAndCreator> roomResponseData) {
-                        if (roomResponseData.code == 0) {
-                            tv_top_bar_title.setText(getString(R.string.room_title,
-                                    roomResponseData.data.hongBaoRoom.name, roomResponseData.data.hongBaoRoom.nowNumber));
-                            boolean isManager = roomResponseData.data.hblUser != null
-                                    && mUserInfoSp.getLong("user_id", 0) == roomResponseData.data.hblUser.userId;
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.fl_fragment_container,
-                                            RoomInfoFragment.newInstance(getIntent().getLongExtra("room_id", 0), isManager),
-                                            "RoomInfoFragment").commit();
-                        }
+                    public void call(Room room) {
+                        tv_top_bar_title.setText(getString(R.string.room_title,
+                                room.name, room.nowNumber));
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fl_fragment_container,
+                                        RoomInfoFragment.newInstance(room),
+                                        "RoomInfoFragment").commit();
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -112,9 +130,7 @@ public class RoomInfoActivity extends BaseActivity {
         private TextView tv_be_a_vip;
         private Button btn_exit_room;
 
-        private long mRoomId;
-
-        private boolean mIsManager;
+        private Room mRoom;
 
         private RoomMemberGridAdapter mAdapter;
 
@@ -122,11 +138,10 @@ public class RoomInfoActivity extends BaseActivity {
 
         private Subscription mVipSubscription;
 
-        public static RoomInfoFragment newInstance(long roomId, boolean isManager) {
+        public static RoomInfoFragment newInstance(Room room) {
             RoomInfoFragment fragment = new RoomInfoFragment();
             Bundle args = new Bundle();
-            args.putLong("room_id", roomId);
-            args.putBoolean("is_manager", isManager);
+            args.putSerializable("room", room);
             fragment.setArguments(args);
             return fragment;
         }
@@ -135,19 +150,29 @@ public class RoomInfoActivity extends BaseActivity {
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             if (getArguments() != null) {
-                mRoomId = getArguments().getLong("room_id");
-                mIsManager = getArguments().getBoolean("is_manager");
+                mRoom = (Room) getArguments().getSerializable("room");
             }
         }
 
         @Override
         public RecyclerView.Adapter onCreateAdapter(List<User> data) {
-            mAdapter = new RoomMemberGridAdapter(data);
+            mAdapter = new RoomMemberGridAdapter(data, mRoom, mUserInfoSp);
             return mAdapter;
         }
 
         @Override
         public void onLoadMoreAdapterCreated(LoadMoreAdapter loadMoreAdapter) {
+            if (!TextUtils.isEmpty(mRoom.desc)) {
+                TextView header = new TextView(getContext());
+                int padding = (int) DimenUtils.dipToPixels(8, getContext());
+                header.setPadding(padding, padding, padding, padding);
+                header.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                header.setTextSize(16);
+                header.setTextColor(ContextCompat.getColor(getContext(), R.color.colorTextBlack));
+                header.setText(mRoom.desc);
+                loadMoreAdapter.addHeader(header);
+            }
+
             View footer = LayoutInflater.from(getContext()).inflate(R.layout.room_info_footer, recycler_view, false);
             tv_view_more_member = ButterKnife.findById(footer, R.id.tv_view_more_member);
             tv_room_luck_billboard = ButterKnife.findById(footer, R.id.tv_room_luck_billboard);
@@ -161,13 +186,14 @@ public class RoomInfoActivity extends BaseActivity {
             tv_invite_friend.setOnClickListener(this);
             tv_be_a_vip.setOnClickListener(this);
             btn_exit_room.setOnClickListener(this);
+
             loadMoreAdapter.addFooter(footer);
         }
 
         @Override
         public Observable<PageResult<User>> onCreatePageObservable(int currentPage) {
             return mRestAPI.redEnvelopeService()
-                    .getRoomMembers(mUserInfoSp.getLong("user_id", 0), mRoomId, 1, 100)
+                    .getRoomMembers(mUserInfoSp.getLong("user_id", 0), mRoom.id, 1, 100)
                     .map(new Func1<ResponseData<Users>, PageResult<User>>() {
                         @Override
                         public PageResult<User> call(ResponseData<Users> listResponseData) {
@@ -204,14 +230,6 @@ public class RoomInfoActivity extends BaseActivity {
                     outRect.set(pixel1, pixel1, pixel1, pixel1);
                 }
             });
-            if (mIsManager) {
-                recycler_view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startActivity(new Intent(v.getContext(), RoomMemberManageActivity.class).putExtra("room_id", mRoomId));
-                    }
-                });
-            }
 
             super.onViewCreated(view, savedInstanceState);
 
@@ -253,7 +271,7 @@ public class RoomInfoActivity extends BaseActivity {
                     notifyDataChanged(mMembers);
                     break;
                 case R.id.tv_room_luck_billboard:
-                    startActivity(new Intent(v.getContext(), RoomLuckBillboardsActivity.class));
+                    startActivity(new Intent(v.getContext(), RoomLuckBillboardsActivity.class).putExtra("room_id", mRoom.id));
                     break;
                 case R.id.tv_invite_friend:
                     break;
@@ -272,8 +290,13 @@ public class RoomInfoActivity extends BaseActivity {
 
         private List<User> mData;
 
-        RoomMemberGridAdapter(List<User> data) {
+        private Room mRoom;
+        private SharedPreferences mUserInfoSp;
+
+        RoomMemberGridAdapter(List<User> data, Room room, SharedPreferences userInfoSp) {
             this.mData = data;
+            this.mRoom = room;
+            this.mUserInfoSp = userInfoSp;
         }
 
         void replaceAll(final List<User> data) {
@@ -311,7 +334,7 @@ public class RoomInfoActivity extends BaseActivity {
 
         @Override
         public MemberViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MemberViewHolder(parent);
+            return new MemberViewHolder(parent, mRoom, mUserInfoSp);
         }
 
         @Override
@@ -326,9 +349,23 @@ public class RoomInfoActivity extends BaseActivity {
             @BindView(R.id.tv_user_name)
             TextView tv_user_name;
 
-            MemberViewHolder(ViewGroup parent) {
+            private Room mRoom;
+            private SharedPreferences mUserInfoSp;
+
+            MemberViewHolder(ViewGroup parent, Room room, SharedPreferences userInfoSp) {
                 super(LayoutInflater.from(parent.getContext()).inflate(R.layout.room_member_grid_item, parent, false));
                 ButterKnife.bind(this, this.itemView);
+                this.mRoom = room;
+                this.mUserInfoSp = userInfoSp;
+                if (mRoom.creator != null && mUserInfoSp.getLong("user_id", 0) == mRoom.creator.userId) {
+                    this.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            v.getContext().startActivity(new Intent(v.getContext(),
+                                    RoomMemberManageActivity.class).putExtra("room_id", mRoom.id));
+                        }
+                    });
+                }
             }
 
             public void bindTo(User user) {

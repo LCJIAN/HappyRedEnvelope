@@ -3,6 +3,7 @@ package com.lcjian.happyredenvelope.ui.room;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.Video;
 import com.lcjian.happyredenvelope.data.network.RestAPI;
 import com.lcjian.happyredenvelope.ui.web.WebViewActivity;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +58,10 @@ public class RedEnvelopeSnatchedEmptyActivity extends BaseActivity implements Vi
 
         rv_videos.setHasFixedSize(true);
         rv_videos.setLayoutManager(new LinearLayoutManager(this));
+        rv_videos.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
+                .color(ContextCompat.getColor(this, R.color.colorDivider))
+                .size(1)
+                .build());
 
         mData = new ArrayList<>();
         mAdapter = new VideoAdapter(mData, mRestAPI);
@@ -179,6 +185,7 @@ public class RedEnvelopeSnatchedEmptyActivity extends BaseActivity implements Vi
                 Context context = itemView.getContext();
                 Glide.with(context)
                         .load(video.picture)
+                        .apply(Global.centerCrop)
                         .transition(Global.crossFade)
                         .into(iv_video_thumbnail);
                 iv_video_title.setText(video.name);

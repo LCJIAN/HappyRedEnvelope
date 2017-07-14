@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    tools:context=".ui.room.RedEnvelopeSnatchedSuccessActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:background="@color/colorDarkRed">
+        android:background="@color/colorLightRed">
 
         <ImageButton
             android:id="@+id/btn_top_bar_left"
@@ -23,11 +26,11 @@
             app:srcCompat="@drawable/ic_arrow_left" />
 
         <TextView
-            android:id="@+id/tv_top_bar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:text="@string/crash_red_envelope"
+            android:textAppearance="@style/TextAppearance.AppTheme.Medium"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -38,7 +41,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_margin="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:text="@string/invite_friend_2"
+            android:textAppearance="@style/TextAppearance.AppTheme"
             android:textColor="@android:color/white" />
     </RelativeLayout>
 

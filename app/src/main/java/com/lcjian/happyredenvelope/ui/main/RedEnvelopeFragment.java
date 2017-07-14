@@ -143,6 +143,7 @@ public class RedEnvelopeFragment extends BaseFragment implements View.OnClickLis
             }
             break;
             case R.id.tv_create_room: {
+                mPopupWindow.dismiss();
                 startActivity(new Intent(v.getContext(), CreateRoomActivity.class));
             }
             break;
@@ -151,6 +152,7 @@ public class RedEnvelopeFragment extends BaseFragment implements View.OnClickLis
             }
             break;
             case R.id.tv_buy_luck_card: {
+                mPopupWindow.dismiss();
                 startActivity(new Intent(v.getContext(), UserLuckCardActivity.class));
             }
             break;

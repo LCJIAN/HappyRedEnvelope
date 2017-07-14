@@ -265,7 +265,7 @@
 
                 <TextView
                     android:id="@+id/tv_buy_luck_card_count"
-                    style="@style/TextAppearance.AppCompat.Small"
+                    style="@style/TextAppearance.AppTheme.Small"
                     android:layout_width="40dp"
                     android:layout_height="29dp"
                     android:gravity="center"
@@ -280,7 +280,7 @@
                     android:minWidth="0dp" />
 
                 <TextView
-                    style="@style/TextAppearance.AppCompat.Small"
+                    style="@style/TextAppearance.AppTheme.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/luck_card_unit"
@@ -293,7 +293,7 @@
 
                 <TextView
                     android:id="@+id/tv_total_price"
-                    style="@style/TextAppearance.AppCompat.Small"
+                    style="@style/TextAppearance.AppTheme.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorTextBlack" />

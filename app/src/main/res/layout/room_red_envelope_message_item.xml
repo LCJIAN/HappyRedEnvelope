@@ -39,7 +39,7 @@
             android:textColor="@color/colorTextLightGray" />
     </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/fl_message_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,10 +47,20 @@
         android:layout_marginStart="48dp"
         android:background="@drawable/message_red_envelope_bg">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/red_envelope" />
+
         <TextView
             android:id="@+id/tv_message_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </FrameLayout>
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:textAppearance="@style/TextAppearance.AppTheme"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
 
 </LinearLayout>

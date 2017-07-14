@@ -1,6 +1,13 @@
 package com.lcjian.happyredenvelope.data.entity;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
+
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 1L;
 
     public long userCreatetime;
     public String userHeadimg;

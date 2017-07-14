@@ -54,7 +54,7 @@ public class GoodsViewHolder extends RecyclerView.ViewHolder {
         Context context = itemView.getContext();
         Glide.with(context)
                 .load(goods.pic)
-                .apply(Global.roomAvatar)
+                .apply(Global.centerCrop)
                 .transition(Global.crossFade)
                 .into(iv_goods_avatar);
         tv_goods_name.setText(goods.title);

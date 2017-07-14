@@ -22,6 +22,7 @@ import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.Room;
 import com.lcjian.happyredenvelope.data.entity.User;
 import com.lcjian.happyredenvelope.data.entity.Users;
+import com.lcjian.lib.recyclerview.RecyclerViewPositionHelper;
 import com.lcjian.lib.util.common.DimenUtils;
 import com.lcjian.lib.util.common.StringUtils;
 
@@ -321,14 +322,17 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
                             }
                         }
                         if (roomData.newMessages != null && !roomData.newMessages.isEmpty()) {
+                            int preFirstPosition = RecyclerViewPositionHelper.createHelper(rv_chat_messages).findFirstVisibleItemPosition();
                             mMessages.addAll(0, roomData.newMessages);
                             mRoomMessageAdapter.replaceAll(new ArrayList<>(mMessages));
-                            rv_chat_messages.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    rv_chat_messages.smoothScrollToPosition(0);
-                                }
-                            });
+                            if (preFirstPosition < 2) {
+                                rv_chat_messages.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        rv_chat_messages.smoothScrollToPosition(0);
+                                    }
+                                });
+                            }
                         }
                     }
                 }, new Action1<Throwable>() {

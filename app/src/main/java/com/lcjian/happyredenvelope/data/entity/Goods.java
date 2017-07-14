@@ -10,6 +10,7 @@ public class Goods implements Displayable {
     public String pic;
     public String platform;
     public float price;
+    public float zkPrice;
     public int quanCount;
     public String quanEndDate;
     public String quanInfo;

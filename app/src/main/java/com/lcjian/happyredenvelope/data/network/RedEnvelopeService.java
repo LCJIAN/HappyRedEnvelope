@@ -18,6 +18,7 @@ import com.lcjian.happyredenvelope.data.entity.RoomAndCreator;
 import com.lcjian.happyredenvelope.data.entity.RoomBillboard;
 import com.lcjian.happyredenvelope.data.entity.RoomHistory;
 import com.lcjian.happyredenvelope.data.entity.RoomIdInfo;
+import com.lcjian.happyredenvelope.data.entity.SnatchingDetail;
 import com.lcjian.happyredenvelope.data.entity.User;
 import com.lcjian.happyredenvelope.data.entity.UserSummary;
 import com.lcjian.happyredenvelope.data.entity.Users;
@@ -262,6 +263,16 @@ public interface RedEnvelopeService {
                                                         @Field("roomid") long roomId);
 
     /**
+     * 获取红包详情
+     */
+    @FormUrlEncoded
+    @POST("hongbao/gethongbaodetail")
+    Observable<ResponseData<SnatchingDetail>> getSnatchingDetail(@Field("uid") long userId,
+                                                                 @Field("msgid") long msgId,
+                                                                 @Field("page") int pageNumber,
+                                                                 @Field("pagesize") int pageSize);
+
+    /**
      * 获取房间基本信息
      */
     @FormUrlEncoded
@@ -336,10 +347,25 @@ public interface RedEnvelopeService {
     Observable<ResponseData<String>> addVideoHistory(@Field("id") long id);
 
     /**
-     * 添加视频浏览记录
+     * 看广告免费领取福卡
      */
     @FormUrlEncoded
     @POST("fuka/order/getfree")
-    Observable<ResponseData<FreeLuckCard>> getFreeLuckCard(@Field("userid") long id);
+    Observable<ResponseData<FreeLuckCard>> getFreeLuckCard(@Field("userid") long userId);
+
+    /**
+     * 费领优惠券
+     */
+    @FormUrlEncoded
+    @POST("ticket/receiveticket")
+    Observable<ResponseData<String>> receiveTicket(@Field("uid") long userId,
+                                                   @Field("ticketid") long ticketId);
+
+    /**
+     * 费领优惠券
+     */
+    @FormUrlEncoded
+    @POST("user/user/cleanscanhistory")
+    Observable<ResponseData<String>> cleanHistories(@Field("userid") long userId);
 
 }

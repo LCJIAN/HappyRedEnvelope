@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -157,7 +158,7 @@ class RoomMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.tv_message_content)
         TextView tv_message_content;
         @BindView(R.id.fl_message_content)
-        FrameLayout fl_message_content;
+        LinearLayout fl_message_content;
 
         Message message;
 

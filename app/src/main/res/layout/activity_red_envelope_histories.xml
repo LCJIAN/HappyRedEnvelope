@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/red_envelope_history"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textAppearance="@style/TextAppearance.AppTheme.Medium"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -41,7 +41,7 @@
             android:layout_centerVertical="true"
             android:layout_margin="8dp"
             android:text="@string/filter"
-            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textAppearance="@style/TextAppearance.AppTheme"
             android:textColor="@android:color/white" />
     </RelativeLayout>
 

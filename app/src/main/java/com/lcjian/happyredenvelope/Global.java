@@ -7,6 +7,12 @@ import com.bumptech.glide.request.RequestOptions;
 public class Global {
 
     public static DrawableTransitionOptions crossFade = DrawableTransitionOptions.withCrossFade();
-    public static RequestOptions userAvatar = RequestOptions.placeholderOf(R.drawable.shape_user_no_avatar_bg).circleCrop();
-    public static RequestOptions roomAvatar = RequestOptions.placeholderOf(R.drawable.shape_room_no_avatar_bg).transform(new RoundedCorners(4));
+
+    public static RequestOptions userAvatar = RequestOptions.placeholderOf(R.drawable.shape_user_no_avatar_bg)
+            .circleCrop();
+
+    public static RequestOptions roomAvatar = RequestOptions.placeholderOf(R.drawable.shape_room_no_avatar_bg)
+            .centerCrop().transform(new RoundedCorners(4));
+
+    public static RequestOptions centerCrop = RequestOptions.centerCropTransform();
 }
