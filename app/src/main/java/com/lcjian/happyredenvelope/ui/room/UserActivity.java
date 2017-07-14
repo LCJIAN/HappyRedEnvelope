@@ -73,9 +73,9 @@ public class UserActivity extends BaseActivity {
                                     .transition(Global.crossFade)
                                     .into(iv_user_avatar);
                             tv_top_bar_title.setText(userSummaryResponseData.data.hblUser.userNickname);
-                            tv_day_count.setText(String.valueOf(userSummaryResponseData.data.day));
-                            tv_week_count.setText(String.valueOf(userSummaryResponseData.data.week));
-                            tv_month_count.setText(String.valueOf(userSummaryResponseData.data.month));
+                            tv_day_count.setText(String.valueOf(userSummaryResponseData.data.dayCount));
+                            tv_week_count.setText(String.valueOf(userSummaryResponseData.data.weekCount));
+                            tv_month_count.setText(String.valueOf(userSummaryResponseData.data.monthCount));
                             tv_total_amount.setText(String.format(Locale.getDefault(), "%s%s",
                                     "￥", new DecimalFormat("0.00").format(userSummaryResponseData.data.total)));
                         } else {

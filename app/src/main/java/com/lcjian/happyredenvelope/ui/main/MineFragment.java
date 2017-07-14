@@ -296,9 +296,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void call(ResponseData<UserSummary> userSummaryResponseData) {
                         if (userSummaryResponseData.code == 0) {
-                            tv_day_count.setText(String.valueOf(userSummaryResponseData.data.day));
-                            tv_week_count.setText(String.valueOf(userSummaryResponseData.data.week));
-                            tv_month_count.setText(String.valueOf(userSummaryResponseData.data.month));
+                            tv_day_count.setText(String.valueOf(userSummaryResponseData.data.dayCount));
+                            tv_week_count.setText(String.valueOf(userSummaryResponseData.data.weekCount));
+                            tv_month_count.setText(String.valueOf(userSummaryResponseData.data.monthCount));
                             tv_total_count.setText(String.valueOf(userSummaryResponseData.data.totalCount));
                             tv_left_luck_card_total.setText(getString(R.string.luck_card_left, userSummaryResponseData.data.totalLuck));
                         } else {

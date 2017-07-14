@@ -73,7 +73,7 @@ public class UserLuckCardActivity extends BaseActivity implements View.OnClickLi
                             tv_total_buy_count.setText(getString(R.string.luck_card_buy_total, luckCardSummary.sell.totalCount));
                             tv_total_buy_time.setText(getString(R.string.luck_card_time_total, luckCardSummary.sell.totalTime));
                             tv_total_present_count.setText(getString(R.string.luck_card_present_total, luckCardSummary.send.totalCount));
-                            tv_total_present_time.setText(getString(R.string.luck_card_time_total, luckCardSummary.send.totalTime));
+                            tv_total_present_time.setText(getString(R.string.luck_card_time_total, luckCardSummary.send.totalTime / 60));
                         } else {
                             Toast.makeText(App.getInstance(), luckCardSummaryResponseData.msg, Toast.LENGTH_SHORT).show();
                         }

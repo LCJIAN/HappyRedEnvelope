@@ -134,24 +134,23 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         loadRoomData();
     }
 
+
     @Override
-    public void onPause() {
+    protected void onStop() {
         if (mSubscriptionRoomData != null) {
             mSubscriptionRoomData.unsubscribe();
         }
-        super.onPause();
+        super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        if (mJoined) {
-            exitRoom();
-        }
+        exitRoom();
         if (mSubscriptionRoomData != null) {
             mSubscriptionRoomData.unsubscribe();
         }
@@ -235,7 +234,7 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
             mSubscriptionRoomData.unsubscribe();
         }
         mSubscriptionRoomData = Observable
-                .interval(0, 5, TimeUnit.SECONDS)
+                .interval(2, 5, TimeUnit.SECONDS)
                 .flatMap(new Func1<Long, Observable<RoomData>>() {
                     @Override
                     public Observable<RoomData> call(Long aLong) {
