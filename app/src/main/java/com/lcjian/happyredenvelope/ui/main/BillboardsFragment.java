@@ -156,6 +156,12 @@ public class BillboardsFragment extends RecyclerFragment<Displayable> {
                 .build());
 
         super.onViewCreated(view, savedInstanceState);
+
+        if (one != null && two != null && three != null) {
+            setupHeaderItem(one, iv_user_avatar_one, tv_user_name_one, tv_billboard_amount_one);
+            setupHeaderItem(two, iv_user_avatar_two, tv_user_name_two, tv_billboard_amount_two);
+            setupHeaderItem(three, iv_user_avatar_three, tv_user_name_three, tv_billboard_amount_three);
+        }
     }
 
     private void setupHeaderItem(Billboard billboard, ImageView avatar, TextView userName, TextView billboardAmount) {
