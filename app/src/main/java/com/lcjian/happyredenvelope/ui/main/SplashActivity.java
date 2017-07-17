@@ -36,7 +36,7 @@ public class SplashActivity extends BaseActivity {
 
         setContentView(R.layout.activity_splash);
 
-        getWindow().getDecorView().postDelayed(mRunnable, 3000);
+        getWindow().getDecorView().postDelayed(mRunnable, 2000);
     }
 
     @Override

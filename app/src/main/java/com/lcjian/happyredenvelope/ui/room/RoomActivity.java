@@ -22,6 +22,7 @@ import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.Room;
 import com.lcjian.happyredenvelope.data.entity.User;
 import com.lcjian.happyredenvelope.data.entity.Users;
+import com.lcjian.happyredenvelope.ui.mine.RedEnvelopeHistoriesActivity;
 import com.lcjian.lib.recyclerview.RecyclerViewPositionHelper;
 import com.lcjian.lib.util.common.DimenUtils;
 import com.lcjian.lib.util.common.StringUtils;
@@ -98,6 +99,7 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
         tv_top_bar_right.setBackgroundResource(R.drawable.ic_room_member);
         tv_top_bar_right.setOnClickListener(this);
         btn_top_bar_left.setOnClickListener(this);
+        btn_go_red_envelope_histories.setOnClickListener(this);
 
         rv_room_members.setHasFixedSize(true);
         rv_room_members.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -157,9 +159,6 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
         if (mSubscriptionJoinRoom != null) {
             mSubscriptionJoinRoom.unsubscribe();
         }
-        if (mSubscriptionExitRoom != null) {
-            mSubscriptionExitRoom.unsubscribe();
-        }
         if (mSubscriptionCounting != null) {
             mSubscriptionCounting.unsubscribe();
         }
@@ -177,6 +176,9 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.tv_top_bar_right:
                 startActivity(new Intent(this, RoomInfoActivity.class).putExtra("room_id", mRoomId));
+                break;
+            case R.id.btn_go_red_envelope_histories:
+                startActivity(new Intent(this, RedEnvelopeHistoriesActivity.class));
                 break;
             default:
                 break;
@@ -234,7 +236,7 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
             mSubscriptionRoomData.unsubscribe();
         }
         mSubscriptionRoomData = Observable
-                .interval(2, 5, TimeUnit.SECONDS)
+                .interval(0, 5, TimeUnit.SECONDS)
                 .flatMap(new Func1<Long, Observable<RoomData>>() {
                     @Override
                     public Observable<RoomData> call(Long aLong) {
@@ -276,34 +278,34 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
 
                         tv_top_bar_title.setText(getString(R.string.room_title, roomData.room.name, roomData.room.nowNumber));
 
-                        if (mJoined) {
-                            if (roomData.room.state == 1) {
-                                boolean change = ll_room_state_snatching.getVisibility() == View.VISIBLE;
-                                ll_room_state_waiting.setVisibility(View.VISIBLE);
-                                ll_room_state_snatching.setVisibility(View.GONE);
+                        if (roomData.room.state == 1) {
+                            boolean change = ll_room_state_snatching.getVisibility() == View.VISIBLE;
+                            ll_room_state_waiting.setVisibility(View.VISIBLE);
+                            ll_room_state_snatching.setVisibility(View.GONE);
 
-                                tv_room_member_count.setText(getString(R.string.room_now_member_count, roomData.room.nowNumber));
+                            tv_room_member_count.setText(getString(R.string.room_now_member_count, roomData.room.nowNumber));
 
-                                if (change) {
-                                    if (mSubscriptionCounting != null) {
-                                        mSubscriptionCounting.unsubscribe();
-                                    }
-                                }
-                            } else if (roomData.room.state == 2) {
-                                boolean change = ll_room_state_snatching.getVisibility() == View.GONE;
-                                ll_room_state_waiting.setVisibility(View.GONE);
-                                ll_room_state_snatching.setVisibility(View.VISIBLE);
-
-                                if (change) {
-                                    counting(roomData.leftTimeInfo.totalLeftTime);
+                            if (change) {
+                                if (mSubscriptionCounting != null) {
+                                    mSubscriptionCounting.unsubscribe();
                                 }
                             }
+                        } else if (roomData.room.state == 2) {
+                            boolean change = ll_room_state_snatching.getVisibility() == View.GONE;
+                            ll_room_state_waiting.setVisibility(View.GONE);
+                            ll_room_state_snatching.setVisibility(View.VISIBLE);
 
-                            if (roomData.users != null && !roomData.users.isEmpty()) {
-                                mMembers.clear();
-                                mMembers.addAll(roomData.users);
-                                mRoomMemberAdapter.replaceAll(new ArrayList<>(mMembers));
+                            if (change) {
+                                counting(roomData.leftTimeInfo.totalLeftTime);
+                            }
+                        }
 
+                        if (roomData.users != null && !roomData.users.isEmpty()) {
+                            mMembers.clear();
+                            mMembers.addAll(roomData.users);
+                            mRoomMemberAdapter.replaceAll(new ArrayList<>(mMembers));
+
+                            if (mJoined) {
                                 boolean kicked = true;
                                 for (User user : roomData.users) {
                                     if (user.userId == mUserId) {
@@ -317,6 +319,7 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
                                     if (mSubscriptionRoomData != null) {
                                         mSubscriptionRoomData.unsubscribe();
                                     }
+                                    onBackPressed();
                                 }
                             }
                         }
@@ -352,7 +355,7 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
                 new Func2<Long, Long, Long>() {
                     @Override
                     public Long call(Long aLong, Long aLong2) {
-                        return (aLong2 - aLong) * 1000;
+                        return (aLong2 - aLong) < 0 ? 0 : (aLong2 - aLong) * 1000;
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())

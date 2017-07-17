@@ -2,6 +2,8 @@ package com.lqpinxuan.lqpx.wxapi;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.lcjian.happyredenvelope.BaseActivity;
@@ -22,6 +24,13 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
     @BindView(R.id.tv_pay_result)
     TextView tv_pay_result;
 
+    @BindView(R.id.btn_top_bar_left)
+    ImageButton btn_top_bar_left;
+    @BindView(R.id.tv_top_bar_title)
+    TextView tv_top_bar_title;
+    @BindView(R.id.tv_top_bar_right)
+    TextView tv_top_bar_right;
+
     private IWXAPI api;
 
     @Override
@@ -29,6 +38,15 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pay_result);
         ButterKnife.bind(this);
+
+        btn_top_bar_left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        tv_top_bar_title.setText(R.string.pay_result);
+        tv_top_bar_right.setVisibility(View.GONE);
 
         api = WXAPIFactory.createWXAPI(this, Constants.WE_CHAT_ID);
         api.handleIntent(getIntent(), this);

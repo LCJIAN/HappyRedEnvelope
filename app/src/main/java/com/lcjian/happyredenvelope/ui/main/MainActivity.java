@@ -58,7 +58,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                                     .putString("helping_center_link", appLinks.helpCenterLink)
                                     .putString("red_envelop_sponsor_link", appLinks.hongbaoCooperatorLink)
                                     .putString("hot_app_link", appLinks.hotAppLink)
-                                    .putString("tao_bao_ticket_Link", appLinks.taobaoTicketLink).apply();
+                                    .putString("tao_bao_ticket_Link", appLinks.taobaoTicketLink)
+                                    .putString("withdraw_tutorial_link", appLinks.withdrawLink)
+                                    .apply();
                         }
                     }
                 }, new Action1<Throwable>() {

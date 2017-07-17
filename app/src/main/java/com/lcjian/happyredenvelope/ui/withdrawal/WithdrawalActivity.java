@@ -3,7 +3,6 @@ package com.lcjian.happyredenvelope.ui.withdrawal;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -15,8 +14,10 @@ import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseActivity;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
+import com.lcjian.happyredenvelope.data.entity.UserSummary;
 import com.lcjian.happyredenvelope.data.entity.VipInfo;
 import com.lcjian.happyredenvelope.data.entity.Withdrawal;
+import com.lcjian.happyredenvelope.ui.web.WebViewActivity;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -30,6 +31,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func2;
+import rx.functions.Func4;
 import rx.schedulers.Schedulers;
 
 public class WithdrawalActivity extends BaseActivity implements View.OnClickListener {
@@ -55,13 +57,13 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
 
     private Boolean mIsFirstWithdrawal;
     private Withdrawal mCurrentWithdrawal;
+    private UserSummary mUserSummary;
 
     private ProgressDialog mProgressDialog;
 
     private Subscription mSubscription;
     private Subscription mSubscription2;
     private Subscription mSubscription3;
-    private Subscription mSubscription4;
 
     private boolean mIsVip;
 
@@ -76,8 +78,6 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
 
         tv_top_bar_title.setText(R.string.withdrawal);
         tv_top_bar_right.setText(R.string.withdrawal_history);
-        tv_my_balance.setText(String.format(Locale.getDefault(), "%s%s",
-                "￥", new DecimalFormat("0.00").format(mUserInfoSp.getFloat("user_balance", 0))));
 
         btn_go_withdrawal.setVisibility(View.INVISIBLE);
         ll_current_withdrawal.setVisibility(View.INVISIBLE);
@@ -89,7 +89,6 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
         btn_copy_token.setOnClickListener(this);
         tv_withdrawal_tutorial.setOnClickListener(this);
 
-        checkVip();
         refresh();
     }
 
@@ -103,9 +102,6 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
         }
         if (mSubscription3 != null) {
             mSubscription3.unsubscribe();
-        }
-        if (mSubscription4 != null) {
-            mSubscription4.unsubscribe();
         }
         super.onDestroy();
     }
@@ -122,7 +118,7 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
             }
             break;
             case R.id.btn_go_withdrawal: {
-                float balance = mUserInfoSp.getFloat("user_balance", 0);
+                float balance = mUserSummary.hblUser.userBalance;
                 if (!mIsFirstWithdrawal || balance <= 0f) {
                     if (mIsVip) {
                         if (balance < 50) {
@@ -144,6 +140,8 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
             }
             break;
             case R.id.tv_withdrawal_tutorial: {
+                startActivity(new Intent(v.getContext(), WebViewActivity.class)
+                        .putExtra("url", mUserInfoSp.getString("withdraw_tutorial_link", "")));
             }
             break;
             default:
@@ -157,34 +155,37 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
             mSubscription.unsubscribe();
         }
         mSubscription = Observable.zip(
+                mRestAPI.redEnvelopeService().isVip(mUserInfoSp.getLong("user_id", 0)),
+                mRestAPI.redEnvelopeService().getUserSummary(mUserInfoSp.getLong("user_id", 0)),
                 mRestAPI.redEnvelopeService().isFirstWithdrawal(mUserInfoSp.getLong("user_id", 0)),
                 mRestAPI.redEnvelopeService().getCurrentWithdrawals(mUserInfoSp.getLong("user_id", 0)),
-                new Func2<ResponseData<Boolean>, ResponseData<List<Withdrawal>>, Pair<ResponseData<Boolean>, ResponseData<List<Withdrawal>>>>() {
+                new Func4<ResponseData<VipInfo>, ResponseData<UserSummary>, ResponseData<Boolean>, ResponseData<List<Withdrawal>>, WithdrawalPredicate>() {
                     @Override
-                    public Pair<ResponseData<Boolean>, ResponseData<List<Withdrawal>>> call(
-                            ResponseData<Boolean> booleanResponseData,
-                            ResponseData<List<Withdrawal>> listResponseData) {
-                        return Pair.create(booleanResponseData, listResponseData);
+                    public WithdrawalPredicate call(ResponseData<VipInfo> vipInfoResponseData,
+                                                    ResponseData<UserSummary> userSummaryResponseData,
+                                                    ResponseData<Boolean> booleanResponseData,
+                                                    ResponseData<List<Withdrawal>> listResponseData) {
+                        return new WithdrawalPredicate(vipInfoResponseData.data,
+                                userSummaryResponseData.data,
+                                booleanResponseData.data,
+                                listResponseData.data
+                        );
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Pair<ResponseData<Boolean>, ResponseData<List<Withdrawal>>>>() {
+                .subscribe(new Action1<WithdrawalPredicate>() {
                     @Override
-                    public void call(Pair<ResponseData<Boolean>, ResponseData<List<Withdrawal>>> responseDataResponseDataPair) {
+                    public void call(WithdrawalPredicate withdrawalPredicate) {
                         mProgressDialog.dismiss();
-                        if (responseDataResponseDataPair.first.code != 0) {
-                            Toast.makeText(App.getInstance(), responseDataResponseDataPair.first.msg, Toast.LENGTH_SHORT).show();
-                        }
-                        if (responseDataResponseDataPair.second.code != 0) {
-                            Toast.makeText(App.getInstance(), responseDataResponseDataPair.second.msg, Toast.LENGTH_SHORT).show();
-                        }
-                        if (responseDataResponseDataPair.first.code == 0 && responseDataResponseDataPair.second.code == 0) {
-                            mIsFirstWithdrawal = responseDataResponseDataPair.first.data;
-                            if (responseDataResponseDataPair.second.data != null && !responseDataResponseDataPair.second.data.isEmpty()) {
-                                mCurrentWithdrawal = responseDataResponseDataPair.second.data.get(0);
-                            }
-                        }
+                        mIsVip = withdrawalPredicate.vipInfo.isvip;
+                        mIsFirstWithdrawal = withdrawalPredicate.isFirstWithdrawal;
+                        mUserSummary = withdrawalPredicate.userSummary;
+                        mCurrentWithdrawal = withdrawalPredicate.withdrawals == null || withdrawalPredicate.withdrawals.isEmpty()
+                                ? null : withdrawalPredicate.withdrawals.get(0);
+
+                        tv_my_balance.setText(String.format(Locale.getDefault(), "%s%s",
+                                "￥", new DecimalFormat("0.00").format(mUserSummary.hblUser.userBalance)));
                         setupWithdrawal();
                     }
                 }, new Action1<Throwable>() {
@@ -196,19 +197,6 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
                 });
     }
 
-    private void checkVip() {
-        mSubscription4 = mRestAPI.redEnvelopeService().isVip(mUserInfoSp.getLong("user_id", 0))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<ResponseData<VipInfo>>() {
-                    @Override
-                    public void call(ResponseData<VipInfo> vipInfoResponseData) {
-                        if (vipInfoResponseData.code == 0) {
-                            mIsVip = vipInfoResponseData.data.isvip;
-                        }
-                    }
-                });
-    }
 
     private void saveWithdrawal(float withdrawalAmount) {
         mProgressDialog.show();
@@ -281,6 +269,23 @@ public class WithdrawalActivity extends BaseActivity implements View.OnClickList
         } else {
             btn_go_withdrawal.setVisibility(View.VISIBLE);
             ll_current_withdrawal.setVisibility(View.GONE);
+        }
+    }
+
+    private static class WithdrawalPredicate {
+        private VipInfo vipInfo;
+        private UserSummary userSummary;
+        private Boolean isFirstWithdrawal;
+        private List<Withdrawal> withdrawals;
+
+        private WithdrawalPredicate(VipInfo vipInfo,
+                                    UserSummary userSummary,
+                                    Boolean isFirstWithdrawal,
+                                    List<Withdrawal> withdrawals) {
+            this.vipInfo = vipInfo;
+            this.userSummary = userSummary;
+            this.isFirstWithdrawal = isFirstWithdrawal;
+            this.withdrawals = withdrawals;
         }
     }
 }

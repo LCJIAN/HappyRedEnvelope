@@ -26,6 +26,7 @@ import com.lcjian.happyredenvelope.data.entity.User;
 import com.lcjian.happyredenvelope.data.entity.UserSummary;
 import com.lcjian.happyredenvelope.ui.mine.BuyVipActivity;
 import com.lcjian.happyredenvelope.ui.mine.RedEnvelopeHistoriesActivity;
+import com.lcjian.happyredenvelope.ui.mine.SettingsActivity;
 import com.lcjian.happyredenvelope.ui.mine.UserLuckCardActivity;
 import com.lcjian.happyredenvelope.ui.mine.ViewHistoriesActivity;
 import com.lcjian.happyredenvelope.ui.web.WebViewActivity;
@@ -198,13 +199,17 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
             }
             break;
             case R.id.tv_helping_center: {
-               startActivity(new Intent(getContext(), WebViewActivity.class)
-                       .putExtra("url", mUserInfoSp.getString("helping_center_link", "")));
+                startActivity(new Intent(getContext(), WebViewActivity.class)
+                        .putExtra("url", mUserInfoSp.getString("helping_center_link", "")));
             }
             break;
             case R.id.tv_red_envelope_sponsor: {
                 startActivity(new Intent(getContext(), WebViewActivity.class)
                         .putExtra("url", mUserInfoSp.getString("red_envelop_sponsor_link", "")));
+            }
+            break;
+            case R.id.tv_settings: {
+                startActivity(new Intent(getContext(), SettingsActivity.class));
             }
             break;
             default:

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">红包乐</string>
     <string name="error_msg">Error occurred</string>
-    <string name="empty_msg">No data</string>
+    <string name="empty_msg">暂无数据</string>
     <string name="red_envelope">红包乐</string>
     <string name="billboard">排行榜</string>
     <string name="explore">发现</string>
@@ -37,24 +37,14 @@
     <string name="room_id">ID:%1$d</string>
     <string name="room_red_envelope_count">%1$d个</string>
     <string name="room_user_count">%1$d人</string>
-    <string name="quarter_luck_card">15分钟</string>
-    <string name="half_an_hour_luck_card">30分钟</string>
-    <string name="one_hour_luck_card">60分钟</string>
-    <string name="two_hours_luck_card">2小时</string>
-    <string name="day_luck_card">包天</string>
-    <string name="yuan_5">$5</string>
-    <string name="yuan_9">$9</string>
-    <string name="yuan_16">$16</string>
-    <string name="yuan_25">$25</string>
-    <string name="yuan_50">$50</string>
-    <string name="luck_card_unit">张</string>
-    <string name="total_price">总价:%1$s元</string>
+    <string name="luck_card_unit">&#160;张</string>
+    <string name="total_price">总价:</string>
     <string name="buy_now">立即购买</string>
     <string name="luck_card_tip">提醒：\n福卡是进入红包房间抢红包的唯一“钥匙”并且有时效性</string>
     <string name="luck_card_tutorial">福卡教程</string>
-    <string name="buy_luck_card_tip">提醒：\n福卡是进入红包房间抢红包的唯一“钥匙”并且有时效性</string>
+    <string name="buy_luck_card_tip">提醒：\n福卡部分时长，每购买一次统称为一张，购买多张会提价时长。</string>
     <string name="withdrawal_tip">提醒：\n现在的口令有时效性，若提现成功将自动从月总扣除，若提现不成功将失效，需要重新获取，口令的有效期为10分钟</string>
-    <string name="vip_price">福卡VIP&#160;&#160;&#160;30元/月</string>
+    <string name="vip_price">%1$s&#160;&#160;&#160;%2$s元/月</string>
     <string name="red_envelope_history">红包记录</string>
     <string name="filter">筛选</string>
     <string name="start_snatch">开抢</string>
@@ -146,4 +136,13 @@
     <string name="pay_failed">支付失败</string>
     <string name="user_canceled">用户取消</string>
     <string name="auth_denied">没有权限</string>
+    <string name="pay_result">支付结果</string>
+    <string name="yuan">元</string>
+    <string name="minutes">%1$d分钟</string>
+    <string name="turn_off_msg">关闭后不会接收消息</string>
+    <string name="turn_on_zip">开启节省流量模式</string>
+    <string name="msg_notification">红包推送提醒</string>
+    <string name="clean_cache">清除缓存</string>
+    <string name="sign_out">退出</string>
+    <string name="cache_cleared">缓存已清除</string>
 </resources>

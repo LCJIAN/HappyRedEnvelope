@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -72,7 +71,7 @@ public class RedEnvelopeSnatchedFakeActivity extends BaseActivity {
     public static class RedEnvelopeSnatchedFakeFragment extends RecyclerFragment<Goods> {
 
         private GoodsAdapter mAdapter;
-        private FrameLayout fl_coupon;
+        private ImageView iv_coupon;
         private ImageView iv_goods_avatar;
         private TextView tv_goods_name;
         private TextView tv_origin_price;
@@ -94,7 +93,7 @@ public class RedEnvelopeSnatchedFakeActivity extends BaseActivity {
         public void onLoadMoreAdapterCreated(LoadMoreAdapter loadMoreAdapter) {
             View header = LayoutInflater.from(getContext()).inflate(R.layout.coupon_header, recycler_view, false);
 
-            fl_coupon = ButterKnife.findById(header, R.id.fl_coupon);
+            iv_coupon = ButterKnife.findById(header, R.id.iv_coupon);
             iv_goods_avatar = ButterKnife.findById(header, R.id.iv_goods_avatar);
             tv_goods_name = ButterKnife.findById(header, R.id.tv_goods_name);
             tv_origin_price = ButterKnife.findById(header, R.id.tv_origin_price);
@@ -137,7 +136,7 @@ public class RedEnvelopeSnatchedFakeActivity extends BaseActivity {
                                         "￥", mDecimalFormat.format(listResponseData.data.get(0).zkPrice)));
                                 tv_coupon_amount.setText(getString(R.string.origin_price,
                                         "￥" + mDecimalFormat.format(listResponseData.data.get(0).price - listResponseData.data.get(0).zkPrice)));
-                                fl_coupon.setOnClickListener(new View.OnClickListener() {
+                                iv_coupon.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         receiveTicket(listResponseData.data.get(0).id);
@@ -211,7 +210,7 @@ public class RedEnvelopeSnatchedFakeActivity extends BaseActivity {
                         public void call(ResponseData<String> stringResponseData) {
                             if (stringResponseData.code == 0) {
                                 Toast.makeText(App.getInstance(), R.string.receive_success, Toast.LENGTH_LONG).show();
-                                fl_coupon.setEnabled(false);
+                                iv_coupon.setEnabled(false);
                             }
                         }
                     }, new Action1<Throwable>() {

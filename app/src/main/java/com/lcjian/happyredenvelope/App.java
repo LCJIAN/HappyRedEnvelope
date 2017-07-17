@@ -2,6 +2,7 @@ package com.lcjian.happyredenvelope;
 
 import android.app.Application;
 
+import com.db.ta.sdk.TaSDK;
 import com.lcjian.happyredenvelope.di.component.AppComponent;
 import com.lcjian.happyredenvelope.di.component.DaggerAppComponent;
 import com.lcjian.happyredenvelope.di.module.AppModule;
@@ -41,6 +42,7 @@ public class App extends Application {
         Config.DEBUG = BuildConfig.DEBUG;
         PlatformConfig.setWeixin(Constants.WE_CHAT_ID, Constants.WE_CHAT_SECRET);
         UMShareAPI.get(this);
+        TaSDK.init(this);
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());

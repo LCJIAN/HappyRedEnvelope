@@ -7,16 +7,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.db.ta.sdk.TMNaTmView;
+import com.db.ta.sdk.TmListener;
 import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.Message;
 import com.lcjian.lib.util.common.DateUtils;
+import com.lcjian.lib.widget.RatioLayout;
 
 import java.util.Date;
 import java.util.List;
@@ -96,6 +98,20 @@ class RoomMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    @Override
+    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
+        if (holder instanceof RoomAdvertisementMessageViewHolder) {
+            ((RoomAdvertisementMessageViewHolder) holder).destroyAd();
+        }
+    }
+
+    @Override
+    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+        if (holder instanceof RoomAdvertisementMessageViewHolder) {
+            ((RoomAdvertisementMessageViewHolder) holder).initAd();
+        }
+    }
+
     static class RoomNotificationMessageViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_notification_message)
@@ -119,19 +135,14 @@ class RoomMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView tv_message_user_name;
         @BindView(R.id.tv_message_time)
         TextView tv_message_time;
-        @BindView(R.id.fl_advertisement_content)
-        FrameLayout fl_advertisement_content;
+        @BindView(R.id.rl_message_advertisement_content)
+        RatioLayout rl_message_advertisement_content;
 
         Message message;
 
         RoomAdvertisementMessageViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.room_advertisement_message_item, parent, false));
             ButterKnife.bind(this, this.itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                }
-            });
         }
 
         void bindTo(Message message) {
@@ -144,6 +155,50 @@ class RoomMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .into(iv_message_user_avatar);
             tv_message_user_name.setText(message.hblUser == null ? "" : message.hblUser.userNickname);
             tv_message_time.setText(DateUtils.convertDateToStr(new Date(message.createTime), DateUtils.YYYY_MM_DD_HH_MM_SS));
+        }
+
+        void destroyAd() {
+            TMNaTmView adView = (TMNaTmView) rl_message_advertisement_content.findViewById(R.id.view_message_advertisement);
+            adView.destroy();
+            rl_message_advertisement_content.removeAllViews();
+        }
+
+        void initAd() {
+            TMNaTmView adView = (TMNaTmView) LayoutInflater.from(rl_message_advertisement_content.getContext()).inflate(
+                    R.layout.message_advertisement, rl_message_advertisement_content, false);
+            rl_message_advertisement_content.addView(adView);
+            adView.setAdListener(new TmListener() {
+                @Override
+                public void onReceiveAd() {
+
+                }
+
+                @Override
+                public void onFailedToReceiveAd() {
+
+                }
+
+                @Override
+                public void onLoadFailed() {
+
+                }
+
+                @Override
+                public void onCloseClick() {
+
+                }
+
+                @Override
+                public void onAdClick() {
+
+                }
+
+                @Override
+                public void onAdExposure() {
+
+                }
+            });
+            adView.loadAd(2682);
         }
     }
 

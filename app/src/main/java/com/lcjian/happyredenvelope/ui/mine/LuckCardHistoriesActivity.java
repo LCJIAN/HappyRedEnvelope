@@ -73,11 +73,11 @@ public class LuckCardHistoriesActivity extends BaseActivity implements View.OnCl
 
     public static class LuckCardHistoriesFragment extends RecyclerFragment<RedEnvelope> {
 
-        private RedEnvelopeHistoriesActivity.RedEnvelopeAdapter mAdapter;
+        private RedEnvelopeAdapter mAdapter;
 
         @Override
         public RecyclerView.Adapter onCreateAdapter(List<RedEnvelope> data) {
-            mAdapter = new RedEnvelopeHistoriesActivity.RedEnvelopeAdapter(data);
+            mAdapter = new RedEnvelopeAdapter(data);
             return mAdapter;
         }
 
@@ -114,7 +114,7 @@ public class LuckCardHistoriesActivity extends BaseActivity implements View.OnCl
         }
     }
 
-    static class RedEnvelopeAdapter extends RecyclerView.Adapter<RedEnvelopeHistoriesActivity.RedEnvelopeAdapter.RedEnvelopeViewHolder> {
+    static class RedEnvelopeAdapter extends RecyclerView.Adapter<RedEnvelopeAdapter.RedEnvelopeViewHolder> {
 
         private List<RedEnvelope> mRedEnvelopeHistories;
 
@@ -150,12 +150,12 @@ public class LuckCardHistoriesActivity extends BaseActivity implements View.OnCl
         }
 
         @Override
-        public RedEnvelopeHistoriesActivity.RedEnvelopeAdapter.RedEnvelopeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new RedEnvelopeHistoriesActivity.RedEnvelopeAdapter.RedEnvelopeViewHolder(parent);
+        public RedEnvelopeAdapter.RedEnvelopeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new RedEnvelopeAdapter.RedEnvelopeViewHolder(parent);
         }
 
         @Override
-        public void onBindViewHolder(RedEnvelopeHistoriesActivity.RedEnvelopeAdapter.RedEnvelopeViewHolder holder, int position) {
+        public void onBindViewHolder(RedEnvelopeAdapter.RedEnvelopeViewHolder holder, int position) {
             holder.bindTo(mRedEnvelopeHistories.get(position));
         }
 

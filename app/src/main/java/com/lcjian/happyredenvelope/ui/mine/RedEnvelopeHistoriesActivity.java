@@ -50,6 +50,7 @@ public class RedEnvelopeHistoriesActivity extends BaseActivity implements View.O
         setContentView(R.layout.activity_red_envelope_histories);
         ButterKnife.bind(this);
 
+        tv_filter.setVisibility(View.GONE);
         btn_back.setOnClickListener(this);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_red_env_histories_container,
                 new RedEnvelopesFragment(), "RedEnvelopesFragment").commit();
@@ -100,6 +101,7 @@ public class RedEnvelopeHistoriesActivity extends BaseActivity implements View.O
         public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
             swipe_refresh_layout.setColorSchemeResources(R.color.colorLightRed);
 
+            recycler_view.setHasFixedSize(true);
             recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
             recycler_view.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext())
                     .color(ContextCompat.getColor(getContext(), R.color.colorDivider))

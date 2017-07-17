@@ -49,6 +49,8 @@ public class ExploreFragment extends BaseFragment implements View.OnClickListene
     TextView tv_explore_four;
     Unbinder unbinder;
 
+    private List<Banner> mBanners;
+
     private CompositeSubscription mSubscriptions;
 
     private Explore mExplore;
@@ -76,8 +78,11 @@ public class ExploreFragment extends BaseFragment implements View.OnClickListene
                 .subscribe(new Action1<ResponseData<List<Banner>>>() {
                     @Override
                     public void call(ResponseData<List<Banner>> listResponseData) {
-                        vp_banner.setAdapter(new BannerAdapter(listResponseData.data));
-                        vp_banner.setOffscreenPageLimit(2);
+                        if (listResponseData.code == 0) {
+                            mBanners = listResponseData.data;
+                            vp_banner.setAdapter(new BannerAdapter(mBanners));
+                            vp_banner.setOffscreenPageLimit(2);
+                        }
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -91,7 +96,9 @@ public class ExploreFragment extends BaseFragment implements View.OnClickListene
                 .subscribe(new Action1<ResponseData<Explore>>() {
                     @Override
                     public void call(ResponseData<Explore> exploreResponseData) {
-                        mExplore = exploreResponseData.data;
+                        if (exploreResponseData.code == 0) {
+                            mExplore = exploreResponseData.data;
+                        }
                     }
                 }, new Action1<Throwable>() {
                     @Override

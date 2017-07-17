@@ -60,6 +60,7 @@ public class UserLuckCardActivity extends BaseActivity implements View.OnClickLi
 
         tv_top_bar_title.setText(R.string.luck_card);
         tv_top_bar_right.setText(R.string.luck_card_history);
+        tv_top_bar_right.setVisibility(View.GONE);
 
         mSubscription = mRestAPI.redEnvelopeService()
                 .getLuckCardSummary(mUserInfoSp.getLong("user_id", 0))

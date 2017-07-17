@@ -13,18 +13,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseActivity;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
+import com.lcjian.happyredenvelope.data.entity.VipCombo;
 import com.lcjian.happyredenvelope.data.entity.VipPrivilege;
 import com.lcjian.happyredenvelope.data.entity.WeChatPayOrder;
 import com.lcjian.lib.util.common.DimenUtils;
 import com.lqpinxuan.lqpx.wxapi.WeChatPay;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import butterknife.BindView;
@@ -43,6 +47,8 @@ public class BuyVipActivity extends BaseActivity implements View.OnClickListener
     RecyclerView rv_vip_privileges;
     @BindView(R.id.btn_buy_vip)
     Button btn_buy_vip;
+    @BindView(R.id.tv_vip_price)
+    TextView tv_vip_price;
 
     private Subscription mSubscription;
     private Subscription mSubscription2;
@@ -71,6 +77,25 @@ public class BuyVipActivity extends BaseActivity implements View.OnClickListener
             }
         });
         rv_vip_privileges.setHasFixedSize(true);
+
+        mRestAPI.redEnvelopeService().getVipCombo()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<ResponseData<List<VipCombo>>>() {
+                    @Override
+                    public void call(ResponseData<List<VipCombo>> listResponseData) {
+                        if (listResponseData.code == 0) {
+                            tv_vip_price.setText(getString(R.string.vip_price,
+                                    listResponseData.data.get(0).vipName,
+                                    new DecimalFormat("0.00").format(listResponseData.data.get(0).vipAmount)));
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+
+                    }
+                });
 
         mSubscription = mRestAPI.redEnvelopeService().getVipPrivileges()
                 .subscribeOn(Schedulers.io())
@@ -129,12 +154,15 @@ public class BuyVipActivity extends BaseActivity implements View.OnClickListener
                                             orderResponseData.data.timestamp,
                                             orderResponseData.data.packages,
                                             orderResponseData.data.sign);
+                                } else {
+                                    Toast.makeText(App.getInstance(), orderResponseData.msg, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }, new Action1<Throwable>() {
                             @Override
                             public void call(Throwable throwable) {
                                 mProgressDialog.dismiss();
+                                Toast.makeText(App.getInstance(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -177,7 +205,6 @@ public class BuyVipActivity extends BaseActivity implements View.OnClickListener
                 ButterKnife.bind(this, this.itemView);
             }
 
-
             void bindTo(VipPrivilege vipPrivilege) {
                 Context context = itemView.getContext();
                 Glide.with(context)
@@ -190,7 +217,6 @@ public class BuyVipActivity extends BaseActivity implements View.OnClickListener
                         });
                 tv_vip_privilege.setText(vipPrivilege.name);
             }
-
         }
     }
 }

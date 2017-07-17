@@ -279,6 +279,8 @@ public class RoomInfoActivity extends BaseActivity {
                     startActivity(new Intent(v.getContext(), BuyVipActivity.class));
                     break;
                 case R.id.btn_exit_room:
+                    getActivity().onBackPressed();
+                    mRxBus.send("close_room_activity");
                     break;
                 default:
                     break;

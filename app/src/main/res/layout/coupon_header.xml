@@ -35,18 +35,17 @@
         </FrameLayout>
     </com.lcjian.lib.widget.RatioLayout>
 
-    <FrameLayout
-        android:id="@+id/fl_coupon"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
-        android:background="@drawable/coupon_bg">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:background="@drawable/coupon_bg_one"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -78,7 +77,13 @@
                 android:textColor="@color/colorDarkRed"
                 android:textStyle="bold" />
         </LinearLayout>
-    </FrameLayout>
+
+        <ImageView
+            android:id="@+id/iv_coupon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/coupon_bg_two" />
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"

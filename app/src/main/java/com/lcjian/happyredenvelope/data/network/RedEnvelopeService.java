@@ -8,6 +8,7 @@ import com.lcjian.happyredenvelope.data.entity.FreeLuckCard;
 import com.lcjian.happyredenvelope.data.entity.Goods;
 import com.lcjian.happyredenvelope.data.entity.GoodsHistory;
 import com.lcjian.happyredenvelope.data.entity.LeftTimeInfo;
+import com.lcjian.happyredenvelope.data.entity.LuckCardCombo;
 import com.lcjian.happyredenvelope.data.entity.LuckCardSummary;
 import com.lcjian.happyredenvelope.data.entity.Message;
 import com.lcjian.happyredenvelope.data.entity.PageResult;
@@ -25,6 +26,7 @@ import com.lcjian.happyredenvelope.data.entity.UserSummary;
 import com.lcjian.happyredenvelope.data.entity.Users;
 import com.lcjian.happyredenvelope.data.entity.Video;
 import com.lcjian.happyredenvelope.data.entity.VideoHistory;
+import com.lcjian.happyredenvelope.data.entity.VipCombo;
 import com.lcjian.happyredenvelope.data.entity.VipInfo;
 import com.lcjian.happyredenvelope.data.entity.VipPrivilege;
 import com.lcjian.happyredenvelope.data.entity.WeChatPayOrder;
@@ -182,8 +184,8 @@ public interface RedEnvelopeService {
     @Multipart
     @POST("room/addviproom")
     Observable<ResponseData<RoomIdInfo>> createVipRoom(@Part("uid") long userId,
-                                                       @Part("name") String name,
-                                                       @Part("desc") String desc,
+                                                       @Part MultipartBody.Part name,
+                                                       @Part MultipartBody.Part desc,
                                                        @Part MultipartBody.Part icon);
 
     /**
@@ -363,19 +365,31 @@ public interface RedEnvelopeService {
     Observable<ResponseData<String>> receiveTicket(@Field("uid") long userId,
                                                    @Field("ticketid") long ticketId);
 
-    /**
-     * 费领优惠券
-     */
     @FormUrlEncoded
     @POST("user/user/cleanscanhistory")
     Observable<ResponseData<String>> cleanHistories(@Field("userid") long userId);
 
     @FormUrlEncoded
     @POST("user/vip/setrecord")
-    Observable<ResponseData<WeChatPayOrder>> createBuyingVipOrder(@Field("userid") long userId, @Field("month") int month);
+    Observable<ResponseData<WeChatPayOrder>> createBuyingVipOrder(@Field("userid") long userId,
+                                                                  @Field("month") int month);
 
     @Headers("Content-Type: application/x-www-form-urlencoded; charset=utf-8")
     @POST("app/getlinks")
     Observable<ResponseData<AppLinks>> getAppLinks();
+
+    @Headers("Content-Type: application/x-www-form-urlencoded; charset=utf-8")
+    @POST("fuka/card/getcards")
+    Observable<ResponseData<List<LuckCardCombo>>> getLuckCardCombo();
+
+    @FormUrlEncoded
+    @POST("fuka/order/setorder")
+    Observable<ResponseData<WeChatPayOrder>> createBuyingLuckCardOrder(@Field("userid") long userId,
+                                                                       @Field("cardid") long cardId,
+                                                                       @Field("number") int count);
+
+    @Headers("Content-Type: application/x-www-form-urlencoded; charset=utf-8")
+    @POST("user/vip/getvips")
+    Observable<ResponseData<List<VipCombo>>> getVipCombo();
 
 }

@@ -53,10 +53,14 @@ public class RedEnvelopeFragment extends BaseFragment implements View.OnClickLis
     ImageButton btn_go_add_room;
     @BindView(R.id.vp_red_env_hot)
     AutoViewPager vp_red_env_hot;
+    @BindView(R.id.tv_view_red_env_hot)
+    TextView tv_view_red_env_hot;
     Unbinder unbinder;
 
     TextView tv_create_room;
     TextView tv_buy_luck_card;
+
+    private List<RedEnvHot> mRedEnvHots;
 
     private Subscription mSubscription;
 
@@ -94,6 +98,7 @@ public class RedEnvelopeFragment extends BaseFragment implements View.OnClickLis
         btn_go_add_room.setOnClickListener(this);
         tv_create_room.setOnClickListener(this);
         tv_buy_luck_card.setOnClickListener(this);
+        tv_view_red_env_hot.setOnClickListener(this);
 
 
         SimpleFragmentPagerAdapter pagerAdapter = new SimpleFragmentPagerAdapter(getChildFragmentManager());
@@ -109,8 +114,12 @@ public class RedEnvelopeFragment extends BaseFragment implements View.OnClickLis
                 .subscribe(new Action1<ResponseData<List<RedEnvHot>>>() {
                     @Override
                     public void call(ResponseData<List<RedEnvHot>> listResponseData) {
-                        vp_red_env_hot.setAdapter(new RedEnvHotAdapter(listResponseData.data));
-                        vp_red_env_hot.setOffscreenPageLimit(2);
+                        if (listResponseData.code == 0) {
+                            mRedEnvHots = listResponseData.data;
+                            vp_red_env_hot.setAdapter(new RedEnvHotAdapter(mRedEnvHots));
+                            vp_red_env_hot.setOffscreenPageLimit(2);
+                        }
+
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -154,6 +163,13 @@ public class RedEnvelopeFragment extends BaseFragment implements View.OnClickLis
             case R.id.tv_buy_luck_card: {
                 mPopupWindow.dismiss();
                 startActivity(new Intent(v.getContext(), UserLuckCardActivity.class));
+            }
+            break;
+            case R.id.tv_view_red_env_hot: {
+                if (mRedEnvHots != null && !mRedEnvHots.isEmpty()) {
+                    startActivity(new Intent(v.getContext(), WebViewActivity.class)
+                            .putExtra("url", mRedEnvHots.get(vp_red_env_hot.getCurrentItem()).link));
+                }
             }
             break;
             default:

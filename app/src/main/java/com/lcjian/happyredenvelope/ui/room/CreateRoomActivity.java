@@ -1,5 +1,6 @@
 package com.lcjian.happyredenvelope.ui.room;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,16 +22,20 @@ import com.lcjian.happyredenvelope.data.entity.VipInfo;
 import com.lcjian.lib.util.ImageChooseHelper;
 
 import java.io.File;
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+import top.zibin.luban.Luban;
 
 public class CreateRoomActivity extends BaseActivity implements View.OnClickListener {
 
@@ -56,11 +61,16 @@ public class CreateRoomActivity extends BaseActivity implements View.OnClickList
     private Subscription mSubscription;
     private Subscription mSubscription2;
 
+    private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_room);
         ButterKnife.bind(this);
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
 
         tv_top_bar_title.setText(R.string.create_room);
         tv_top_bar_right.setVisibility(View.GONE);
@@ -144,17 +154,38 @@ public class CreateRoomActivity extends BaseActivity implements View.OnClickList
                 if (TextUtils.isEmpty(mPath)) {
                     return;
                 }
-                File file = new File(mPath);
-                mSubscription2 = mRestAPI.redEnvelopeService().createVipRoom(mUserInfoSp.getLong("user_id", 0),
-                        et_room_name.getText().toString(), et_room_announcement.getText().toString(),
-                        MultipartBody.Part.createFormData("icon",
-                                file.getName(),
-                                RequestBody.create(MediaType.parse("image/*"), file)))
+                if (mSubscription2 != null) {
+                    mSubscription2.unsubscribe();
+                }
+                mProgressDialog.show();
+                mSubscription2 = Observable.just(new File(mPath))
+                        .map(new Func1<File, File>() {
+                            @Override
+                            public File call(File file) {
+                                try {
+                                    return Luban.with(CreateRoomActivity.this).load(file).get();
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                        }).flatMap(new Func1<File, Observable<ResponseData<RoomIdInfo>>>() {
+                            @Override
+                            public Observable<ResponseData<RoomIdInfo>> call(File file) {
+                                return mRestAPI.redEnvelopeService().createVipRoom(
+                                        mUserInfoSp.getLong("user_id", 0),
+                                        MultipartBody.Part.createFormData("name", et_room_name.getText().toString()),
+                                        MultipartBody.Part.createFormData("desc", et_room_announcement.getText().toString()),
+                                        MultipartBody.Part.createFormData("icon",
+                                                file.getName(),
+                                                RequestBody.create(MediaType.parse("image/*"), file)));
+                            }
+                        })
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Action1<ResponseData<RoomIdInfo>>() {
                             @Override
                             public void call(ResponseData<RoomIdInfo> longResponseData) {
+                                mProgressDialog.dismiss();
                                 if (longResponseData.code == 0) {
                                     mRxBus.send("refresh_room_list");
                                     finish();
@@ -165,6 +196,7 @@ public class CreateRoomActivity extends BaseActivity implements View.OnClickList
                         }, new Action1<Throwable>() {
                             @Override
                             public void call(Throwable throwable) {
+                                mProgressDialog.dismiss();
                                 Toast.makeText(App.getInstance(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });

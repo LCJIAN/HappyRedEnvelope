@@ -48,6 +48,7 @@
             android:src="@drawable/ic_vip_large" />
 
         <TextView
+            android:id="@+id/tv_vip_price"
             style="@style/TextAppearance.AppTheme.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

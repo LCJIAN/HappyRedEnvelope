@@ -1,9 +1,11 @@
 package com.lcjian.happyredenvelope.ui.room;
 
+import android.content.Intent;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -72,12 +74,21 @@ class RoomMemberAdapter extends RecyclerView.Adapter<RoomMemberAdapter.RoomMembe
         @BindView(R.id.iv_room_member_avatar)
         ImageView iv_room_member_avatar;
 
+        private User mUser;
+
         RoomMemberViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.room_member_item, parent, false));
             ButterKnife.bind(this, this.itemView);
+            this.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    v.getContext().startActivity(new Intent(v.getContext(), UserActivity.class).putExtra("user_id", mUser.userId));
+                }
+            });
         }
 
         void bindTo(User user) {
+            this.mUser = user;
             Glide.with(itemView.getContext())
                     .load(user.userHeadimg)
                     .apply(Global.userAvatar)

@@ -7,4 +7,5 @@ public class AppLinks {
     public String hongbaoCooperatorLink;
     public String hotAppLink;
     public String taobaoTicketLink;
+    public String withdrawLink;
 }

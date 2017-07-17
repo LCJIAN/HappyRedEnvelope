@@ -73,6 +73,8 @@ dependencies {
     compile 'com.just.agentweb:agentweb:latest.integration'
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:latest.integration'
+    compile 'top.zibin:Luban:latest.integration'
+    compile(name: 'tuia-2.2.0', ext: 'aar')
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:latest.integration'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.5.1'
