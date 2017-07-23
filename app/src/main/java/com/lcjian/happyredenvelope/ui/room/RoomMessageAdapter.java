@@ -2,6 +2,7 @@ package com.lcjian.happyredenvelope.ui.room;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.util.LruCache;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,9 +37,20 @@ class RoomMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private FragmentManager mFragmentManager;
 
+    private LruCache<Long, TMNaTmView> mADViewCache;
+
     RoomMessageAdapter(List<Message> data, FragmentManager fragmentManager) {
         this.mData = data;
         this.mFragmentManager = fragmentManager;
+        this.mADViewCache = new LruCache<Long, TMNaTmView>(40) {
+
+            @Override
+            protected void entryRemoved(boolean evicted, Long key, TMNaTmView oldValue, TMNaTmView newValue) {
+                if (evicted) {
+                    oldValue.destroy();
+                }
+            }
+        };
     }
 
     void replaceAll(final List<Message> data) {
@@ -83,7 +95,7 @@ class RoomMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return viewType == TYPE_ROOM_NOTIFICATION_MESSAGE ? new RoomNotificationMessageViewHolder(parent)
-                : (viewType == TYPE_ROOM_ADVERTISEMENT_MESSAGE ? new RoomAdvertisementMessageViewHolder(parent)
+                : (viewType == TYPE_ROOM_ADVERTISEMENT_MESSAGE ? new RoomAdvertisementMessageViewHolder(parent, mADViewCache)
                 : new RoomRedEnvelopeMessageViewHolder(parent, mFragmentManager));
     }
 
@@ -109,6 +121,12 @@ class RoomMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         if (holder instanceof RoomAdvertisementMessageViewHolder) {
             ((RoomAdvertisementMessageViewHolder) holder).initAd();
+        }
+    }
+
+    public void destroy() {
+        for (TMNaTmView tmNaTmView : mADViewCache.snapshot().values()) {
+            tmNaTmView.destroy();
         }
     }
 
@@ -140,9 +158,12 @@ class RoomMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         Message message;
 
-        RoomAdvertisementMessageViewHolder(ViewGroup parent) {
+        LruCache<Long, TMNaTmView> cache;
+
+        RoomAdvertisementMessageViewHolder(ViewGroup parent, LruCache<Long, TMNaTmView> cache) {
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.room_advertisement_message_item, parent, false));
             ButterKnife.bind(this, this.itemView);
+            this.cache = cache;
         }
 
         void bindTo(Message message) {
@@ -159,46 +180,49 @@ class RoomMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         void destroyAd() {
             TMNaTmView adView = (TMNaTmView) rl_message_advertisement_content.findViewById(R.id.view_message_advertisement);
-            adView.destroy();
             rl_message_advertisement_content.removeAllViews();
+            cache.put(message.id, adView);
         }
 
         void initAd() {
-            TMNaTmView adView = (TMNaTmView) LayoutInflater.from(rl_message_advertisement_content.getContext()).inflate(
-                    R.layout.message_advertisement, rl_message_advertisement_content, false);
+            TMNaTmView adView = cache.get(message.id);
+            if (adView == null) {
+                adView = (TMNaTmView) LayoutInflater.from(rl_message_advertisement_content.getContext()).inflate(
+                        R.layout.message_advertisement, rl_message_advertisement_content, false);
+                adView.setAdListener(new TmListener() {
+                    @Override
+                    public void onReceiveAd() {
+
+                    }
+
+                    @Override
+                    public void onFailedToReceiveAd() {
+
+                    }
+
+                    @Override
+                    public void onLoadFailed() {
+
+                    }
+
+                    @Override
+                    public void onCloseClick() {
+
+                    }
+
+                    @Override
+                    public void onAdClick() {
+
+                    }
+
+                    @Override
+                    public void onAdExposure() {
+
+                    }
+                });
+                adView.loadAd(2682);
+            }
             rl_message_advertisement_content.addView(adView);
-            adView.setAdListener(new TmListener() {
-                @Override
-                public void onReceiveAd() {
-
-                }
-
-                @Override
-                public void onFailedToReceiveAd() {
-
-                }
-
-                @Override
-                public void onLoadFailed() {
-
-                }
-
-                @Override
-                public void onCloseClick() {
-
-                }
-
-                @Override
-                public void onAdClick() {
-
-                }
-
-                @Override
-                public void onAdExposure() {
-
-                }
-            });
-            adView.loadAd(2682);
         }
     }
 

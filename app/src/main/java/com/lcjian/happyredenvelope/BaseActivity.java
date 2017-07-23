@@ -8,6 +8,7 @@ import com.lcjian.happyredenvelope.data.network.RestAPI;
 import com.lcjian.happyredenvelope.di.component.AppComponent;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -31,6 +32,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         onCreateComponent(App.getInstance().appComponent());
+        PushAgent.getInstance(this).onAppStart();
     }
 
     protected void onCreateComponent(AppComponent appComponent) {

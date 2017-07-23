@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.lcjian.happyredenvelope.Constants;
 import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.common.AdvertisementViewHolder;
@@ -75,7 +76,9 @@ class RedEnvelopeSnatchedSuccessAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return viewType == TYPE_NORMAL ? new RedEnvelopeSnatchedSuccessViewHolder(parent) : new AdvertisementViewHolder(parent);
+        return viewType == TYPE_NORMAL
+                ? new RedEnvelopeSnatchedSuccessViewHolder(parent)
+                : new AdvertisementViewHolder(parent, Constants.SNATCH_SUCCESS_NATIVE_AD);
     }
 
     @Override
@@ -84,6 +87,20 @@ class RedEnvelopeSnatchedSuccessAdapter extends RecyclerView.Adapter<RecyclerVie
             ((RedEnvelopeSnatchedSuccessViewHolder) holder).bindTo((SnatchingDetail.Rank) mData.get(position));
         } else if (holder instanceof AdvertisementViewHolder) {
             ((AdvertisementViewHolder) holder).bindTo((Advertisement) mData.get(position));
+        }
+    }
+
+    @Override
+    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+        if (holder instanceof AdvertisementViewHolder) {
+            ((AdvertisementViewHolder) holder).loadAd();
+        }
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
+        if (holder instanceof AdvertisementViewHolder) {
+            ((AdvertisementViewHolder) holder).destroyAd();
         }
     }
 

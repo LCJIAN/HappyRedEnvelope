@@ -12,29 +12,31 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.db.ta.sdk.TMNaTmView;
+import com.db.ta.sdk.TmListener;
 import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseActivity;
+import com.lcjian.happyredenvelope.Constants;
 import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.RoomIdInfo;
 import com.lcjian.happyredenvelope.data.entity.VipInfo;
 import com.lcjian.lib.util.ImageChooseHelper;
+import com.lcjian.lib.util.common.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 import top.zibin.luban.Luban;
 
 public class CreateRoomActivity extends BaseActivity implements View.OnClickListener {
@@ -53,6 +55,8 @@ public class CreateRoomActivity extends BaseActivity implements View.OnClickList
     EditText et_room_announcement;
     @BindView(R.id.btn_create_room)
     Button btn_create_room;
+    @BindView(R.id.ad_native)
+    TMNaTmView ad_native;
 
     private ImageChooseHelper mImageChooseHelper;
 
@@ -114,6 +118,8 @@ public class CreateRoomActivity extends BaseActivity implements View.OnClickList
                         finish();
                     }
                 });
+
+        loadAd();
     }
 
     @Override
@@ -130,6 +136,7 @@ public class CreateRoomActivity extends BaseActivity implements View.OnClickList
         if (mSubscription2 != null) {
             mSubscription2.unsubscribe();
         }
+        destroyAd();
         super.onDestroy();
     }
 
@@ -171,13 +178,13 @@ public class CreateRoomActivity extends BaseActivity implements View.OnClickList
                         }).flatMap(new Func1<File, Observable<ResponseData<RoomIdInfo>>>() {
                             @Override
                             public Observable<ResponseData<RoomIdInfo>> call(File file) {
+                                String ss = FileUtils.fileToBase64(file);
+                                Timber.d(ss);
                                 return mRestAPI.redEnvelopeService().createVipRoom(
                                         mUserInfoSp.getLong("user_id", 0),
-                                        MultipartBody.Part.createFormData("name", et_room_name.getText().toString()),
-                                        MultipartBody.Part.createFormData("desc", et_room_announcement.getText().toString()),
-                                        MultipartBody.Part.createFormData("icon",
-                                                file.getName(),
-                                                RequestBody.create(MediaType.parse("image/*"), file)));
+                                        et_room_name.getText().toString(),
+                                        et_room_announcement.getText().toString(),
+                                        ss);
                             }
                         })
                         .subscribeOn(Schedulers.io())
@@ -204,6 +211,47 @@ public class CreateRoomActivity extends BaseActivity implements View.OnClickList
             break;
             default:
                 break;
+        }
+    }
+
+    private void loadAd() {
+        ad_native.setAdListener(new TmListener() {
+            @Override
+            public void onReceiveAd() {
+
+            }
+
+            @Override
+            public void onFailedToReceiveAd() {
+
+            }
+
+            @Override
+            public void onLoadFailed() {
+
+            }
+
+            @Override
+            public void onCloseClick() {
+
+            }
+
+            @Override
+            public void onAdClick() {
+
+            }
+
+            @Override
+            public void onAdExposure() {
+
+            }
+        });
+        ad_native.loadAd(Constants.CREATE_ROOM_NATIVE_AD);
+    }
+
+    private void destroyAd() {
+        if (ad_native != null) {
+            ad_native.destroy();
         }
     }
 }

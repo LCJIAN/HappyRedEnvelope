@@ -1,6 +1,7 @@
 package com.lcjian.happyredenvelope.ui.room;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.util.DiffUtil;
@@ -15,8 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.db.ta.sdk.TMBrTmView;
+import com.db.ta.sdk.TmListener;
 import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseActivity;
+import com.lcjian.happyredenvelope.Constants;
 import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.common.GoodsViewHolder;
@@ -48,6 +52,8 @@ public class RedEnvelopeSnatchedFakeActivity extends BaseActivity {
     TextView tv_top_bar_title;
     @BindView(R.id.tv_top_bar_right)
     TextView tv_top_bar_right;
+    @BindView(R.id.ad_small_banner)
+    TMBrTmView ad_small_banner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,55 @@ public class RedEnvelopeSnatchedFakeActivity extends BaseActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_red_env_fake,
                 new RedEnvelopeSnatchedFakeFragment(), "RedEnvelopeSnatchedFakeFragment").commit();
+
+        loadAd();
+    }
+
+    @Override
+    protected void onDestroy() {
+        destroyAd();
+        super.onDestroy();
+    }
+
+    private void loadAd() {
+        ad_small_banner.setAdListener(new TmListener() {
+            @Override
+            public void onReceiveAd() {
+
+            }
+
+            @Override
+            public void onFailedToReceiveAd() {
+
+            }
+
+            @Override
+            public void onLoadFailed() {
+
+            }
+
+            @Override
+            public void onCloseClick() {
+
+            }
+
+            @Override
+            public void onAdClick() {
+
+            }
+
+            @Override
+            public void onAdExposure() {
+
+            }
+        });
+        ad_small_banner.loadAd(Constants.SNATCH_COUPON_BANNER_AD);
+    }
+
+    private void destroyAd() {
+        if (ad_small_banner != null) {
+            ad_small_banner.destroy();
+        }
     }
 
     public static class RedEnvelopeSnatchedFakeFragment extends RecyclerFragment<Goods> {
@@ -130,11 +185,12 @@ public class RedEnvelopeSnatchedFakeActivity extends BaseActivity {
                                     }
                                 });
 
+                                tv_origin_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                                 tv_origin_price.setText(getString(R.string.origin_price,
                                         "￥" + mDecimalFormat.format(listResponseData.data.get(0).price)));
                                 tv_now_price.setText(String.format(Locale.getDefault(), "%s%s",
                                         "￥", mDecimalFormat.format(listResponseData.data.get(0).zkPrice)));
-                                tv_coupon_amount.setText(getString(R.string.origin_price,
+                                tv_coupon_amount.setText(getString(R.string.coupon_amount,
                                         "￥" + mDecimalFormat.format(listResponseData.data.get(0).price - listResponseData.data.get(0).zkPrice)));
                                 iv_coupon.setOnClickListener(new View.OnClickListener() {
                                     @Override

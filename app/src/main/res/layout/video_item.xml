@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/iv_video_thumbnail"
-        android:layout_width="150dp"
-        android:layout_height="100dp"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
         android:layout_margin="8dp" />
 
     <TextView
@@ -19,4 +19,24 @@
         android:layout_toEndOf="@id/iv_video_thumbnail"
         android:layout_toRightOf="@id/iv_video_thumbnail"
         android:textColor="@color/colorTextBlack" />
+
+    <TextView
+        android:id="@+id/tv_video_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/iv_video_thumbnail"
+        android:layout_toEndOf="@id/iv_video_thumbnail"
+        android:layout_toRightOf="@id/iv_video_thumbnail"
+        android:textAppearance="@style/TextAppearance.AppTheme.Micro"
+        android:textColor="@color/colorTextLightGray" />
+
+    <TextView
+        android:id="@+id/tv_video_play_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/iv_video_thumbnail"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:textAppearance="@style/TextAppearance.AppTheme.Micro"
+        android:textColor="@color/colorTextLightGray" />
 </RelativeLayout>

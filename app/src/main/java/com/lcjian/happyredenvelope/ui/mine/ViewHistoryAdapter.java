@@ -18,6 +18,7 @@ import com.lcjian.happyredenvelope.data.entity.GoodsHistory;
 import com.lcjian.happyredenvelope.data.entity.GroupHeader;
 import com.lcjian.happyredenvelope.data.entity.RoomHistory;
 import com.lcjian.happyredenvelope.data.entity.VideoHistory;
+import com.lcjian.happyredenvelope.ui.room.RoomActivity;
 import com.lcjian.happyredenvelope.ui.web.WebViewActivity;
 import com.lcjian.lib.entity.Displayable;
 
@@ -116,6 +117,8 @@ class ViewHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    v.getContext().startActivity(new Intent(v.getContext(), RoomActivity.class)
+                            .putExtra("room_id", roomHistory.hongBaoRoom.id));
                 }
             });
         }
@@ -154,7 +157,7 @@ class ViewHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     v.getContext().startActivity(new Intent(v.getContext(), WebViewActivity.class)
-                            .putExtra("url", goodsHistory.link));
+                            .putExtra("url", goodsHistory.quanLink));
                 }
             });
             this.mDecimalFormat = new DecimalFormat("0.00");
@@ -179,6 +182,10 @@ class ViewHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ImageView iv_video_thumbnail;
         @BindView(R.id.iv_video_title)
         TextView iv_video_title;
+        @BindView(R.id.tv_video_tag)
+        TextView tv_video_tag;
+        @BindView(R.id.tv_video_play_count)
+        TextView tv_video_play_count;
 
         VideoHistory videoHistory;
 
@@ -203,6 +210,8 @@ class ViewHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .transition(Global.crossFade)
                     .into(iv_video_thumbnail);
             iv_video_title.setText(videoHistory.ku6ShortVideo.name);
+            tv_video_tag.setText(videoHistory.ku6ShortVideo.tag);
+            tv_video_play_count.setText(context.getString(R.string.play_count, videoHistory.ku6ShortVideo.playCount));
         }
     }
 }

@@ -3,6 +3,7 @@ package com.lcjian.happyredenvelope.di.component;
 import android.app.Application;
 import android.content.SharedPreferences;
 
+import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseActivity;
 import com.lcjian.happyredenvelope.BaseDialogFragment;
 import com.lcjian.happyredenvelope.BaseFragment;
@@ -43,5 +44,7 @@ public interface AppComponent {
     void inject(BaseFragment baseFragment);
 
     void inject(BaseDialogFragment baseDialogFragment);
+
+    void inject(App app);
 
 }

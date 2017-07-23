@@ -18,6 +18,7 @@ import com.lcjian.happyredenvelope.BaseDialogFragment;
 import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.Message;
+import com.lcjian.happyredenvelope.data.entity.OpenResult;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
 
 import butterknife.BindView;
@@ -43,7 +44,7 @@ public class RedEnvelopeOpenFragment extends BaseDialogFragment implements View.
 
     private Message mMessage;
 
-    private ResponseData<Object> responseData;
+    private ResponseData<OpenResult> responseData;
 
     public static RedEnvelopeOpenFragment newInstance(Message message) {
         RedEnvelopeOpenFragment fragment = new RedEnvelopeOpenFragment();
@@ -88,9 +89,9 @@ public class RedEnvelopeOpenFragment extends BaseDialogFragment implements View.
             mRestAPI.redEnvelopeService().openRedEnvelope(mUserInfoSp.getLong("user_id", 0), mMessage.id)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<ResponseData<Object>>() {
+                    .subscribe(new Action1<ResponseData<OpenResult>>() {
                         @Override
-                        public void call(ResponseData<Object> objectResponseData) {
+                        public void call(ResponseData<OpenResult> objectResponseData) {
                             responseData = objectResponseData;
                         }
                     }, new Action1<Throwable>() {
@@ -119,8 +120,16 @@ public class RedEnvelopeOpenFragment extends BaseDialogFragment implements View.
                 } else if (mMessage.type == 3) {
                     if (responseData != null) {
                         if (responseData.code == 0) {
-                            startActivity(new Intent(v.getContext(), RedEnvelopeSnatchedSuccessActivity.class)
-                                    .putExtra("msg_id", mMessage.id));
+                            if (responseData.data.state == 1) {
+                                startActivity(new Intent(v.getContext(), RedEnvelopeSnatchedSuccessActivity.class)
+                                        .putExtra("msg_id", mMessage.id));
+                            } else if (responseData.data.state == 2) {
+                                RedEnvelopeSnatchFailedFragment.newInstance(getString(R.string.red_envelope_snatched_buy_others))
+                                        .show(getFragmentManager(), "RedEnvelopeSnatchFailedFragment");
+                            } else if (responseData.data.state == 3) {
+                                RedEnvelopeSnatchFailedFragment.newInstance(getString(R.string.red_envelope_snatched_buy_you))
+                                        .show(getFragmentManager(), "RedEnvelopeSnatchFailedFragment");
+                            }
                         } else {
                             RedEnvelopeSnatchFailedFragment.newInstance(responseData.msg)
                                     .show(getFragmentManager(), "RedEnvelopeSnatchFailedFragment");

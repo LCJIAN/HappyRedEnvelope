@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.lcjian.happyredenvelope.data.db.table.PushMessageTable;
 import com.lcjian.happyredenvelope.data.db.table.SearchHistoryTable;
 
 
@@ -26,6 +27,7 @@ public class AppSQLiteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SearchHistoryTable.getCreateTableQuery());
+        db.execSQL(PushMessageTable.getCreateTableQuery());
     }
 
     @Override

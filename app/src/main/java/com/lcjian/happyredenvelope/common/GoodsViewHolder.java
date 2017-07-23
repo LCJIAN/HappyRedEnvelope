@@ -43,7 +43,7 @@ public class GoodsViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 v.getContext().startActivity(new Intent(v.getContext(), WebViewActivity.class)
-                        .putExtra("url", goods.link));
+                        .putExtra("url", goods.quanLink));
             }
         });
         this.mDecimalFormat = new DecimalFormat("0.00");

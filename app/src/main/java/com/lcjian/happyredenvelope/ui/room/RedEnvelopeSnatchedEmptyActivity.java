@@ -9,13 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.db.ta.sdk.TMNaTmView;
+import com.db.ta.sdk.TmListener;
 import com.lcjian.happyredenvelope.BaseActivity;
+import com.lcjian.happyredenvelope.Constants;
 import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
@@ -38,8 +40,8 @@ public class RedEnvelopeSnatchedEmptyActivity extends BaseActivity implements Vi
 
     @BindView(R.id.btn_top_bar_left)
     ImageButton btn_top_bar_left;
-    @BindView(R.id.fl_advertisement_content)
-    FrameLayout fl_advertisement_content;
+    @BindView(R.id.ad_native)
+    TMNaTmView ad_native;
     @BindView(R.id.tv_change)
     TextView tv_change;
     @BindView(R.id.rv_videos)
@@ -70,6 +72,7 @@ public class RedEnvelopeSnatchedEmptyActivity extends BaseActivity implements Vi
         tv_change.setOnClickListener(this);
 
         refresh();
+        loadAd();
     }
 
     @Override
@@ -91,6 +94,7 @@ public class RedEnvelopeSnatchedEmptyActivity extends BaseActivity implements Vi
         if (mSubscription != null) {
             mSubscription.unsubscribe();
         }
+        destroyAd();
         super.onDestroy();
     }
 
@@ -114,6 +118,47 @@ public class RedEnvelopeSnatchedEmptyActivity extends BaseActivity implements Vi
 
                     }
                 });
+    }
+
+    private void loadAd() {
+        ad_native.setAdListener(new TmListener() {
+            @Override
+            public void onReceiveAd() {
+
+            }
+
+            @Override
+            public void onFailedToReceiveAd() {
+
+            }
+
+            @Override
+            public void onLoadFailed() {
+
+            }
+
+            @Override
+            public void onCloseClick() {
+
+            }
+
+            @Override
+            public void onAdClick() {
+
+            }
+
+            @Override
+            public void onAdExposure() {
+
+            }
+        });
+        ad_native.loadAd(Constants.CREATE_ROOM_NATIVE_AD);
+    }
+
+    private void destroyAd() {
+        if (ad_native != null) {
+            ad_native.destroy();
+        }
     }
 
     static class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
@@ -148,6 +193,10 @@ public class RedEnvelopeSnatchedEmptyActivity extends BaseActivity implements Vi
             ImageView iv_video_thumbnail;
             @BindView(R.id.iv_video_title)
             TextView iv_video_title;
+            @BindView(R.id.tv_video_tag)
+            TextView tv_video_tag;
+            @BindView(R.id.tv_video_play_count)
+            TextView tv_video_play_count;
 
             Video video;
 
@@ -189,6 +238,8 @@ public class RedEnvelopeSnatchedEmptyActivity extends BaseActivity implements Vi
                         .transition(Global.crossFade)
                         .into(iv_video_thumbnail);
                 iv_video_title.setText(video.name);
+                tv_video_tag.setText(video.tag);
+                tv_video_play_count.setText(context.getString(R.string.play_count, video.playCount));
             }
         }
     }

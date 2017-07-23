@@ -23,12 +23,12 @@
 
         <TextView
             android:id="@+id/tv_red_envelope_amount"
-            style="@style/TextAppearance.AppTheme.Large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:textColor="@color/color_two" />
+            android:textColor="@color/color_two"
+            android:textSize="30sp" />
 
         <TextView
             style="@style/TextAppearance.AppTheme.Small"

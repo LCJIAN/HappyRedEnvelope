@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.lcjian.happyredenvelope.Constants;
 import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.common.AdvertisementViewHolder;
@@ -77,7 +78,9 @@ class BillBoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return viewType == TYPE_BILLBOARD ? new BillboardViewHolder(parent, mMyUserId) : new AdvertisementViewHolder(parent);
+        return viewType == TYPE_BILLBOARD
+                ? new BillboardViewHolder(parent, mMyUserId)
+                : new AdvertisementViewHolder(parent, Constants.BILLBOARD_NATIVE_AD);
     }
 
     @Override

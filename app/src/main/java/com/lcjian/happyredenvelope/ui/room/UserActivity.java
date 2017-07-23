@@ -8,8 +8,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.db.ta.sdk.TMBrTmView;
+import com.db.ta.sdk.TmListener;
 import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseActivity;
+import com.lcjian.happyredenvelope.Constants;
 import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
@@ -43,6 +46,8 @@ public class UserActivity extends BaseActivity {
     TextView tv_month_count;
     @BindView(R.id.tv_total_amount)
     TextView tv_total_amount;
+    @BindView(R.id.ad_small_banner)
+    TMBrTmView ad_small_banner;
 
     private Subscription mSubscription;
 
@@ -59,6 +64,8 @@ public class UserActivity extends BaseActivity {
             }
         });
         tv_top_bar_right.setVisibility(View.GONE);
+
+        loadAd();
 
         mSubscription = mRestAPI.redEnvelopeService().getUserInfo(getIntent().getLongExtra("user_id", 0))
                 .subscribeOn(Schedulers.io())
@@ -90,11 +97,53 @@ public class UserActivity extends BaseActivity {
                 });
     }
 
+    private void loadAd() {
+        ad_small_banner.setAdListener(new TmListener() {
+            @Override
+            public void onReceiveAd() {
+
+            }
+
+            @Override
+            public void onFailedToReceiveAd() {
+
+            }
+
+            @Override
+            public void onLoadFailed() {
+
+            }
+
+            @Override
+            public void onCloseClick() {
+
+            }
+
+            @Override
+            public void onAdClick() {
+
+            }
+
+            @Override
+            public void onAdExposure() {
+
+            }
+        });
+        ad_small_banner.loadAd(Constants.USER_BANNER_AD);
+    }
+
+    private void destroyAd() {
+        if (ad_small_banner != null) {
+            ad_small_banner.destroy();
+        }
+    }
+
     @Override
     protected void onDestroy() {
         if (mSubscription != null) {
             mSubscription.unsubscribe();
         }
+        destroyAd();
         super.onDestroy();
     }
 }

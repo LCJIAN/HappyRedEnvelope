@@ -1,1 +1,4 @@
-include ':app'
+include ':app', ':mylibrary', ':sharesdk', ':PushSDK'
+project(':mylibrary').projectDir = new File('../vast_player/mylibrary')
+project(':sharesdk').projectDir = new File('../vast_player/sharesdk')
+project(':PushSDK').projectDir = new File('/home/lcjian/下载/PushSDK')

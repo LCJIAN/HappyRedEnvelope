@@ -25,6 +25,7 @@ import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.User;
 import com.lcjian.happyredenvelope.data.entity.UserSummary;
 import com.lcjian.happyredenvelope.ui.mine.BuyVipActivity;
+import com.lcjian.happyredenvelope.ui.mine.MessageActivity;
 import com.lcjian.happyredenvelope.ui.mine.RedEnvelopeHistoriesActivity;
 import com.lcjian.happyredenvelope.ui.mine.SettingsActivity;
 import com.lcjian.happyredenvelope.ui.mine.UserLuckCardActivity;
@@ -32,6 +33,8 @@ import com.lcjian.happyredenvelope.ui.mine.ViewHistoriesActivity;
 import com.lcjian.happyredenvelope.ui.web.WebViewActivity;
 import com.lcjian.happyredenvelope.ui.withdrawal.WithdrawalActivity;
 import com.lcjian.lib.util.common.StringUtils;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -212,6 +215,10 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(new Intent(getContext(), SettingsActivity.class));
             }
             break;
+            case R.id.btn_go_message: {
+                startActivity(new Intent(getContext(), MessageActivity.class));
+            }
+            break;
             default:
                 break;
         }
@@ -276,6 +283,15 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                                     .putInt("user_sex", userResponseData.data.userSex)
                                     .putBoolean("signed_in", true)
                                     .apply();
+                            PushAgent.getInstance(App.getInstance())
+                                    .addAlias(
+                                            String.valueOf(userResponseData.data.userId),
+                                            "we_chat",
+                                            new UTrack.ICallBack() {
+                                                @Override
+                                                public void onMessage(boolean isSuccess, String message) {
+                                                }
+                                            });
                             setupSignedIn();
                         } else {
                             Toast.makeText(App.getInstance(), userResponseData.msg, Toast.LENGTH_SHORT).show();
@@ -315,6 +331,11 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                             tv_total_count.setText(String.valueOf(userSummaryResponseData.data.totalCount));
                             tv_balance.setText(String.format(Locale.getDefault(), "%s%s",
                                     "￥", new DecimalFormat("0.00").format(userSummaryResponseData.data.hblUser.userBalance)));
+                            if (userSummaryResponseData.data.hblUser.userVipendtime > System.currentTimeMillis()) {
+                                tv_user_name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_vip, 0);
+                            } else {
+                                tv_user_name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                            }
                         } else {
                             Toast.makeText(App.getInstance(), userSummaryResponseData.msg, Toast.LENGTH_SHORT).show();
                         }

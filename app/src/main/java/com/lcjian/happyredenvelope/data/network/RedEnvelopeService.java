@@ -11,6 +11,7 @@ import com.lcjian.happyredenvelope.data.entity.LeftTimeInfo;
 import com.lcjian.happyredenvelope.data.entity.LuckCardCombo;
 import com.lcjian.happyredenvelope.data.entity.LuckCardSummary;
 import com.lcjian.happyredenvelope.data.entity.Message;
+import com.lcjian.happyredenvelope.data.entity.OpenResult;
 import com.lcjian.happyredenvelope.data.entity.PageResult;
 import com.lcjian.happyredenvelope.data.entity.RedEnvHot;
 import com.lcjian.happyredenvelope.data.entity.RedEnvelope;
@@ -34,13 +35,10 @@ import com.lcjian.happyredenvelope.data.entity.Withdrawal;
 
 import java.util.List;
 
-import okhttp3.MultipartBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Headers;
-import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.Part;
 import rx.Observable;
 
 public interface RedEnvelopeService {
@@ -181,12 +179,12 @@ public interface RedEnvelopeService {
     /**
      * VIP创建房间
      */
-    @Multipart
+    @FormUrlEncoded
     @POST("room/addviproom")
-    Observable<ResponseData<RoomIdInfo>> createVipRoom(@Part("uid") long userId,
-                                                       @Part MultipartBody.Part name,
-                                                       @Part MultipartBody.Part desc,
-                                                       @Part MultipartBody.Part icon);
+    Observable<ResponseData<RoomIdInfo>> createVipRoom(@Field("uid") long userId,
+                                                       @Field("name") String name,
+                                                       @Field("desc") String desc,
+                                                       @Field("icon") String icon);
 
     /**
      * 用户是否VIP
@@ -321,8 +319,8 @@ public interface RedEnvelopeService {
      */
     @FormUrlEncoded
     @POST("hongbao/openhongbao")
-    Observable<ResponseData<Object>> openRedEnvelope(@Field("uid") long userId,
-                                                     @Field("msgid") long msgId);
+    Observable<ResponseData<OpenResult>> openRedEnvelope(@Field("uid") long userId,
+                                                         @Field("msgid") long msgId);
 
     /**
      * 获取幸运手气榜

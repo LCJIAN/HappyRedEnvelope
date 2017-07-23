@@ -20,6 +20,6 @@ public class SnatchingDetail {
         public User hblUser;
         public int luck;
         public long time;
-        public int money;
+        public float money;
     }
 }

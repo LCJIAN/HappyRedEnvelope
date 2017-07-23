@@ -15,6 +15,8 @@ import com.lcjian.happyredenvelope.BaseDialogFragment;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.User;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -122,6 +124,15 @@ public class SignInDialogFragment extends BaseDialogFragment implements View.OnC
                                     .putFloat("user_balance", userResponseData.data.userBalance)
                                     .putBoolean("signed_in", true)
                                     .apply();
+                            PushAgent.getInstance(App.getInstance())
+                                    .addAlias(
+                                            String.valueOf(userResponseData.data.userId),
+                                            "we_chat",
+                                            new UTrack.ICallBack() {
+                                                @Override
+                                                public void onMessage(boolean isSuccess, String message) {
+                                                }
+                                            });
                             dismiss();
                         } else {
                             Toast.makeText(App.getInstance(), userResponseData.msg, Toast.LENGTH_SHORT).show();

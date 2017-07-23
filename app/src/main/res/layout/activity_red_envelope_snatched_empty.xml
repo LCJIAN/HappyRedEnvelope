@@ -51,12 +51,13 @@
             android:textColor="#ffe7ae" />
     </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/fl_advertisement_content"
+    <com.db.ta.sdk.TMNaTmView
+        android:id="@+id/ad_native"
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="wrap_content"
+        app:TMNa_size="TMNa_750_420">
 
-    </FrameLayout>
+    </com.db.ta.sdk.TMNaTmView>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -1,5 +1,6 @@
 package com.lcjian.happyredenvelope.ui.room;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -10,8 +11,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseActivity;
 import com.lcjian.happyredenvelope.Global;
 import com.lcjian.happyredenvelope.R;
@@ -22,6 +25,12 @@ import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.SnatchingDetail;
 import com.lcjian.lib.entity.Displayable;
 import com.lcjian.lib.recyclerview.LoadMoreAdapter;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.text.DecimalFormat;
@@ -64,10 +73,47 @@ public class RedEnvelopeSnatchedSuccessActivity extends BaseActivity implements 
                 onBackPressed();
                 break;
             case R.id.tv_top_bar_right:
+                new ShareAction(this)
+                        .withMedia(new UMWeb(
+                                "http://www.baidu.com",
+                                "我是标题",
+                                "我是内容，描述内容。",
+                                new UMImage(this, R.mipmap.ic_launcher)))
+                        .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
+                        .setCallback(new UMShareListener() {
+                            @Override
+                            public void onStart(SHARE_MEDIA share_media) {
+                            }
+
+                            @Override
+                            public void onResult(SHARE_MEDIA share_media) {
+                            }
+
+                            @Override
+                            public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+                                Toast.makeText(App.getInstance(), R.string.share_failed, Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onCancel(SHARE_MEDIA share_media) {
+                            }
+                        }).share();
                 break;
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onDestroy() {
+        UMShareAPI.get(this).release();
+        super.onDestroy();
     }
 
     public static class RedEnvelopeSnatchedSuccessFragment extends RecyclerFragment<Displayable> {
@@ -156,6 +202,8 @@ public class RedEnvelopeSnatchedSuccessActivity extends BaseActivity implements 
                             result.elements.addAll(snatchingDetailResponseData.data.rankList);
                             if (result.elements.size() > 4) {
                                 result.elements.add(4, new Advertisement());
+                            } else {
+                                result.elements.add(new Advertisement());
                             }
                             return result;
                         }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -156,4 +157,15 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <com.db.ta.sdk.TMBrTmView
+        android:id="@+id/ad_small_banner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:TMBr_size="lander_TMBr" />
 </LinearLayout>

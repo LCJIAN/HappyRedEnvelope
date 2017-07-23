@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.mine.MessageActivity">
 
     <include layout="@layout/navigation_top_bar" />
 
     <FrameLayout
-        android:id="@+id/fl_red_env_fake"
+        android:id="@+id/fl_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
     </FrameLayout>
 
-    <com.db.ta.sdk.TMBrTmView
-        android:id="@+id/ad_small_banner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:TMBr_size="lander_TMBr" />
 </LinearLayout>

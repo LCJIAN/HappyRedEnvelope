@@ -73,7 +73,7 @@ public class UserLuckCardActivity extends BaseActivity implements View.OnClickLi
                             LuckCardSummary luckCardSummary = luckCardSummaryResponseData.data;
                             tv_time_left.setText(StringUtils.stringForTime((int) luckCardSummary.lefttime * 1000));
                             tv_total_buy_count.setText(getString(R.string.luck_card_buy_total, luckCardSummary.sell.totalCount));
-                            tv_total_buy_time.setText(getString(R.string.luck_card_time_total, luckCardSummary.sell.totalTime));
+                            tv_total_buy_time.setText(getString(R.string.luck_card_time_total, luckCardSummary.sell.totalTime / 60));
                             tv_total_present_count.setText(getString(R.string.luck_card_present_total, luckCardSummary.send.totalCount));
                             tv_total_present_time.setText(getString(R.string.luck_card_time_total, luckCardSummary.send.totalTime / 60));
                         } else {

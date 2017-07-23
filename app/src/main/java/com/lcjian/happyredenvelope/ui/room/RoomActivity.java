@@ -3,9 +3,13 @@ package com.lcjian.happyredenvelope.ui.room;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.BackgroundColorSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -26,6 +30,12 @@ import com.lcjian.happyredenvelope.ui.mine.RedEnvelopeHistoriesActivity;
 import com.lcjian.lib.recyclerview.RecyclerViewPositionHelper;
 import com.lcjian.lib.util.common.DimenUtils;
 import com.lcjian.lib.util.common.StringUtils;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +109,7 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
         tv_top_bar_right.setBackgroundResource(R.drawable.ic_room_member);
         tv_top_bar_right.setOnClickListener(this);
         btn_top_bar_left.setOnClickListener(this);
+        btn_invite_friend.setOnClickListener(this);
         btn_go_red_envelope_histories.setOnClickListener(this);
 
         rv_room_members.setHasFixedSize(true);
@@ -141,7 +152,6 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
         loadRoomData();
     }
 
-
     @Override
     protected void onStop() {
         if (mSubscriptionRoomData != null) {
@@ -165,7 +175,15 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
         if (mSubscriptions != null) {
             mSubscriptions.unsubscribe();
         }
+        mRoomMessageAdapter.destroy();
+        UMShareAPI.get(this).release();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -179,6 +197,33 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.btn_go_red_envelope_histories:
                 startActivity(new Intent(this, RedEnvelopeHistoriesActivity.class));
+                break;
+            case R.id.btn_invite_friend:
+                new ShareAction(this)
+                        .withMedia(new UMWeb(
+                                "http://www.baidu.com",
+                                "我是标题",
+                                "我是内容，描述内容。",
+                                new UMImage(this, R.mipmap.ic_launcher)))
+                        .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
+                        .setCallback(new UMShareListener() {
+                            @Override
+                            public void onStart(SHARE_MEDIA share_media) {
+                            }
+
+                            @Override
+                            public void onResult(SHARE_MEDIA share_media) {
+                            }
+
+                            @Override
+                            public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+                                Toast.makeText(App.getInstance(), R.string.share_failed, Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onCancel(SHARE_MEDIA share_media) {
+                            }
+                        }).share();
                 break;
             default:
                 break;
@@ -237,6 +282,7 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
         }
         mSubscriptionRoomData = Observable
                 .interval(0, 5, TimeUnit.SECONDS)
+                .observeOn(Schedulers.io())
                 .flatMap(new Func1<Long, Observable<RoomData>>() {
                     @Override
                     public Observable<RoomData> call(Long aLong) {
@@ -251,6 +297,9 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
                                                          ResponseData<Room> roomResponseData,
                                                          ResponseData<Users> usersResponseData,
                                                          ResponseData<List<Message>> listResponseData) {
+                                        if (listResponseData.code != 0) {
+                                            throw new RuntimeException("you are kicked");
+                                        }
                                         return new RoomData(leftTimeInfoResponseData.data,
                                                 roomResponseData.data,
                                                 usersResponseData.data.data,
@@ -260,17 +309,23 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
                         );
                     }
                 })
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<RoomData>() {
                     @Override
                     public void call(RoomData roomData) {
                         if (roomData.leftTimeInfo.totalLeftTime <= 0) {
-                            new LuckCardInsufficientFragment().show(getSupportFragmentManager(), "LuckCardInsufficientFragment");
+                            if (getSupportFragmentManager().findFragmentByTag("LuckCardInsufficientFragment") == null) {
+                                new LuckCardInsufficientFragment().show(getSupportFragmentManager(), "LuckCardInsufficientFragment");
+                            }
                             if (mSubscriptionRoomData != null) {
                                 mSubscriptionRoomData.unsubscribe();
                             }
                         } else {
+                            if (getSupportFragmentManager().findFragmentByTag("LuckCardInsufficientFragment") != null) {
+                                LuckCardInsufficientFragment fragment = (LuckCardInsufficientFragment)
+                                        getSupportFragmentManager().findFragmentByTag("LuckCardInsufficientFragment");
+                                fragment.dismiss();
+                            }
                             if (!mJoined) {
                                 joinRoom();
                             }
@@ -304,24 +359,6 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
                             mMembers.clear();
                             mMembers.addAll(roomData.users);
                             mRoomMemberAdapter.replaceAll(new ArrayList<>(mMembers));
-
-                            if (mJoined) {
-                                boolean kicked = true;
-                                for (User user : roomData.users) {
-                                    if (user.userId == mUserId) {
-                                        kicked = false;
-                                        break;
-                                    }
-                                }
-                                if (kicked) {
-                                    mJoined = false;
-                                    Toast.makeText(App.getInstance(), R.string.your_are_kicked, Toast.LENGTH_SHORT).show();
-                                    if (mSubscriptionRoomData != null) {
-                                        mSubscriptionRoomData.unsubscribe();
-                                    }
-                                    onBackPressed();
-                                }
-                            }
                         }
                         if (roomData.newMessages != null && !roomData.newMessages.isEmpty()) {
                             int preFirstPosition = RecyclerViewPositionHelper.createHelper(rv_chat_messages).findFirstVisibleItemPosition();
@@ -340,7 +377,16 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-
+                        if ("you are kicked".equals(throwable.getMessage())) {
+                            if (mJoined) {
+                                mJoined = false;
+                                Toast.makeText(App.getInstance(), R.string.your_are_kicked, Toast.LENGTH_SHORT).show();
+                                if (mSubscriptionRoomData != null) {
+                                    mSubscriptionRoomData.unsubscribe();
+                                }
+                                onBackPressed();
+                            }
+                        }
                     }
                 });
     }
@@ -362,7 +408,22 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
                 .subscribe(new Action1<Long>() {
                     @Override
                     public void call(Long aLong) {
-                        tv_time_left.setText(StringUtils.stringForTime(aLong.intValue()));
+                        String str = StringUtils.stringForTime(aLong.intValue(), true, true);
+                        SpannableString spannableString = new SpannableString(str);
+                        String[] array = str.split(":");
+                        int start;
+                        int end = 0;
+                        for (int i = 0; i < array.length; i++) {
+                            if (i == 0) {
+                                start = 0;
+                            } else {
+                                start = end + 1;
+                            }
+                            end = start + array[i].length();
+                            spannableString.setSpan(new BackgroundColorSpan(ContextCompat.getColor(RoomActivity.this, R.color.color_two)),
+                                    start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                        tv_time_left.setText(spannableString);
                     }
                 });
     }

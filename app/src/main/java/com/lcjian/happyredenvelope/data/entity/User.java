@@ -13,6 +13,7 @@ public class User implements Serializable {
     public String userHeadimg;
     public long userId;
     public long userLastlogintime;
+    public long userVipendtime;
     public String userNickname;
     public String userOpenid;
     public String userCountry;

@@ -83,4 +83,17 @@
         android:paddingRight="32dp"
         android:text="@string/create_room"
         android:textColor="@android:color/white" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <com.db.ta.sdk.TMNaTmView
+        android:id="@+id/ad_native"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:TMNa_size="TMNa_750_420">
+
+    </com.db.ta.sdk.TMNaTmView>
 </LinearLayout>

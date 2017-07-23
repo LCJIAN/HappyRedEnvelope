@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.widget.RadioGroup;
 
+import com.lcjian.happyredenvelope.App;
 import com.lcjian.happyredenvelope.BaseActivity;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.AppLinks;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.lib.util.FragmentSwitchHelper;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
 import com.umeng.socialize.UMShareAPI;
 
 import butterknife.BindView;
@@ -69,6 +72,17 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
                     }
                 });
+        if (mUserInfoSp.getLong("user_id", 0) != 0) {
+            PushAgent.getInstance(App.getInstance())
+                    .addAlias(
+                            String.valueOf(mUserInfoSp.getLong("user_id", 0)),
+                            "we_chat",
+                            new UTrack.ICallBack() {
+                                @Override
+                                public void onMessage(boolean isSuccess, String message) {
+                                }
+                            });
+        }
     }
 
     @Override

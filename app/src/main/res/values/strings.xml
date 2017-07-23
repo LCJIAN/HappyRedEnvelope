@@ -145,4 +145,8 @@
     <string name="clean_cache">清除缓存</string>
     <string name="sign_out">退出</string>
     <string name="cache_cleared">缓存已清除</string>
+    <string name="receive_luck_card_success">你已经成功领取%1$d秒福卡时间</string>
+    <string name="play_count">%1$d次播放</string>
+    <string name="share_failed">分享失败</string>
+    <string name="message">消息</string>
 </resources>

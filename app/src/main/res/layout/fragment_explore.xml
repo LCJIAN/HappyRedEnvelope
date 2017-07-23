@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -31,10 +32,17 @@
             android:background="@android:color/white"
             android:orientation="vertical">
 
-            <com.lcjian.lib.viewpager.AutoViewPager
-                android:id="@+id/vp_banner"
+            <com.lcjian.lib.widget.RatioLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp" />
+                android:layout_height="wrap_content"
+                app:fixedSide="width"
+                app:ratio="0.42">
+
+                <com.lcjian.lib.viewpager.AutoViewPager
+                    android:id="@+id/vp_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.lcjian.lib.widget.RatioLayout>
 
             <View
                 android:layout_width="match_parent"

@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 
 import com.lcjian.happyredenvelope.data.db.AppSQLiteOpenHelper;
+import com.lcjian.happyredenvelope.data.entity.PushMessage;
+import com.lcjian.happyredenvelope.data.entity.PushMessageSQLiteTypeMapping;
 import com.lcjian.happyredenvelope.data.entity.SearchHistory;
 import com.lcjian.happyredenvelope.data.entity.SearchHistorySQLiteTypeMapping;
 import com.lcjian.happyredenvelope.di.scope.ApplicationScope;
@@ -24,6 +26,7 @@ public class DbModule {
         return DefaultStorIOSQLite.builder()
                 .sqliteOpenHelper(sqLiteOpenHelper)
                 .addTypeMapping(SearchHistory.class, new SearchHistorySQLiteTypeMapping())
+                .addTypeMapping(PushMessage.class, new PushMessageSQLiteTypeMapping())
                 .build();
     }
 

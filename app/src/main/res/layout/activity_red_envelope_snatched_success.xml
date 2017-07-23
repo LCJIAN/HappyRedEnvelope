@@ -11,7 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:background="@color/colorLightRed">
+        android:background="#fff75851">
 
         <ImageButton
             android:id="@+id/btn_top_bar_left"
