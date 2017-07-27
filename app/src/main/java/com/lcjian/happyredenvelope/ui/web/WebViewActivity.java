@@ -42,6 +42,20 @@ public class WebViewActivity extends BaseActivity implements
 
     private AgentWeb mAgentWeb;
 
+    private WebViewClient mWebViewClient=new WebViewClient(){
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            //do you  work
+        }
+    };
+
+    private WebChromeClient mWebChromeClient=new WebChromeClient(){
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            //do you work
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +77,8 @@ public class WebViewActivity extends BaseActivity implements
                 .useDefaultIndicator() // 使用默认进度条
                 .defaultProgressBarColor() // 使用默认进度条颜色
                 .setReceivedTitleCallback(this) // 设置Web页面的title回调
+                .setWebChromeClient(mWebChromeClient)
+                .setWebViewClient(mWebViewClient)
                 .createAgentWeb()
                 .ready()
                 .go(getIntent().getStringExtra("url"));
@@ -72,7 +88,7 @@ public class WebViewActivity extends BaseActivity implements
 
         //商品详情page
         AlibcBasePage detailPage = new AlibcDetailPage("ss");
-        AlibcTrade.show(this, mAgentWeb.getWebCreator().get(), null, null, detailPage, null, null, exParams ,
+        AlibcTrade.show(this, mAgentWeb.getWebCreator().get(), mWebViewClient, mWebChromeClient, detailPage, null, null, exParams ,
                 new AlibcTradeCallback() {
                     @Override
                     public void onTradeSuccess(TradeResult tradeResult) {
@@ -93,18 +109,30 @@ public class WebViewActivity extends BaseActivity implements
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_top_bar_left:
-                onBackPressed();
-                break;
-        }
+    public void onPause() {
+        mAgentWeb.getWebLifeCycle().onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        mAgentWeb.getWebLifeCycle().onResume();
+        super.onResume();
     }
 
     @Override
     public void onBackPressed() {
         if (!mAgentWeb.back()) {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_top_bar_left:
+                onBackPressed();
+                break;
         }
     }
 }
