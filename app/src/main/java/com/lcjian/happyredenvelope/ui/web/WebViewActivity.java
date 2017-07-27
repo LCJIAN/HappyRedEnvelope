@@ -87,7 +87,7 @@ public class WebViewActivity extends BaseActivity implements
         exParams.put(AlibcConstants.TAOKE_PID, "mm_106929643_20324269_108658120");
 
         //商品详情page
-        AlibcBasePage detailPage = new AlibcDetailPage("ss");
+        AlibcBasePage detailPage = new AlibcPage(getIntent().getStringExtra("url"));
         AlibcTrade.show(this, mAgentWeb.getWebCreator().get(), mWebViewClient, mWebChromeClient, detailPage, null, null, exParams ,
                 new AlibcTradeCallback() {
                     @Override
