@@ -19,9 +19,10 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:background="?selectableItemBackground"
+            android:padding="8dp"
             app:srcCompat="@drawable/ic_message" />
 
         <TextView
@@ -148,7 +149,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/colorDivider" />
+                android:background="@color/colorDivider"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_my_coupon"
@@ -164,7 +166,8 @@
                 android:padding="16dp"
                 android:text="@string/my_coupon"
                 android:textAppearance="@style/TextAppearance.AppTheme"
-                android:textColor="@color/colorTextBlack" />
+                android:textColor="@color/colorTextBlack"
+                android:visibility="gone" />
 
             <View
                 android:layout_width="match_parent"

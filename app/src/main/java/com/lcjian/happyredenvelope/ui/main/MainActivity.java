@@ -1,6 +1,5 @@
 package com.lcjian.happyredenvelope.ui.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.widget.RadioGroup;
@@ -13,7 +12,6 @@ import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.lib.util.FragmentSwitchHelper;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UTrack;
-import com.umeng.socialize.UMShareAPI;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,7 +74,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             PushAgent.getInstance(App.getInstance())
                     .addAlias(
                             String.valueOf(mUserInfoSp.getLong("user_id", 0)),
-                            "we_chat",
+                            "uid",
                             new UTrack.ICallBack() {
                                 @Override
                                 public void onMessage(boolean isSuccess, String message) {
@@ -115,11 +113,5 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             default:
                 break;
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -3,6 +3,8 @@ package com.lcjian.happyredenvelope;
 import android.app.Application;
 import android.content.Context;
 
+import com.alibaba.baichuan.android.trade.AlibcTradeSDK;
+import com.alibaba.baichuan.android.trade.callback.AlibcTradeInitCallback;
 import com.db.ta.sdk.TaSDK;
 import com.lcjian.happyredenvelope.data.entity.PushMessage;
 import com.lcjian.happyredenvelope.di.component.AppComponent;
@@ -79,6 +81,17 @@ public class App extends Application {
 
             @Override
             public void onFailure(String s, String s1) {
+            }
+        });
+        AlibcTradeSDK.asyncInit(this, new AlibcTradeInitCallback() {
+            @Override
+            public void onSuccess() {
+                //初始化成功，设置相关的全局配置参数
+            }
+
+            @Override
+            public void onFailure(int code, String msg) {
+                //初始化失败，可以根据code和msg判断失败原因，详情参见错误说明
             }
         });
 

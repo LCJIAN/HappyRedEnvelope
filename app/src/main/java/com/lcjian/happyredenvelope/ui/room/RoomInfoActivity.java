@@ -33,14 +33,9 @@ import com.lcjian.happyredenvelope.data.entity.User;
 import com.lcjian.happyredenvelope.data.entity.Users;
 import com.lcjian.happyredenvelope.data.entity.VipInfo;
 import com.lcjian.happyredenvelope.ui.mine.BuyVipActivity;
+import com.lcjian.happyredenvelope.ui.mine.InviteFriendActivity;
 import com.lcjian.lib.recyclerview.LoadMoreAdapter;
 import com.lcjian.lib.util.common.DimenUtils;
-import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.media.UMWeb;
 
 import java.util.List;
 
@@ -120,17 +115,10 @@ public class RoomInfoActivity extends BaseActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
     protected void onDestroy() {
         if (mSubscription != null) {
             mSubscription.unsubscribe();
         }
-        UMShareAPI.get(this).release();
         super.onDestroy();
     }
 
@@ -287,31 +275,7 @@ public class RoomInfoActivity extends BaseActivity {
                     startActivity(new Intent(v.getContext(), RoomLuckBillboardsActivity.class).putExtra("room_id", mRoom.id));
                     break;
                 case R.id.tv_invite_friend:
-                    new ShareAction(getActivity())
-                            .withMedia(new UMWeb(
-                                    "http://www.baidu.com",
-                                    "我是标题",
-                                    "我是内容，描述内容。",
-                                    new UMImage(getActivity(), R.mipmap.ic_launcher)))
-                            .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
-                            .setCallback(new UMShareListener() {
-                                @Override
-                                public void onStart(SHARE_MEDIA share_media) {
-                                }
-
-                                @Override
-                                public void onResult(SHARE_MEDIA share_media) {
-                                }
-
-                                @Override
-                                public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-                                    Toast.makeText(App.getInstance(), R.string.share_failed, Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onCancel(SHARE_MEDIA share_media) {
-                                }
-                            }).share();
+                    startActivity(new Intent(v.getContext(), InviteFriendActivity.class));
                     break;
                 case R.id.tv_be_a_vip:
                     startActivity(new Intent(v.getContext(), BuyVipActivity.class));

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.mine.InviteFriendActivity">
+
+    <include layout="@layout/navigation_top_bar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:text="@string/your_invite_id"
+        android:textAppearance="@style/TextAppearance.AppTheme.Small"
+        android:textColor="@color/colorTextLightGray" />
+
+    <TextView
+        android:id="@+id/tv_your_invite_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/colorTextBlack"
+        android:textSize="40sp" />
+
+    <Button
+        android:id="@+id/btn_invite_now"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/shape_button_medium_bg"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:text="@string/invite_now"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:text="@string/your_invite_qr_code"
+        android:textAppearance="@style/TextAppearance.AppTheme.Small"
+        android:textColor="@color/colorTextLightGray" />
+
+    <ImageView
+        android:id="@+id/iv_your_invite_qr_code"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/invite_tip"
+        android:textAppearance="@style/TextAppearance.AppTheme.Small"
+        android:textColor="@color/colorTextLightGray" />
+
+</LinearLayout>

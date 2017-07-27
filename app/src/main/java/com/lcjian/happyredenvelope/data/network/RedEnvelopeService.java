@@ -21,6 +21,7 @@ import com.lcjian.happyredenvelope.data.entity.RoomAndCreator;
 import com.lcjian.happyredenvelope.data.entity.RoomBillboard;
 import com.lcjian.happyredenvelope.data.entity.RoomHistory;
 import com.lcjian.happyredenvelope.data.entity.RoomIdInfo;
+import com.lcjian.happyredenvelope.data.entity.ShareInfo;
 import com.lcjian.happyredenvelope.data.entity.SnatchingDetail;
 import com.lcjian.happyredenvelope.data.entity.User;
 import com.lcjian.happyredenvelope.data.entity.UserSummary;
@@ -389,5 +390,20 @@ public interface RedEnvelopeService {
     @Headers("Content-Type: application/x-www-form-urlencoded; charset=utf-8")
     @POST("user/vip/getvips")
     Observable<ResponseData<List<VipCombo>>> getVipCombo();
+
+    /**
+     * 获取分享内容
+     */
+    @FormUrlEncoded
+    @POST("user/user/shareinfo")
+    Observable<ResponseData<ShareInfo>> getShareInfo(@Field("userid") long userId);
+
+    /**
+     * 填写邀请码
+     */
+    @FormUrlEncoded
+    @POST("user/user/invite")
+    Observable<ResponseData<String>> setInvite(@Field("userid") long userId,
+                                               @Field("code") String inviteId);
 
 }

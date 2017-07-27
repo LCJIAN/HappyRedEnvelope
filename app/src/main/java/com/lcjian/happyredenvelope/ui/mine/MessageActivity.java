@@ -43,8 +43,8 @@ public class MessageActivity extends BaseActivity {
     TextView tv_top_bar_right;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_push_message);
         ButterKnife.bind(this);
 
@@ -58,6 +58,11 @@ public class MessageActivity extends BaseActivity {
         tv_top_bar_right.setVisibility(View.GONE);
         getSupportFragmentManager().beginTransaction().add(R.id.fl_fragment_container,
                 new PushMessagesFragment()).commit();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
     }
 
     public static class PushMessagesFragment extends RecyclerFragment<PushMessage> {

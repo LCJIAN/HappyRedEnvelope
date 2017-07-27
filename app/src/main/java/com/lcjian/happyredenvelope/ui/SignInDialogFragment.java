@@ -15,6 +15,7 @@ import com.lcjian.happyredenvelope.BaseDialogFragment;
 import com.lcjian.happyredenvelope.R;
 import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.User;
+import com.lcjian.happyredenvelope.ui.mine.SetInviteFragment;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UTrack;
 import com.umeng.socialize.UMAuthListener;
@@ -127,12 +128,15 @@ public class SignInDialogFragment extends BaseDialogFragment implements View.OnC
                             PushAgent.getInstance(App.getInstance())
                                     .addAlias(
                                             String.valueOf(userResponseData.data.userId),
-                                            "we_chat",
+                                            "uid",
                                             new UTrack.ICallBack() {
                                                 @Override
                                                 public void onMessage(boolean isSuccess, String message) {
                                                 }
                                             });
+                            if (!mSettingSp.getBoolean("invited", false)) {
+                                new SetInviteFragment().show(getFragmentManager(), "SetInviteFragment");
+                            }
                             dismiss();
                         } else {
                             Toast.makeText(App.getInstance(), userResponseData.msg, Toast.LENGTH_SHORT).show();

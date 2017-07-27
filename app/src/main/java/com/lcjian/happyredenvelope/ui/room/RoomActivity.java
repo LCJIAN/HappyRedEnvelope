@@ -26,16 +26,11 @@ import com.lcjian.happyredenvelope.data.entity.ResponseData;
 import com.lcjian.happyredenvelope.data.entity.Room;
 import com.lcjian.happyredenvelope.data.entity.User;
 import com.lcjian.happyredenvelope.data.entity.Users;
+import com.lcjian.happyredenvelope.ui.mine.InviteFriendActivity;
 import com.lcjian.happyredenvelope.ui.mine.RedEnvelopeHistoriesActivity;
 import com.lcjian.lib.recyclerview.RecyclerViewPositionHelper;
 import com.lcjian.lib.util.common.DimenUtils;
 import com.lcjian.lib.util.common.StringUtils;
-import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.media.UMWeb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +44,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.functions.Func2;
-import rx.functions.Func4;
+import rx.functions.Func5;
 import rx.observables.ConnectableObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -144,20 +139,8 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
             }
         }));
         mSubscriptions.add(eventEmitter.connect());
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
         loadRoomData();
-    }
-
-    @Override
-    protected void onStop() {
-        if (mSubscriptionRoomData != null) {
-            mSubscriptionRoomData.unsubscribe();
-        }
-        super.onStop();
     }
 
     @Override
@@ -176,14 +159,7 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
             mSubscriptions.unsubscribe();
         }
         mRoomMessageAdapter.destroy();
-        UMShareAPI.get(this).release();
         super.onDestroy();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -199,31 +175,7 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(new Intent(this, RedEnvelopeHistoriesActivity.class));
                 break;
             case R.id.btn_invite_friend:
-                new ShareAction(this)
-                        .withMedia(new UMWeb(
-                                "http://www.baidu.com",
-                                "我是标题",
-                                "我是内容，描述内容。",
-                                new UMImage(this, R.mipmap.ic_launcher)))
-                        .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
-                        .setCallback(new UMShareListener() {
-                            @Override
-                            public void onStart(SHARE_MEDIA share_media) {
-                            }
-
-                            @Override
-                            public void onResult(SHARE_MEDIA share_media) {
-                            }
-
-                            @Override
-                            public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-                                Toast.makeText(App.getInstance(), R.string.share_failed, Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onCancel(SHARE_MEDIA share_media) {
-                            }
-                        }).share();
+                startActivity(new Intent(v.getContext(), InviteFriendActivity.class));
                 break;
             default:
                 break;
@@ -287,17 +239,20 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
                     @Override
                     public Observable<RoomData> call(Long aLong) {
                         return Observable.zip(
+                                Observable.just(mJoined),
                                 mRestAPI.redEnvelopeService().getLuckCardTotalLeftTime(mUserId).cache(),
                                 mRestAPI.redEnvelopeService().getRoomDetail(mRoomId),
                                 mRestAPI.redEnvelopeService().getRoomMembers(mUserId, mRoomId, 1, 100),
                                 mRestAPI.redEnvelopeService().getAddedMsg(mUserId, mRoomId),
-                                new Func4<ResponseData<LeftTimeInfo>, ResponseData<Room>, ResponseData<Users>, ResponseData<List<Message>>, RoomData>() {
+                                new Func5<Boolean, ResponseData<LeftTimeInfo>, ResponseData<Room>,
+                                        ResponseData<Users>, ResponseData<List<Message>>, RoomData>() {
                                     @Override
-                                    public RoomData call(ResponseData<LeftTimeInfo> leftTimeInfoResponseData,
+                                    public RoomData call(Boolean aBoolean,
+                                                         ResponseData<LeftTimeInfo> leftTimeInfoResponseData,
                                                          ResponseData<Room> roomResponseData,
                                                          ResponseData<Users> usersResponseData,
                                                          ResponseData<List<Message>> listResponseData) {
-                                        if (listResponseData.code != 0) {
+                                        if (listResponseData.code != 0 && aBoolean) {
                                             throw new RuntimeException("you are kicked");
                                         }
                                         return new RoomData(leftTimeInfoResponseData.data,

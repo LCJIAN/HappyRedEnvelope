@@ -27,6 +27,7 @@ import com.lcjian.happyredenvelope.data.entity.UserSummary;
 import com.lcjian.happyredenvelope.ui.mine.BuyVipActivity;
 import com.lcjian.happyredenvelope.ui.mine.MessageActivity;
 import com.lcjian.happyredenvelope.ui.mine.RedEnvelopeHistoriesActivity;
+import com.lcjian.happyredenvelope.ui.mine.SetInviteFragment;
 import com.lcjian.happyredenvelope.ui.mine.SettingsActivity;
 import com.lcjian.happyredenvelope.ui.mine.UserLuckCardActivity;
 import com.lcjian.happyredenvelope.ui.mine.ViewHistoriesActivity;
@@ -232,7 +233,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
             tv_buy_luck_card.setVisibility(View.VISIBLE);
             tv_buy_vip.setVisibility(View.VISIBLE);
             tv_view_history.setVisibility(View.VISIBLE);
-            tv_my_coupon.setVisibility(View.VISIBLE);
+//            tv_my_coupon.setVisibility(View.VISIBLE);
             tv_helping_center.setVisibility(View.VISIBLE);
 
             fl_not_signed_in.setVisibility(View.GONE);
@@ -254,7 +255,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
             tv_buy_luck_card.setVisibility(View.GONE);
             tv_buy_vip.setVisibility(View.GONE);
             tv_view_history.setVisibility(View.GONE);
-            tv_my_coupon.setVisibility(View.GONE);
+//            tv_my_coupon.setVisibility(View.GONE);
             tv_helping_center.setVisibility(View.GONE);
             Glide.with(this).load(R.drawable.not_signed_in_bg).into(iv_not_signed_in);
         }
@@ -286,13 +287,16 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                             PushAgent.getInstance(App.getInstance())
                                     .addAlias(
                                             String.valueOf(userResponseData.data.userId),
-                                            "we_chat",
+                                            "uid",
                                             new UTrack.ICallBack() {
                                                 @Override
                                                 public void onMessage(boolean isSuccess, String message) {
                                                 }
                                             });
                             setupSignedIn();
+                            if (!mSettingSp.getBoolean("invited", false)) {
+                                new SetInviteFragment().show(getFragmentManager(), "SetInviteFragment");
+                            }
                         } else {
                             Toast.makeText(App.getInstance(), userResponseData.msg, Toast.LENGTH_SHORT).show();
                         }

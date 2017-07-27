@@ -36,7 +36,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup">
         <activity
             android:name=".ui.main.SplashActivity"
             android:theme="@style/AppTheme.Splash">
@@ -54,6 +55,7 @@
         <activity android:name=".ui.mine.RedEnvelopeHistoriesActivity" />
         <activity android:name=".ui.mine.SettingsActivity" />
         <activity android:name=".ui.mine.MessageActivity" />
+        <activity android:name=".ui.mine.InviteFriendActivity" />
         <activity android:name=".ui.withdrawal.WithdrawalActivity" />
         <activity android:name=".ui.withdrawal.WithdrawalHistoriesActivity" />
         <activity android:name=".ui.search.SearchActivity" />

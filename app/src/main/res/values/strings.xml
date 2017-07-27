@@ -149,4 +149,12 @@
     <string name="play_count">%1$d次播放</string>
     <string name="share_failed">分享失败</string>
     <string name="message">消息</string>
+    <string name="your_invite_id">你的邀请id</string>
+    <string name="your_invite_qr_code">专属邀请二维码</string>
+    <string name="invite_now">立即邀请</string>
+    <string name="confirm">确定</string>
+    <string name="skip">跳过</string>
+    <string name="invited_success">你已成功获得福卡一张</string>
+    <string name="invite_you">若是被好友邀请下载本软件，可填写他的邀请码，让其获得一张福卡</string>
+    <string name="invite_tip">提醒：\n1、邀请好友使用《红包乐》软件可以免费获得福卡，福卡剩余时间即位停留于房间的时间；\n2、普通用户没邀请一个好友加入可活动（价值2元60分钟）的福卡一张；\n3、VIP账户没邀请一个好友加入可获得（价值2元60分钟）的福卡两张；</string>
 </resources>
