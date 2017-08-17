@@ -5,6 +5,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.lqpinxuan.lqpx"
         minSdkVersion 16
         targetSdkVersion 21
@@ -42,6 +43,16 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
+    productFlavors {
+        Wandoujia {
+
+        }
+    }
+
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders.put("UMENG_CHANNEL_VALUE", name)
+    }
 }
 
 dependencies {
@@ -53,6 +64,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    compile 'com.android.support:multidex:latest.integration'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -104,7 +116,7 @@ dependencies {
     //applink
     compile 'com.taobao.android:alibc_applink:2.0.0.9@jar'
     //UT
-    compile 'com.taobao.android:utdid4all:1.1.5.3_proguard@jar'
+//    compile 'com.taobao.android:utdid4all:1.1.5.3_proguard@jar'
     compile 'com.alibaba.mtl:app-monitor-sdk:2.5.1.3_for_bc_proguard@jar'
     //电商SDK
     compile 'com.alibaba.sdk.android:alibc_trade_sdk:3.1.1.11@aar'

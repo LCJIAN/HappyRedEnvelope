@@ -1,11 +1,14 @@
 package com.lcjian.happyredenvelope.ui.web;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,9 +16,10 @@ import android.widget.TextView;
 import com.alibaba.baichuan.android.trade.AlibcTrade;
 import com.alibaba.baichuan.android.trade.callback.AlibcTradeCallback;
 import com.alibaba.baichuan.android.trade.constants.AlibcConstants;
+import com.alibaba.baichuan.android.trade.model.AlibcShowParams;
 import com.alibaba.baichuan.android.trade.model.TradeResult;
 import com.alibaba.baichuan.android.trade.page.AlibcBasePage;
-import com.alibaba.baichuan.android.trade.page.AlibcDetailPage;
+import com.alibaba.baichuan.android.trade.page.AlibcPage;
 import com.just.library.AgentWeb;
 import com.just.library.ChromeClientCallbackManager;
 import com.lcjian.happyredenvelope.BaseActivity;
@@ -42,14 +46,14 @@ public class WebViewActivity extends BaseActivity implements
 
     private AgentWeb mAgentWeb;
 
-    private WebViewClient mWebViewClient=new WebViewClient(){
+    private WebViewClient mWebViewClient = new WebViewClient() {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             //do you  work
         }
     };
 
-    private WebChromeClient mWebChromeClient=new WebChromeClient(){
+    private WebChromeClient mWebChromeClient = new WebChromeClient() {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             //do you work
@@ -86,9 +90,8 @@ public class WebViewActivity extends BaseActivity implements
         Map<String, String> exParams = new HashMap<>();
         exParams.put(AlibcConstants.TAOKE_PID, "mm_106929643_20324269_108658120");
 
-        //商品详情page
-        AlibcBasePage detailPage = new AlibcPage(getIntent().getStringExtra("url"));
-        AlibcTrade.show(this, mAgentWeb.getWebCreator().get(), mWebViewClient, mWebChromeClient, detailPage, null, null, exParams ,
+        AlibcBasePage page = new AlibcPage(getIntent().getStringExtra("url"));
+        AlibcTrade.show(this, mAgentWeb.getWebCreator().get(), mWebViewClient, mWebChromeClient, page, new AlibcShowParams(), null, exParams,
                 new AlibcTradeCallback() {
                     @Override
                     public void onTradeSuccess(TradeResult tradeResult) {

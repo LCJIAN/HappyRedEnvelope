@@ -2,6 +2,7 @@ package com.lcjian.happyredenvelope;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.alibaba.baichuan.android.trade.AlibcTradeSDK;
 import com.alibaba.baichuan.android.trade.callback.AlibcTradeInitCallback;
@@ -77,21 +78,25 @@ public class App extends Application {
             @Override
             public void onSuccess(String deviceToken) {
                 //注册成功会返回device token
+                Timber.d("deviceToken");
             }
 
             @Override
             public void onFailure(String s, String s1) {
+                Timber.d(s + " | " + s1);
             }
         });
         AlibcTradeSDK.asyncInit(this, new AlibcTradeInitCallback() {
             @Override
             public void onSuccess() {
                 //初始化成功，设置相关的全局配置参数
+                Timber.d("onSuccess");
             }
 
             @Override
             public void onFailure(int code, String msg) {
                 //初始化失败，可以根据code和msg判断失败原因，详情参见错误说明
+                Timber.d("onFailure " + code + " | " + msg);
             }
         });
 
@@ -101,6 +106,12 @@ public class App extends Application {
             Timber.plant(new ErrorTree());
         }
         LeakCanary.install(this);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     public AppComponent appComponent() {

@@ -66,7 +66,7 @@ public class RestAPI {
                     String deviceId = new DeviceUuidFactory(App.getInstance()).getDeviceUuid().toString();
                     String version = BuildConfig.VERSION_NAME;
                     String platform = "Android";
-                    String channel = "QQ";
+                    String channel = BuildConfig.FLAVOR;
                     String timestamp = String.valueOf(System.currentTimeMillis());
                     List<String> commonParas = Arrays.asList(deviceId, version, platform, channel, timestamp);
                     Collections.sort(commonParas);
